@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SG AI Chat - Talk to SG AI Assistant</title>
+    <title>SG AI Chat - Premium Features</title>
     <style>
+        /* ... (Purana CSS Same Hai) ... */
         :root {
             --bg-body: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --bg-container: rgba(255, 255, 255, 0.95);
@@ -53,34 +54,22 @@
         
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: var(--bg-body);
-            height: 100vh; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            color: var(--text-main);
+            background: var(--bg-body); height: 100vh; display: flex; 
+            justify-content: center; align-items: center; color: var(--text-main);
             transition: background 0.5s ease;
         }
         
         .chat-container {
             width: 90%; max-width: 800px; height: 90vh;
-            background: var(--bg-container);
-            border-radius: 20px;
+            background: var(--bg-container); border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            display: flex; flex-direction: column;
-            overflow: hidden;
-            transition: background 0.3s ease;
+            display: flex; flex-direction: column; overflow: hidden; position: relative;
         }
         
         .chat-header {
-            background: var(--bg-header);
-            color: var(--text-header);
-            padding: 20px; text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            position: relative; 
-            transition: background 0.3s ease;
+            background: var(--bg-header); color: var(--text-header);
+            padding: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); position: relative; 
         }
-        
         .chat-header h1 { font-size: 1.5rem; margin-bottom: 5px; }
         .chat-header p { opacity: 0.9; font-size: 0.9rem; }
         
@@ -90,142 +79,100 @@
         }
 
         .theme-btn {
-            background: var(--bg-selector);
-            border: 1px solid var(--border-input);
-            border-radius: 50%;
-            width: 38px; height: 38px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            display: flex; justify-content: center; align-items: center;
-            transition: all 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background: var(--bg-selector); border: 1px solid var(--border-input);
+            border-radius: 50%; width: 38px; height: 38px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
-        .theme-btn:hover { transform: scale(1.1); }
         
         .persona-selector {
-            background: var(--bg-selector); 
-            padding: 8px 12px;
-            border-radius: 15px; font-size: 0.9rem;
-            border: 1px solid var(--border-input);
-            transition: background 0.3s ease;
+            background: var(--bg-selector); padding: 8px 12px;
+            border-radius: 15px; border: 1px solid var(--border-input);
         }
-        
         .persona-selector select {
             background: none; border: none; cursor: pointer;
-            font-weight: bold; color: var(--text-selector);
-            outline: none;
+            font-weight: bold; color: var(--text-selector); outline: none;
         }
         
-        .messages {
-            flex: 1; padding: 20px; overflow-y: auto;
-            background: var(--bg-messages);
-            transition: background 0.3s ease;
-        }
-        
-        .message {
-            margin-bottom: 20px; display: flex; 
-            animation: fadeIn 0.3s ease-in;
-        }
-        
+        .messages { flex: 1; padding: 20px; overflow-y: auto; background: var(--bg-messages); }
+        .message { margin-bottom: 20px; display: flex; animation: fadeIn 0.3s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
         .message.user { justify-content: flex-end; }
         .message.ai { justify-content: flex-start; }
-        
         .message-content {
-            max-width: 70%; padding: 15px 20px;
-            border-radius: 20px; position: relative;
-            line-height: 1.5;
-            word-wrap: break-word;
+            max-width: 70%; padding: 15px 20px; border-radius: 20px; line-height: 1.5; word-wrap: break-word;
         }
-        
-        .user .message-content {
-            background: var(--user-msg-bg);
-            color: white; border-bottom-right-radius: 5px;
-        }
-        
-        .ai .message-content {
-            background: var(--bg-ai-msg); 
-            color: var(--text-ai-msg);
-            border: var(--border-ai);
-            border-bottom-left-radius: 5px;
-            box-shadow: var(--shadow-ai);
-            transition: all 0.3s ease;
-        }
-        
+        .user .message-content { background: var(--user-msg-bg); color: white; border-bottom-right-radius: 5px; }
+        .ai .message-content { background: var(--bg-ai-msg); color: var(--text-ai-msg); border: var(--border-ai); border-bottom-left-radius: 5px; }
         .message-time { font-size: 0.75rem; opacity: 0.6; margin-top: 5px; }
         
-        .typing-indicator {
-            display: none; padding: 15px 20px; 
-            color: var(--typing-text); 
-            font-style: italic;
-            align-items: center;
-            background: var(--bg-messages);
-        }
-        
+        .typing-indicator { display: none; padding: 15px 20px; color: var(--typing-text); font-style: italic; background: var(--bg-messages); align-items: center; }
         .typing-indicator::after {
             content: ''; display: inline-block; width: 18px; height: 18px;
-            border: 2px solid #555; border-radius: 50%; border-top-color: #3498db; 
-            animation: spin 1s linear infinite; margin-left: 10px;
+            border: 2px solid #555; border-radius: 50%; border-top-color: #3498db; animation: spin 1s linear infinite; margin-left: 10px;
         }
-        
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        .input-area {
-            padding: 20px; background: var(--bg-input-area); 
-            border-top: var(--border-input-area); 
-            display: flex; gap: 10px;
-            transition: background 0.3s ease;
+        .input-area { padding: 20px; background: var(--bg-input-area); border-top: var(--border-input-area); display: flex; gap: 10px; flex-direction: column;}
+        .input-row { display: flex; gap: 10px; width: 100%; }
+        #messageInput { flex: 1; padding: 15px 20px; background: var(--bg-input); color: var(--text-input); border: var(--border-input); border-radius: 25px; outline: none; }
+        #sendBtn { padding: 15px 25px; background: var(--user-msg-bg); color: white; border: none; border-radius: 25px; cursor: pointer; }
+        
+        /* PREMIUM CHAT COUNTER */
+        .chat-counter { font-size: 0.8rem; color: #e74c3c; font-weight: bold; text-align: right; padding-right: 10px; display: none; }
+
+        /* AD MODAL CSS (POPUP) */
+        .modal-overlay {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center; flex-direction: column;
         }
-        
-        #messageInput {
-            flex: 1; padding: 15px 20px; 
-            background: var(--bg-input); 
-            color: var(--text-input); 
-            border: var(--border-input); 
-            border-radius: 25px; font-size: 1rem;
-            outline: none; transition: all 0.3s;
+        .ad-modal {
+            background: var(--bg-container); padding: 30px; border-radius: 20px; text-align: center; max-width: 80%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        
-        #messageInput:focus { border-color: #3498db; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15); }
-        
-        #sendBtn {
-            padding: 15px 25px; background: var(--user-msg-bg); 
-            color: white; border: none; border-radius: 25px;
-            cursor: pointer; font-size: 1rem; transition: transform 0.2s;
+        .ad-modal h2 { margin-bottom: 10px; color: var(--text-main); }
+        .ad-modal p { margin-bottom: 20px; color: var(--typing-text); }
+        .ad-progress { font-size: 1.2rem; font-weight: bold; color: #3498db; margin-bottom: 20px; }
+        .watch-ad-btn {
+            background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%); color: white;
+            border: none; padding: 12px 24px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; font-weight: bold;
         }
-        
-        #sendBtn:hover { transform: scale(1.05); }
-        #sendBtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-        
+        .cancel-btn { background: none; border: none; color: #e74c3c; margin-top: 15px; cursor: pointer; text-decoration: underline; }
+
         @media (max-width: 600px) {
-            .chat-container { width: 95%; height: 95vh; border-radius: 15px; }
-            .message-content { max-width: 85%; }
+            .chat-container { width: 95%; height: 95vh; }
             .chat-header h1 { font-size: 1.3rem; }
-            .header-controls { top: 15px; right: 15px; flex-direction: row-reverse; }
-            .persona-selector { padding: 5px; }
         }
     </style>
 </head>
 <body data-theme="dark">
     <div class="chat-container">
+        <div class="modal-overlay" id="adModalOverlay">
+            <div class="ad-modal">
+                <h2 id="modalTitle">Unlock Premium Mode 🔒</h2>
+                <p>Watch 3 short ads to get 5 FREE chats with this premium AI persona!</p>
+                <div class="ad-progress" id="adProgressText">Ads Watched: 0 / 3</div>
+                <button class="watch-ad-btn" onclick="watchAd()">🎬 Watch Ad Now</button>
+                <br>
+                <button class="cancel-btn" onclick="cancelAd()">Cancel & Go Back</button>
+            </div>
+        </div>
+
         <div class="chat-header">
             <h1>🤖 SG AI Assistant</h1>
             <p>Talk about anything! 👇</p>
             
             <div class="header-controls">
-                <button id="themeToggle" class="theme-btn" onclick="toggleTheme()" title="Toggle Theme">☀️</button>
+                <button id="themeToggle" class="theme-btn" onclick="toggleTheme()">☀️</button>
                 <div class="persona-selector">
-                    <select id="personaSelect" onchange="setPersona()">
+                    <select id="personaSelect" onchange="checkPersonaAccess()">
                         <option value="general">General Assistant</option>
                         <option value="friendly">Friendly Friend</option>
                         <option value="professional">Professional</option>
-                        <option value="coder">Code Helper</option>
-                        <option value="teacher">Teacher Mode</option>
-                        <option value="funny">Funny Bot</option>
-                        <option value="motivator">Motivator</option>
-                        <option value="shayari">Shayari Mode ✨</option> 
+                        <option value="coder">Code Helper 🔒</option>
+                        <option value="teacher">Teacher Mode 🔒</option>
+                        <option value="funny">Funny Bot 🔒</option>
+                        <option value="motivator">Motivator 🔒</option>
+                        <option value="shayari">Shayari Mode ✨🔒</option> 
                     </select>
                 </div>
             </div>
@@ -234,7 +181,7 @@
         <div class="messages" id="messages">
             <div class="message ai">
                 <div class="message-content">
-                    👋 Hi! I'm SG AI Assistant. Ask me anything - from homework help to coding questions, casual chat, or motivation! What’s on your mind?
+                    👋 Hi! I'm SG AI Assistant. How can I help you today?
                 </div>
             </div>
         </div>
@@ -242,8 +189,11 @@
         <div class="typing-indicator" id="typingIndicator">SG AI is typing...</div>
         
         <div class="input-area">
-            <input type="text" id="messageInput" placeholder="Type your message here..." autocomplete="off">
-            <button id="sendBtn" onclick="sendMessage()">Send 🚀</button>
+            <div class="chat-counter" id="chatCounter">Premium Chats Left: 5</div>
+            <div class="input-row">
+                <input type="text" id="messageInput" placeholder="Type your message here..." autocomplete="off">
+                <button id="sendBtn" onclick="sendMessage()">Send 🚀</button>
+            </div>
         </div>
     </div>
 
@@ -251,13 +201,10 @@
         function toggleTheme() {
             const body = document.body;
             const themeBtn = document.getElementById('themeToggle');
-            
             if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme');
-                themeBtn.innerHTML = '🌙'; 
+                body.removeAttribute('data-theme'); themeBtn.innerHTML = '🌙'; 
             } else {
-                body.setAttribute('data-theme', 'dark');
-                themeBtn.innerHTML = '☀️';
+                body.setAttribute('data-theme', 'dark'); themeBtn.innerHTML = '☀️';
             }
         }
 
@@ -266,31 +213,100 @@
         const sendBtn = document.getElementById('sendBtn');
         const typingEl = document.getElementById('typingIndicator');
         const personaSelect = document.getElementById('personaSelect');
+        const adModalOverlay = document.getElementById('adModalOverlay');
+        const adProgressText = document.getElementById('adProgressText');
+        const chatCounter = document.getElementById('chatCounter');
         
+        // --- PREMIUM LOGIC VARIABLES ---
+        const premiumModes = ['coder', 'teacher', 'funny', 'motivator', 'shayari'];
+        let previousPersona = 'general'; // Picha wala mode yaad rakhne ke liye
         let currentPersona = 'general';
+        let modeTryingToUnlock = '';
+        let adsWatchedCount = 0;
+        let freePremiumChatsLeft = 0;
         
         const personas = {
-            general: "You are a helpful AI assistant named SG AI. Be clear, concise, and helpful.",
-            friendly: "You are a friendly, casual friend named SG AI. Use emojis and be warm! 😊",
-            professional: "You are a professional consultant named SG AI. Be formal, precise, and polite.",
-            coder: "You are a coding expert named SG AI. Explain code clearly with examples and best practices.",
-            teacher: "You are a patient teacher named SG AI. Explain concepts step-by-step in a simple way.",
-            funny: "You are a hilarious comedian AI named SG AI. Make jokes, be witty, and use humor in your answers! 😂",
-            motivator: "You are a motivational coach named SG AI. Inspire, encourage, and uplift the user! 💪",
-            shayari: "You are a poetic and expressive AI assistant named SG AI. You communicate primarily using beautiful Hindi and Urdu Shayari (poetry/couplets). Always include a relevant 'Sher' (couplet) in your responses and speak in a very polite, poetic, and respectful tone (using words like 'huzoor', 'dost')."
+            general: "You are a helpful AI assistant named SG AI.",
+            friendly: "You are a friendly, casual friend named SG AI. Use emojis! 😊",
+            professional: "You are a professional consultant named SG AI. Be formal.",
+            coder: "You are a coding expert. Explain code clearly.",
+            teacher: "You are a patient teacher. Explain concepts step-by-step.",
+            funny: "You are a hilarious comedian AI. Make jokes! 😂",
+            motivator: "You are a motivational coach. Inspire the user! 💪",
+            shayari: "You are a poetic AI. Use beautiful Shayari in your responses."
         };
         
-        inputEl.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
+        inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
         
-        function setPersona() {
-            currentPersona = personaSelect.value;
+        // --- CHECK ACCESS LOGIC ---
+        function checkPersonaAccess() {
+            const selectedMode = personaSelect.value;
             
-            if(currentPersona === 'shayari') {
-                addMessage('SG AI', `Irshad! Shayari Mode shuru ho gaya hai. Farmaiye, aaj aapka kya haal hai? ✨`, 'ai');
+            // Agar free mode hai, toh direct switch kar do
+            if (!premiumModes.includes(selectedMode)) {
+                switchMode(selectedMode);
+                return;
+            }
+
+            // Agar Premium mode hai, par chats bache hain
+            if (premiumModes.includes(selectedMode) && freePremiumChatsLeft > 0 && selectedMode === currentPersona) {
+                return; // Nothing to do
+            }
+
+            // Agar premium mode hai aur chats nahi hain -> Show Ad Popup
+            modeTryingToUnlock = selectedMode;
+            personaSelect.value = previousPersona; // Dropdown ko purane mode par wapas karo
+            
+            // Ad Modal dikhao
+            adsWatchedCount = 0;
+            adProgressText.innerText = `Ads Watched: 0 / 3`;
+            document.getElementById('modalTitle').innerText = `Unlock ${selectedMode.toUpperCase()} 🔒`;
+            adModalOverlay.style.display = 'flex';
+        }
+
+        function cancelAd() {
+            adModalOverlay.style.display = 'none';
+            personaSelect.value = previousPersona;
+        }
+
+        // --- DUMMY WATCH AD FUNCTION ---
+        function watchAd() {
+            // NOTE FOR ANDROID: Baad mein hum is function ke andar Android se AdMob play karwayenge
+            // Abhi ke liye hum nakli (fake) wait dikhayenge
+            
+            let btn = document.querySelector('.watch-ad-btn');
+            btn.innerText = "Playing Ad... ⏳";
+            btn.disabled = true;
+
+            // 2 Second ka nakli timer (Android mein yahan asli Ad chalega)
+            setTimeout(() => {
+                adsWatchedCount++;
+                adProgressText.innerText = `Ads Watched: ${adsWatchedCount} / 3`;
+                btn.innerText = "🎬 Watch Ad Now";
+                btn.disabled = false;
+
+                if (adsWatchedCount >= 3) {
+                    alert("🎉 Reward Granted! You unlocked 5 free chats.");
+                    adModalOverlay.style.display = 'none';
+                    freePremiumChatsLeft = 5;
+                    switchMode(modeTryingToUnlock); // Mode switch kardo
+                }
+            }, 1500); 
+        }
+
+        function switchMode(newMode) {
+            currentPersona = newMode;
+            previousPersona = newMode;
+            personaSelect.value = newMode;
+            
+            // Agar premium hai toh counter dikhao, warna chupao
+            if (premiumModes.includes(newMode)) {
+                chatCounter.style.display = 'block';
+                chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
+                addMessage('SG AI', `Premium Mode Unlocked! You have ${freePremiumChatsLeft} chats remaining. ✨`, 'ai');
             } else {
-                addMessage('SG AI', `Switched to ${currentPersona} mode! Ready to chat! 🎉`, 'ai');
+                chatCounter.style.display = 'none';
+                addMessage('SG AI', `Switched to ${newMode} mode! 🎉`, 'ai');
             }
         }
         
@@ -302,14 +318,28 @@
             inputEl.value = '';
             sendBtn.disabled = true;
             typingEl.style.display = 'flex';
-            
             scrollToBottom();
             
             try {
                 const response = await getAIResponse(message);
                 addMessage('SG AI', response, 'ai');
+                
+                // --- CHAT DECREMENT LOGIC ---
+                if (premiumModes.includes(currentPersona)) {
+                    freePremiumChatsLeft--;
+                    chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
+                    
+                    if (freePremiumChatsLeft <= 0) {
+                        setTimeout(() => {
+                            alert("⚠️ Your free premium chats are over! Locking mode back.");
+                            chatCounter.style.display = 'none';
+                            switchMode('general'); // Wapas General par phek do
+                        }, 1000);
+                    }
+                }
+                
             } catch (error) {
-                addMessage('SG AI', "Sorry, I had trouble responding. Try again! 😅", 'ai');
+                addMessage('SG AI', "Sorry, error aa gaya.", 'ai');
             } finally {
                 typingEl.style.display = 'none';
                 sendBtn.disabled = false;
@@ -320,61 +350,36 @@
         function addMessage(sender, text, type) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}`;
-            
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
             
-            let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            formattedText = formattedText.replace(/\*/g, '•');
-            formattedText = formattedText.replace(/\n/g, '<br>');
-            
+            let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*/g, '•').replace(/\n/g, '<br>');
             contentDiv.innerHTML = formattedText;
             
             const timeDiv = document.createElement('div');
             timeDiv.className = 'message-time';
             timeDiv.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             
-            messageDiv.appendChild(contentDiv);
-            messageDiv.appendChild(timeDiv);
-            messagesEl.appendChild(messageDiv);
-            
-            scrollToBottom();
+            messageDiv.appendChild(contentDiv); messageDiv.appendChild(timeDiv);
+            messagesEl.appendChild(messageDiv); scrollToBottom();
         }
         
-        function scrollToBottom() {
-            messagesEl.scrollTop = messagesEl.scrollHeight;
-        }
+        function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
         
-        // --- NAYA SUPER SECURE BACKEND CONNECTION ---
+        // --- RENDER BACKEND API ---
         async function getAIResponse(userMessage) {
-            
-            // Dekhiye, API key yahan se hat chuki hai!
-            // Ab seedha aapke naye secure backend par request jayegi:
             const BACKEND_URL = `https://sg-ai-backend.onrender.com/api/chat`;
-            
             const personaInstruction = personas[currentPersona] || personas.general;
             
-            try {
-                const response = await fetch(BACKEND_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: userMessage,
-                        persona: personaInstruction
-                    })
-                });
-
-                const data = await response.json();
-                
-                // Jawab wapas backend se yahan aayega
-                if (data.candidates && data.candidates.length > 0) {
-                    return data.candidates[0].content.parts[0].text;
-                } else {
-                    return "🚨 Backend Error:\n" + (data.error ? data.error.message : JSON.stringify(data));
-                }
-                
-            } catch (error) {
-                return "🚨 Server Connection Error: Thodi der baad try karein ya Render ka log check karein.";
+            const response = await fetch(BACKEND_URL, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userMessage, persona: personaInstruction })
+            });
+            const data = await response.json();
+            if (data.candidates && data.candidates.length > 0) {
+                return data.candidates[0].content.parts[0].text;
+            } else {
+                return "🚨 Backend Error!";
             }
         }
         
