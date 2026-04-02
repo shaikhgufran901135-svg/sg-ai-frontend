@@ -269,29 +269,36 @@
             personaSelect.value = previousPersona;
         }
 
-        // --- DUMMY WATCH AD FUNCTION ---
+// --- ASLI ADMOB CONNECTION LOGIC ---
         function watchAd() {
-            // NOTE FOR ANDROID: Baad mein hum is function ke andar Android se AdMob play karwayenge
-            // Abhi ke liye hum nakli (fake) wait dikhayenge
-            
             let btn = document.querySelector('.watch-ad-btn');
-            btn.innerText = "Playing Ad... ⏳";
+            btn.innerText = "Loading Ad... ⏳";
             btn.disabled = true;
 
-            // 2 Second ka nakli timer (Android mein yahan asli Ad chalega)
-            setTimeout(() => {
-                adsWatchedCount++;
-                adProgressText.innerText = `Ads Watched: ${adsWatchedCount} / 3`;
-                btn.innerText = "🎬 Watch Ad Now";
-                btn.disabled = false;
+            // Check karo ki app Android mein khula hai ya Browser mein
+            if (typeof AndroidBridge !== "undefined") {
+                // Agar Android App mein hai, toh App ko Ad dikhane bolo!
+                AndroidBridge.showAd();
+            } else {
+                // Agar Computer/Browser par check kar rahe ho, toh Dummy Timer chalao
+                setTimeout(() => { adWatchedSuccessfully(); }, 1500);
+            }
+        }
 
-                if (adsWatchedCount >= 3) {
-                    alert("🎉 Reward Granted! You unlocked 5 free chats.");
-                    adModalOverlay.style.display = 'none';
-                    freePremiumChatsLeft = 5;
-                    switchMode(modeTryingToUnlock); // Mode switch kardo
-                }
-            }, 1500); 
+        // Android App ad poora hone ke baad is function ko jagayega!
+        function adWatchedSuccessfully() {
+            let btn = document.querySelector('.watch-ad-btn');
+            adsWatchedCount++;
+            document.getElementById('adProgressText').innerText = `Ads Watched: ${adsWatchedCount} / 3`;
+            btn.innerText = "🎬 Watch Ad Now";
+            btn.disabled = false;
+
+            if (adsWatchedCount >= 3) {
+                alert("🎉 Reward Granted! You unlocked 5 free chats.");
+                document.getElementById('adModalOverlay').style.display = 'none';
+                freePremiumChatsLeft = 5;
+                switchMode(modeTryingToUnlock); 
+            }
         }
 
         function switchMode(newMode) {
