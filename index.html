@@ -130,7 +130,6 @@
             padding: 10px 0px; 
             box-shadow: none; 
         }
-        /* ---------------------------------- */
 
         .message-time { font-size: 0.75rem; opacity: 0.6; margin-top: 5px; }
         
@@ -257,7 +256,9 @@
         let currentPersona = 'general';
         let modeTryingToUnlock = '';
         let adsWatchedCount = 0;
-        let freePremiumChatsLeft = 0;
+        
+        // 👇 JADU 1: Page khulte hi browser ki memory check karo 👇
+        let freePremiumChatsLeft = parseInt(localStorage.getItem('premiumChats')) || 0;
         
         const personas = {
             general: "You are a helpful AI assistant named SG AI.",
@@ -280,7 +281,9 @@
                 return;
             }
 
-            if (premiumModes.includes(selectedMode) && freePremiumChatsLeft > 0 && selectedMode === currentPersona) {
+            // 👇 JADU 2: Agar user ke paas memory mein pehle se chats hain, direct entry do 👇
+            if (premiumModes.includes(selectedMode) && freePremiumChatsLeft > 0) {
+                switchMode(selectedMode);
                 return; 
             }
 
@@ -320,7 +323,11 @@
             if (adsWatchedCount >= 3) {
                 alert("🎉 Reward Granted! You unlocked 5 free chats.");
                 document.getElementById('adModalOverlay').style.display = 'none';
+                
                 freePremiumChatsLeft = 5;
+                // 👇 JADU 3: Ad dekhne ke baad 5 chats memory mein Save karo 👇
+                localStorage.setItem('premiumChats', freePremiumChatsLeft);
+                
                 switchMode(modeTryingToUnlock); 
             }
         }
@@ -333,7 +340,7 @@
             if (premiumModes.includes(newMode)) {
                 chatCounter.style.display = 'block';
                 chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
-                addMessage('SG AI', `Premium Mode Unlocked! You have ${freePremiumChatsLeft} chats remaining. ✨`, 'ai');
+                addMessage('SG AI', `Premium Mode Active! You have ${freePremiumChatsLeft} chats remaining. ✨`, 'ai');
             } else {
                 chatCounter.style.display = 'none';
                 addMessage('SG AI', `Switched to ${newMode} mode! 🎉`, 'ai');
@@ -356,6 +363,9 @@
                 
                 if (premiumModes.includes(currentPersona)) {
                     freePremiumChatsLeft--;
+                    // 👇 JADU 4: Message bhejne ke baad bache hue chats memory mein Update karo 👇
+                    localStorage.setItem('premiumChats', freePremiumChatsLeft);
+                    
                     chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
                     
                     if (freePremiumChatsLeft <= 0) {
@@ -376,12 +386,10 @@
             }
         }
         
-        // --- NAYA ICON ADD KARNE WALA FUNCTION ---
         function addMessage(sender, text, type) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}`;
             
-            // Agar message AI ka hai toh "✨" icon lagao
             if (type === 'ai') {
                 const iconDiv = document.createElement('div');
                 iconDiv.className = 'ai-icon';
