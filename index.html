@@ -34,10 +34,10 @@
             --bg-header: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             --text-header: #ecf0f1;
             --bg-messages: #121212;
-            --bg-ai-msg: #2c2c2c;
+            --bg-ai-msg: transparent;
             --text-ai-msg: #e0e0e0;
-            --border-ai: 1px solid #333; 
-            --shadow-ai: 0 2px 10px rgba(0,0,0,0.15);
+            --border-ai: none; 
+            --shadow-ai: none;
             --bg-input-area: #1e1e1e;
             --border-input-area: 1px solid #333;
             --bg-input: #2c2c2c;
@@ -65,7 +65,6 @@
             display: flex; flex-direction: column; overflow: hidden; position: relative;
         }
         
-        /* --- NAYA HEADER CSS YAHAN HAI --- */
         .chat-header {
             background: var(--bg-header); color: var(--text-header);
             padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
@@ -102,21 +101,37 @@
         .persona-selector select {
             background: none; border: none; cursor: pointer;
             font-weight: bold; color: var(--text-selector); outline: none;
-            max-width: 100px; /* Nam lamba ho toh cut ho jayega par layout nahi bigdega */
+            max-width: 100px; 
             text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
         }
-        /* --------------------------------- */
 
         .messages { flex: 1; padding: 20px; overflow-y: auto; background: var(--bg-messages); }
         .message { margin-bottom: 20px; display: flex; animation: fadeIn 0.3s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .message.user { justify-content: flex-end; }
-        .message.ai { justify-content: flex-start; }
+        
+        /* --- AI Message + Icon CSS --- */
+        .message.ai { justify-content: flex-start; width: 100%; align-items: flex-start; gap: 10px; }
+        
+        .ai-icon { font-size: 1.3rem; margin-top: 8px; flex-shrink: 0; }
+        
         .message-content {
             max-width: 70%; padding: 15px 20px; border-radius: 20px; line-height: 1.5; word-wrap: break-word;
         }
+        
         .user .message-content { background: var(--user-msg-bg); color: white; border-bottom-right-radius: 5px; }
-        .ai .message-content { background: var(--bg-ai-msg); color: var(--text-ai-msg); border: var(--border-ai); border-bottom-left-radius: 5px; }
+        
+        .ai .message-content { 
+            background: transparent; 
+            color: var(--text-ai-msg); 
+            border: none; 
+            max-width: 100%; 
+            width: 100%; 
+            padding: 10px 0px; 
+            box-shadow: none; 
+        }
+        /* ---------------------------------- */
+
         .message-time { font-size: 0.75rem; opacity: 0.6; margin-top: 5px; }
         
         .typing-indicator { display: none; padding: 15px 20px; color: var(--typing-text); font-style: italic; background: var(--bg-messages); align-items: center; }
@@ -196,8 +211,10 @@
                 </div>
             </div>
         </div>
+        
         <div class="messages" id="messages">
             <div class="message ai">
+                <div class="ai-icon">✨</div>
                 <div class="message-content">
                     👋 Hi! I'm SG AI Assistant. How can I help you today?
                 </div>
@@ -235,9 +252,8 @@
         const adProgressText = document.getElementById('adProgressText');
         const chatCounter = document.getElementById('chatCounter');
         
-        // --- PREMIUM LOGIC VARIABLES ---
         const premiumModes = ['coder', 'teacher', 'funny', 'motivator', 'shayari'];
-        let previousPersona = 'general'; // Picha wala mode yaad rakhne ke liye
+        let previousPersona = 'general';
         let currentPersona = 'general';
         let modeTryingToUnlock = '';
         let adsWatchedCount = 0;
@@ -256,26 +272,21 @@
         
         inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
         
-        // --- CHECK ACCESS LOGIC ---
         function checkPersonaAccess() {
             const selectedMode = personaSelect.value;
             
-            // Agar free mode hai, toh direct switch kar do
             if (!premiumModes.includes(selectedMode)) {
                 switchMode(selectedMode);
                 return;
             }
 
-            // Agar Premium mode hai, par chats bache hain
             if (premiumModes.includes(selectedMode) && freePremiumChatsLeft > 0 && selectedMode === currentPersona) {
-                return; // Nothing to do
+                return; 
             }
 
-            // Agar premium mode hai aur chats nahi hain -> Show Ad Popup
             modeTryingToUnlock = selectedMode;
-            personaSelect.value = previousPersona; // Dropdown ko purane mode par wapas karo
+            personaSelect.value = previousPersona;
             
-            // Ad Modal dikhao
             adsWatchedCount = 0;
             adProgressText.innerText = `Ads Watched: 0 / 3`;
             document.getElementById('modalTitle').innerText = `Unlock ${selectedMode.toUpperCase()} 🔒`;
@@ -287,23 +298,18 @@
             personaSelect.value = previousPersona;
         }
 
-        // --- ASLI ADMOB CONNECTION LOGIC ---
         function watchAd() {
             let btn = document.querySelector('.watch-ad-btn');
             btn.innerText = "Loading Ad... ⏳";
             btn.disabled = true;
 
-            // Check karo ki app Android mein khula hai ya Browser mein
             if (typeof AndroidBridge !== "undefined") {
-                // Agar Android App mein hai, toh App ko Ad dikhane bolo!
                 AndroidBridge.showAd();
             } else {
-                // Agar Computer/Browser par check kar rahe ho, toh Dummy Timer chalao
                 setTimeout(() => { adWatchedSuccessfully(); }, 1500);
             }
         }
 
-        // Android App ad poora hone ke baad is function ko jagayega!
         function adWatchedSuccessfully() {
             let btn = document.querySelector('.watch-ad-btn');
             adsWatchedCount++;
@@ -324,7 +330,6 @@
             previousPersona = newMode;
             personaSelect.value = newMode;
             
-            // Agar premium hai toh counter dikhao, warna chupao
             if (premiumModes.includes(newMode)) {
                 chatCounter.style.display = 'block';
                 chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
@@ -349,7 +354,6 @@
                 const response = await getAIResponse(message);
                 addMessage('SG AI', response, 'ai');
                 
-                // --- CHAT DECREMENT LOGIC ---
                 if (premiumModes.includes(currentPersona)) {
                     freePremiumChatsLeft--;
                     chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
@@ -358,7 +362,7 @@
                         setTimeout(() => {
                             alert("⚠️ Your free premium chats are over! Locking mode back.");
                             chatCounter.style.display = 'none';
-                            switchMode('general'); // Wapas General par phek do
+                            switchMode('general'); 
                         }, 1000);
                     }
                 }
@@ -372,26 +376,31 @@
             }
         }
         
+        // --- NAYA ICON ADD KARNE WALA FUNCTION ---
         function addMessage(sender, text, type) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}`;
+            
+            // Agar message AI ka hai toh "✨" icon lagao
+            if (type === 'ai') {
+                const iconDiv = document.createElement('div');
+                iconDiv.className = 'ai-icon';
+                iconDiv.innerHTML = '✨'; 
+                messageDiv.appendChild(iconDiv);
+            }
+
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
             
             let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*/g, '•').replace(/\n/g, '<br>');
             contentDiv.innerHTML = formattedText;
             
-            const timeDiv = document.createElement('div');
-            timeDiv.className = 'message-time';
-            timeDiv.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            
-            messageDiv.appendChild(contentDiv); messageDiv.appendChild(timeDiv);
+            messageDiv.appendChild(contentDiv); 
             messagesEl.appendChild(messageDiv); scrollToBottom();
         }
         
         function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
         
-        // --- RENDER BACKEND API ---
         async function getAIResponse(userMessage) {
             const BACKEND_URL = `https://sg-ai-backend.onrender.com/api/chat`;
             const personaInstruction = personas[currentPersona] || personas.general;
