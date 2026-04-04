@@ -110,8 +110,10 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .message.user { justify-content: flex-end; }
         
-        /* --- YAHAN NAYA DESIGN (CSS) HAI --- */
-        .message.ai { justify-content: flex-start; width: 100%; }
+        /* --- AI Message + Icon CSS --- */
+        .message.ai { justify-content: flex-start; width: 100%; align-items: flex-start; gap: 10px; }
+        
+        .ai-icon { font-size: 1.3rem; margin-top: 8px; flex-shrink: 0; }
         
         .message-content {
             max-width: 70%; padding: 15px 20px; border-radius: 20px; line-height: 1.5; word-wrap: break-word;
@@ -119,7 +121,6 @@
         
         .user .message-content { background: var(--user-msg-bg); color: white; border-bottom-right-radius: 5px; }
         
-        /* AI ke message ko transparent aur full width kiya gaya hai */
         .ai .message-content { 
             background: transparent; 
             color: var(--text-ai-msg); 
@@ -210,8 +211,10 @@
                 </div>
             </div>
         </div>
+        
         <div class="messages" id="messages">
             <div class="message ai">
+                <div class="ai-icon">✨</div>
                 <div class="message-content">
                     👋 Hi! I'm SG AI Assistant. How can I help you today?
                 </div>
@@ -249,7 +252,6 @@
         const adProgressText = document.getElementById('adProgressText');
         const chatCounter = document.getElementById('chatCounter');
         
-        // --- PREMIUM LOGIC VARIABLES ---
         const premiumModes = ['coder', 'teacher', 'funny', 'motivator', 'shayari'];
         let previousPersona = 'general';
         let currentPersona = 'general';
@@ -270,26 +272,21 @@
         
         inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
         
-        // --- CHECK ACCESS LOGIC ---
         function checkPersonaAccess() {
             const selectedMode = personaSelect.value;
             
-            // Agar free mode hai, toh direct switch kar do
             if (!premiumModes.includes(selectedMode)) {
                 switchMode(selectedMode);
                 return;
             }
 
-            // Agar Premium mode hai, par chats bache hain
             if (premiumModes.includes(selectedMode) && freePremiumChatsLeft > 0 && selectedMode === currentPersona) {
                 return; 
             }
 
-            // Agar premium mode hai aur chats nahi hain -> Show Ad Popup
             modeTryingToUnlock = selectedMode;
             personaSelect.value = previousPersona;
             
-            // Ad Modal dikhao
             adsWatchedCount = 0;
             adProgressText.innerText = `Ads Watched: 0 / 3`;
             document.getElementById('modalTitle').innerText = `Unlock ${selectedMode.toUpperCase()} 🔒`;
@@ -301,7 +298,6 @@
             personaSelect.value = previousPersona;
         }
 
-        // --- ASLI ADMOB CONNECTION LOGIC ---
         function watchAd() {
             let btn = document.querySelector('.watch-ad-btn');
             btn.innerText = "Loading Ad... ⏳";
@@ -358,7 +354,6 @@
                 const response = await getAIResponse(message);
                 addMessage('SG AI', response, 'ai');
                 
-                // --- CHAT DECREMENT LOGIC ---
                 if (premiumModes.includes(currentPersona)) {
                     freePremiumChatsLeft--;
                     chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
@@ -381,29 +376,31 @@
             }
         }
         
+        // --- NAYA ICON ADD KARNE WALA FUNCTION ---
         function addMessage(sender, text, type) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}`;
+            
+            // Agar message AI ka hai toh "✨" icon lagao
+            if (type === 'ai') {
+                const iconDiv = document.createElement('div');
+                iconDiv.className = 'ai-icon';
+                iconDiv.innerHTML = '✨'; 
+                messageDiv.appendChild(iconDiv);
+            }
+
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
             
             let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*/g, '•').replace(/\n/g, '<br>');
             contentDiv.innerHTML = formattedText;
             
-            // Time hataya gaya as it doesn't match standard ChatGPT look
-            // But if you need it, uncomment lines below:
-            // const timeDiv = document.createElement('div');
-            // timeDiv.className = 'message-time';
-            // timeDiv.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            
             messageDiv.appendChild(contentDiv); 
-            // messageDiv.appendChild(timeDiv); 
             messagesEl.appendChild(messageDiv); scrollToBottom();
         }
         
         function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
         
-        // --- RENDER BACKEND API ---
         async function getAIResponse(userMessage) {
             const BACKEND_URL = `https://sg-ai-backend.onrender.com/api/chat`;
             const personaInstruction = personas[currentPersona] || personas.general;
