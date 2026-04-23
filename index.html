@@ -232,6 +232,28 @@
     </div>
 
     <script>
+        // --- NAYE FUNCTIONS: Android Inko Call Karega ---
+
+        // 1. Android button ko wapas normal karne ke liye ise call karega
+        function resetAdButton() {
+            let btn = document.querySelector('.watch-ad-btn');
+            if (btn) {
+                btn.innerText = "🎬 Watch Ad Now";
+                btn.disabled = false;
+            }
+        }
+
+        // 2. Android har ad dekhne ke baad ise call karega (Count update karne ke liye)
+        function updateAdUI(count) {
+            adsWatchedCount = count; // Apna global variable bhi update karo
+            let progressText = document.getElementById('adProgressText');
+            if (progressText) {
+                progressText.innerText = `Ads Watched: ${count} / 3`;
+            }
+        }
+
+        // --- BAKI AAPKA PURANA CODE ---
+
         function toggleTheme() {
             const body = document.body;
             const themeBtn = document.getElementById('themeToggle');
@@ -257,7 +279,7 @@
         let modeTryingToUnlock = '';
         let adsWatchedCount = 0;
         
-        // 👇 JADU 1: Page khulte hi browser ki memory check karo 👇
+        // JADU 1: Page khulte hi browser ki memory check karo
         let freePremiumChatsLeft = parseInt(localStorage.getItem('premiumChats')) || 0;
         
         const personas = {
@@ -281,7 +303,7 @@
                 return;
             }
 
-            // 👇 JADU 2: Agar user ke paas memory mein pehle se chats hain, direct entry do 👇
+            // JADU 2: Agar user ke paas memory mein pehle se chats hain, direct entry do
             if (premiumModes.includes(selectedMode) && freePremiumChatsLeft > 0) {
                 switchMode(selectedMode);
                 return; 
@@ -325,7 +347,7 @@
                 document.getElementById('adModalOverlay').style.display = 'none';
                 
                 freePremiumChatsLeft = 5;
-                // 👇 JADU 3: Ad dekhne ke baad 5 chats memory mein Save karo 👇
+                // JADU 3: Ad dekhne ke baad 5 chats memory mein Save karo
                 localStorage.setItem('premiumChats', freePremiumChatsLeft);
                 
                 switchMode(modeTryingToUnlock); 
@@ -358,25 +380,35 @@
             scrollToBottom();
             
             try {
-                const response = await getAIResponse(message);
-                addMessage('SG AI', response, 'ai');
+                const BACKEND_URL = `https://sg-ai-backend.onrender.com/api/chat`;
+                const personaInstruction = personas[currentPersona] || personas.general;
                 
-                if (premiumModes.includes(currentPersona)) {
-                    freePremiumChatsLeft--;
-                    // 👇 JADU 4: Message bhejne ke baad bache hue chats memory mein Update karo 👇
-                    localStorage.setItem('premiumChats', freePremiumChatsLeft);
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message, persona: personaInstruction })
+                });
+                const data = await response.json();
+                if (data.candidates && data.candidates.length > 0) {
+                    addMessage('SG AI', data.candidates[0].content.parts[0].text, 'ai');
                     
-                    chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
-                    
-                    if (freePremiumChatsLeft <= 0) {
-                        setTimeout(() => {
-                            alert("⚠️ Your free premium chats are over! Locking mode back.");
-                            chatCounter.style.display = 'none';
-                            switchMode('general'); 
-                        }, 1000);
+                    if (premiumModes.includes(currentPersona)) {
+                        freePremiumChatsLeft--;
+                        // JADU 4: Message bhejne ke baad bache hue chats memory mein Update karo
+                        localStorage.setItem('premiumChats', freePremiumChatsLeft);
+                        
+                        chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
+                        
+                        if (freePremiumChatsLeft <= 0) {
+                            setTimeout(() => {
+                                alert("⚠️ Your free premium chats are over! Locking mode back.");
+                                chatCounter.style.display = 'none';
+                                switchMode('general'); 
+                            }, 1000);
+                        }
                     }
+                } else {
+                    addMessage('SG AI', "🚨 Backend Error!", 'ai');
                 }
-                
             } catch (error) {
                 addMessage('SG AI', "Sorry, error aa gaya.", 'ai');
             } finally {
@@ -408,22 +440,6 @@
         }
         
         function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
-        
-        async function getAIResponse(userMessage) {
-            const BACKEND_URL = `https://sg-ai-backend.onrender.com/api/chat`;
-            const personaInstruction = personas[currentPersona] || personas.general;
-            
-            const response = await fetch(BACKEND_URL, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: userMessage, persona: personaInstruction })
-            });
-            const data = await response.json();
-            if (data.candidates && data.candidates.length > 0) {
-                return data.candidates[0].content.parts[0].text;
-            } else {
-                return "🚨 Backend Error!";
-            }
-        }
         
         window.onload = () => inputEl.focus();
     </script>
