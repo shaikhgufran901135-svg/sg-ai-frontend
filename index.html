@@ -367,6 +367,11 @@
                 chatCounter.style.display = 'none';
                 addMessage('SG AI', `Switched to ${newMode} mode! 🎉`, 'ai');
             }
+
+            // --- NAYA JADU: Mode change hote hi Android ko Interstitial Ad dikhane ko bolo ---
+            if (typeof AndroidBridge !== "undefined" && typeof AndroidBridge.showInterstitial === "function") {
+                AndroidBridge.showInterstitial();
+            }
         }
         
         async function sendMessage() {
