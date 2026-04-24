@@ -56,11 +56,17 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
+        /* FIX: Android native bounce ko disable karne ke liye */
+        html, body {
+            overscroll-behavior-y: none;
+        }
+        
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background: var(--bg-body); height: 100vh; display: flex; 
             justify-content: center; align-items: center; color: var(--text-main);
             transition: background 0.5s ease;
+            overflow: hidden; /* FIX: Main screen ko scroll hone se rokne ke liye */
         }
         
         .chat-container {
@@ -68,6 +74,7 @@
             background: var(--bg-container); border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             display: flex; flex-direction: column; overflow: hidden; position: relative;
+            transform: translateZ(0); /* FIX: Hardware acceleration for smooth rendering */
         }
         
         .chat-header {
@@ -102,7 +109,17 @@
             max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
         }
 
-        .messages { flex: 1; padding: 20px; overflow-y: auto; background: var(--bg-messages); }
+        /* FIX: Messages list ki scrolling ko smooth aur stable banane ke liye */
+        .messages { 
+            flex: 1; padding: 20px; 
+            overflow-y: scroll; /* auto ki jagah scroll */
+            background: var(--bg-messages); 
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain;
+            overflow-anchor: none;
+        }
+        
         .message { margin-bottom: 20px; display: flex; animation: fadeIn 0.3s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .message.user { justify-content: flex-end; }
@@ -120,10 +137,11 @@
             max-width: 100%; width: 100%; padding: 10px 0px; box-shadow: none; 
         }
 
-        /* NAYA CODE: Code Box aur Copy Button ki Styling */
+        /* FIX: Code Box ki styling mein width stability */
         .message-content pre {
             background: #282c34; border-radius: 10px; padding: 15px; padding-top: 35px;
             margin: 10px 0; overflow-x: auto; position: relative;
+            max-width: 100%; box-sizing: border-box; /* overflow rokne ke liye */
         }
         .message-content pre code {
             font-family: 'Consolas', 'Courier New', Courier, monospace;
@@ -136,7 +154,6 @@
             cursor: pointer; font-weight: bold; transition: 0.2s;
         }
         .copy-code-btn:hover { background: #00f2fe; }
-        /* Markdown ke default p aur ul tags margin theek karne ke liye */
         .message-content p { margin-bottom: 10px; }
         .message-content p:last-child { margin-bottom: 0; }
         
@@ -416,7 +433,6 @@
             }
         }
         
-        // NAYA CODE: Ye function pura badal diya hai Code Box ke liye
         function addMessage(sender, text, type) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}`;
@@ -432,10 +448,8 @@
             contentDiv.className = 'message-content';
             
             if (type === 'ai') {
-                // 1. Marked.js se text ko Markdown se HTML mein badlo
                 contentDiv.innerHTML = marked.parse(text);
                 
-                // 2. Har code block (<pre>) dhoondho aur usme Copy Button lagao
                 const preTags = contentDiv.querySelectorAll('pre');
                 preTags.forEach((pre) => {
                     const copyBtn = document.createElement('button');
@@ -452,13 +466,11 @@
                     pre.appendChild(copyBtn);
                 });
                 
-                // 3. Highlight.js se syntax colors apply karo
                 contentDiv.querySelectorAll('pre code').forEach((block) => {
                     hljs.highlightElement(block);
                 });
 
             } else {
-                // User message simple text rahega
                 contentDiv.innerText = text;
             }
             
