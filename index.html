@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SG AI Chat - Premium Features</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
     <style>
         :root {
             --bg-body: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -71,23 +76,16 @@
             display: flex; justify-content: space-between; align-items: center;
         }
 
-        .title-and-profile {
-            display: flex; align-items: center; gap: 10px;
-        }
-
+        .title-and-profile { display: flex; align-items: center; gap: 10px; }
         .profile-pic {
             width: 40px; height: 40px; border-radius: 50%; background: white;
             display: flex; justify-content: center; align-items: center; font-size: 24px;
         }
-
         .title-text { display: flex; flex-direction: column; text-align: left; }
         .title-text h1 { font-size: 1.2rem; margin: 0; font-weight: bold; }
         .title-text p { font-size: 0.8rem; margin: 0; opacity: 0.9; }
         
-        .header-controls {
-            display: flex; gap: 8px; align-items: center;
-        }
-
+        .header-controls { display: flex; gap: 8px; align-items: center; }
         .theme-btn {
             background: var(--bg-selector); border: 1px solid var(--border-input);
             border-radius: 50%; width: 38px; height: 38px; cursor: pointer;
@@ -101,8 +99,7 @@
         .persona-selector select {
             background: none; border: none; cursor: pointer;
             font-weight: bold; color: var(--text-selector); outline: none;
-            max-width: 100px; 
-            text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
+            max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
         }
 
         .messages { flex: 1; padding: 20px; overflow-y: auto; background: var(--bg-messages); }
@@ -110,28 +107,38 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .message.user { justify-content: flex-end; }
         
-        /* --- AI Message + Icon CSS --- */
         .message.ai { justify-content: flex-start; width: 100%; align-items: flex-start; gap: 10px; }
-        
         .ai-icon { font-size: 1.3rem; margin-top: 8px; flex-shrink: 0; }
         
         .message-content {
-            max-width: 70%; padding: 15px 20px; border-radius: 20px; line-height: 1.5; word-wrap: break-word;
+            max-width: 75%; padding: 15px 20px; border-radius: 20px; line-height: 1.5; word-wrap: break-word;
         }
-        
         .user .message-content { background: var(--user-msg-bg); color: white; border-bottom-right-radius: 5px; }
         
         .ai .message-content { 
-            background: transparent; 
-            color: var(--text-ai-msg); 
-            border: none; 
-            max-width: 100%; 
-            width: 100%; 
-            padding: 10px 0px; 
-            box-shadow: none; 
+            background: transparent; color: var(--text-ai-msg); border: none; 
+            max-width: 100%; width: 100%; padding: 10px 0px; box-shadow: none; 
         }
 
-        .message-time { font-size: 0.75rem; opacity: 0.6; margin-top: 5px; }
+        /* NAYA CODE: Code Box aur Copy Button ki Styling */
+        .message-content pre {
+            background: #282c34; border-radius: 10px; padding: 15px; padding-top: 35px;
+            margin: 10px 0; overflow-x: auto; position: relative;
+        }
+        .message-content pre code {
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            font-size: 0.9rem; color: #abb2bf;
+        }
+        .copy-code-btn {
+            position: absolute; top: 8px; right: 8px;
+            background: #4facfe; color: white; border: none;
+            border-radius: 5px; padding: 4px 10px; font-size: 0.75rem;
+            cursor: pointer; font-weight: bold; transition: 0.2s;
+        }
+        .copy-code-btn:hover { background: #00f2fe; }
+        /* Markdown ke default p aur ul tags margin theek karne ke liye */
+        .message-content p { margin-bottom: 10px; }
+        .message-content p:last-child { margin-bottom: 0; }
         
         .typing-indicator { display: none; padding: 15px 20px; color: var(--typing-text); font-style: italic; background: var(--bg-messages); align-items: center; }
         .typing-indicator::after {
@@ -145,10 +152,8 @@
         #messageInput { flex: 1; padding: 15px 20px; background: var(--bg-input); color: var(--text-input); border: var(--border-input); border-radius: 25px; outline: none; }
         #sendBtn { padding: 15px 25px; background: var(--user-msg-bg); color: white; border: none; border-radius: 25px; cursor: pointer; }
         
-        /* PREMIUM CHAT COUNTER */
         .chat-counter { font-size: 0.8rem; color: #e74c3c; font-weight: bold; text-align: right; padding-right: 10px; display: none; }
 
-        /* AD MODAL CSS (POPUP) */
         .modal-overlay {
             display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center; flex-direction: column;
@@ -232,9 +237,6 @@
     </div>
 
     <script>
-        // --- NAYE FUNCTIONS: Android Inko Call Karega ---
-
-        // 1. Android button ko wapas normal karne ke liye ise call karega
         function resetAdButton() {
             let btn = document.querySelector('.watch-ad-btn');
             if (btn) {
@@ -243,16 +245,13 @@
             }
         }
 
-        // 2. Android har ad dekhne ke baad ise call karega (Count update karne ke liye)
         function updateAdUI(count) {
-            adsWatchedCount = count; // Apna global variable bhi update karo
+            adsWatchedCount = count;
             let progressText = document.getElementById('adProgressText');
             if (progressText) {
                 progressText.innerText = `Ads Watched: ${count} / 3`;
             }
         }
-
-        // --- BAKI AAPKA PURANA CODE ---
 
         function toggleTheme() {
             const body = document.body;
@@ -279,7 +278,6 @@
         let modeTryingToUnlock = '';
         let adsWatchedCount = 0;
         
-        // JADU 1: Page khulte hi browser ki memory check karo
         let freePremiumChatsLeft = parseInt(localStorage.getItem('premiumChats')) || 0;
         
         const personas = {
@@ -303,7 +301,6 @@
                 return;
             }
 
-            // JADU 2: Agar user ke paas memory mein pehle se chats hain, direct entry do
             if (premiumModes.includes(selectedMode) && freePremiumChatsLeft > 0) {
                 switchMode(selectedMode);
                 return; 
@@ -347,7 +344,6 @@
                 document.getElementById('adModalOverlay').style.display = 'none';
                 
                 freePremiumChatsLeft = 5;
-                // JADU 3: Ad dekhne ke baad 5 chats memory mein Save karo
                 localStorage.setItem('premiumChats', freePremiumChatsLeft);
                 
                 switchMode(modeTryingToUnlock); 
@@ -368,7 +364,6 @@
                 addMessage('SG AI', `Switched to ${newMode} mode! 🎉`, 'ai');
             }
 
-            // --- NAYA JADU: Mode change hote hi Android ko Interstitial Ad dikhane ko bolo ---
             if (typeof AndroidBridge !== "undefined" && typeof AndroidBridge.showInterstitial === "function") {
                 AndroidBridge.showInterstitial();
             }
@@ -398,9 +393,7 @@
                     
                     if (premiumModes.includes(currentPersona)) {
                         freePremiumChatsLeft--;
-                        // JADU 4: Message bhejne ke baad bache hue chats memory mein Update karo
                         localStorage.setItem('premiumChats', freePremiumChatsLeft);
-                        
                         chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
                         
                         if (freePremiumChatsLeft <= 0) {
@@ -423,6 +416,7 @@
             }
         }
         
+        // NAYA CODE: Ye function pura badal diya hai Code Box ke liye
         function addMessage(sender, text, type) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}`;
@@ -437,11 +431,40 @@
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
             
-            let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*/g, '•').replace(/\n/g, '<br>');
-            contentDiv.innerHTML = formattedText;
+            if (type === 'ai') {
+                // 1. Marked.js se text ko Markdown se HTML mein badlo
+                contentDiv.innerHTML = marked.parse(text);
+                
+                // 2. Har code block (<pre>) dhoondho aur usme Copy Button lagao
+                const preTags = contentDiv.querySelectorAll('pre');
+                preTags.forEach((pre) => {
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-code-btn';
+                    copyBtn.innerText = 'Copy';
+                    
+                    copyBtn.onclick = () => {
+                        const codeText = pre.querySelector('code').innerText;
+                        navigator.clipboard.writeText(codeText).then(() => {
+                            copyBtn.innerText = 'Copied! ✔';
+                            setTimeout(() => { copyBtn.innerText = 'Copy'; }, 2000);
+                        });
+                    };
+                    pre.appendChild(copyBtn);
+                });
+                
+                // 3. Highlight.js se syntax colors apply karo
+                contentDiv.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+
+            } else {
+                // User message simple text rahega
+                contentDiv.innerText = text;
+            }
             
             messageDiv.appendChild(contentDiv); 
-            messagesEl.appendChild(messageDiv); scrollToBottom();
+            messagesEl.appendChild(messageDiv); 
+            scrollToBottom();
         }
         
         function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
