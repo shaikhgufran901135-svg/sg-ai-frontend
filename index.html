@@ -221,7 +221,7 @@
                 <div class="persona-selector">
                     <select id="personaSelect" onchange="checkPersonaAccess()">
                         <option value="general">General Assistant</option>
-                        <option value="friendly">Friendly Friend</option>
+                        <option value="friendly">Friendly Friend 🔒</option>
                         <option value="professional">Professional</option>
                         <option value="coder">Code Helper 🔒</option>
                         <option value="teacher">Teacher Mode 🔒</option>
@@ -289,7 +289,8 @@
         const adProgressText = document.getElementById('adProgressText');
         const chatCounter = document.getElementById('chatCounter');
         
-        const premiumModes = ['coder', 'teacher', 'funny', 'motivator', 'shayari'];
+        // 🚀 YAHAN 'friendly' KO PREMIUM LIST MEIN ADD KIYA
+        const premiumModes = ['friendly', 'coder', 'teacher', 'funny', 'motivator', 'shayari'];
         let previousPersona = 'general';
         let currentPersona = 'general';
         let modeTryingToUnlock = '';
@@ -299,7 +300,6 @@
         
         const personas = {
             general: "You are a helpful AI assistant named SG AI.",
-            // 🚀 NAYA FRIENDLY VIBE MATCHING RULE
             friendly: "You are a close, friendly, and highly adaptable companion named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If the user is funny, be hilarious. If the user talks romantically or flirts, respond romantically and playfully. If the user is sad, be deeply comforting. 2. Always reply in the EXACT SAME LANGUAGE as the user (e.g., Hinglish for Hinglish, English for English). 3. Use emojis naturally! 😊",
             professional: "You are a professional consultant named SG AI. Be formal.",
             coder: "You are a coding expert. Explain code clearly.",
