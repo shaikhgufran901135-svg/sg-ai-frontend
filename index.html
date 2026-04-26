@@ -1,501 +1,488 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SG AI Chat - Premium Features</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    
-    <style>
-        :root {
-            --bg-body: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --bg-container: rgba(255, 255, 255, 0.95);
-            --text-main: #333;
-            --bg-header: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --text-header: white;
-            --bg-messages: #f8f9fa;
-            --bg-ai-msg: white;
-            --text-ai-msg: #333;
-            --border-ai: 1px solid #e0e0e0;
-            --shadow-ai: 0 2px 10px rgba(0,0,0,0.05);
-            --bg-input-area: white;
-            --border-input-area: 1px solid #eee;
-            --bg-input: white;
-            --text-input: #333;
-            --border-input: 2px solid #e0e0e0;
-            --bg-selector: rgba(255, 255, 255, 0.9);
-            --text-selector: #4facfe;
-            --typing-text: #666;
-            --user-msg-bg: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SG AI Chat - Premium Features</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-body: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-container: rgba(255, 255, 255, 0.95);
+            --text-main: #333;
+            --bg-header: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --text-header: white;
+            --bg-messages: #f8f9fa;
+            --bg-ai-msg: white;
+            --text-ai-msg: #333;
+            --border-ai: 1px solid #e0e0e0;
+            --shadow-ai: 0 2px 10px rgba(0,0,0,0.05);
+            --bg-input-area: white;
+            --border-input-area: 1px solid #eee;
+            --bg-input: white;
+            --text-input: #333;
+            --border-input: 2px solid #e0e0e0;
+            --bg-selector: rgba(255, 255, 255, 0.9);
+            --text-selector: #4facfe;
+            --typing-text: #666;
+            --user-msg-bg: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
 
-        [data-theme="dark"] {
-            --bg-body: linear-gradient(135deg, #1a1c24 0%, #2d3436 100%);
-            --bg-container: rgba(30, 30, 30, 0.95);
-            --text-main: #e0e0e0;
-            --bg-header: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            --text-header: #ecf0f1;
-            --bg-messages: #121212;
-            --bg-ai-msg: transparent;
-            --text-ai-msg: #e0e0e0;
-            --border-ai: none; 
-            --shadow-ai: none;
-            --bg-input-area: #1e1e1e;
-            --border-input-area: 1px solid #333;
-            --bg-input: #2c2c2c;
-            --text-input: #e0e0e0;
-            --border-input: 2px solid #444;
-            --bg-selector: rgba(30, 30, 30, 0.9);
-            --text-selector: #3498db;
-            --typing-text: #aaa;
-            --user-msg-bg: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-        }
+        [data-theme="dark"] {
+            --bg-body: linear-gradient(135deg, #1a1c24 0%, #2d3436 100%);
+            --bg-container: rgba(30, 30, 30, 0.95);
+            --text-main: #e0e0e0;
+            --bg-header: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            --text-header: #ecf0f1;
+            --bg-messages: #121212;
+            --bg-ai-msg: transparent;
+            --text-ai-msg: #e0e0e0;
+            --border-ai: none; 
+            --shadow-ai: none;
+            --bg-input-area: #1e1e1e;
+            --border-input-area: 1px solid #333;
+            --bg-input: #2c2c2c;
+            --text-input: #e0e0e0;
+            --border-input: 2px solid #444;
+            --bg-selector: rgba(30, 30, 30, 0.9);
+            --text-selector: #3498db;
+            --typing-text: #aaa;
+            --user-msg-bg: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        /* FIX: Android native bounce ko disable karne ke liye */
-        html, body {
-            overscroll-behavior-y: none;
-        }
-        
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: var(--bg-body); height: 100vh; display: flex; 
-            justify-content: center; align-items: center; color: var(--text-main);
-            transition: background 0.5s ease;
-            overflow: hidden; /* FIX: Main screen ko scroll hone se rokne ke liye */
-        }
-        
-        .chat-container {
-            width: 90%; max-width: 800px; height: 90vh;
-            background: var(--bg-container); border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            display: flex; flex-direction: column; overflow: hidden; position: relative;
-            transform: translateZ(0); /* FIX: Hardware acceleration for smooth rendering */
-        }
-        
-        .chat-header {
-            background: var(--bg-header); color: var(--text-header);
-            padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* FIX: Android native bounce ko disable karne ke liye */
+        html, body {
+            overscroll-behavior-y: none;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg-body); height: 100vh; display: flex; 
+            justify-content: center; align-items: center; color: var(--text-main);
+            transition: background 0.5s ease;
+            overflow: hidden; /* FIX: Main screen ko scroll hone se rokne ke liye */
+        }
+        
+        .chat-container {
+            width: 90%; max-width: 800px; height: 90vh;
+            background: var(--bg-container); border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            display: flex; flex-direction: column; overflow: hidden; position: relative;
+            transform: translateZ(0); /* FIX: Hardware acceleration for smooth rendering */
+        }
+        
+        .chat-header {
+            background: var(--bg-header); color: var(--text-header);
+            padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
+            display: flex; justify-content: space-between; align-items: center;
+        }
 
-        .title-and-profile { display: flex; align-items: center; gap: 10px; }
-        .profile-pic {
-            width: 40px; height: 40px; border-radius: 50%; background: white;
-            display: flex; justify-content: center; align-items: center; font-size: 24px;
-        }
-        .title-text { display: flex; flex-direction: column; text-align: left; }
-        .title-text h1 { font-size: 1.2rem; margin: 0; font-weight: bold; }
-        .title-text p { font-size: 0.8rem; margin: 0; opacity: 0.9; }
-        
-        .header-controls { display: flex; gap: 8px; align-items: center; }
-        .theme-btn {
-            background: var(--bg-selector); border: 1px solid var(--border-input);
-            border-radius: 50%; width: 38px; height: 38px; cursor: pointer;
-            display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .persona-selector {
-            background: var(--bg-selector); padding: 8px 10px;
-            border-radius: 15px; border: 1px solid var(--border-input);
-        }
-        .persona-selector select {
-            background: none; border: none; cursor: pointer;
-            font-weight: bold; color: var(--text-selector); outline: none;
-            max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
-        }
+        .title-and-profile { display: flex; align-items: center; gap: 10px; }
+        .profile-pic {
+            width: 40px; height: 40px; border-radius: 50%; background: white;
+            display: flex; justify-content: center; align-items: center; font-size: 24px;
+        }
+        .title-text { display: flex; flex-direction: column; text-align: left; }
+        .title-text h1 { font-size: 1.2rem; margin: 0; font-weight: bold; }
+        .title-text p { font-size: 0.8rem; margin: 0; opacity: 0.9; }
+        
+        .header-controls { display: flex; gap: 8px; align-items: center; }
+        .theme-btn {
+            background: var(--bg-selector); border: 1px solid var(--border-input);
+            border-radius: 50%; width: 38px; height: 38px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .persona-selector {
+            background: var(--bg-selector); padding: 8px 10px;
+            border-radius: 15px; border: 1px solid var(--border-input);
+        }
+        .persona-selector select {
+            background: none; border: none; cursor: pointer;
+            font-weight: bold; color: var(--text-selector); outline: none;
+            max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
+        }
 
-        /* FIX: Messages list ki scrolling ko smooth aur stable banane ke liye */
-        .messages { 
-            flex: 1; padding: 20px; 
-            overflow-y: scroll; /* auto ki jagah scroll */
-            background: var(--bg-messages); 
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior-y: contain;
-            overflow-anchor: none;
-        }
-        
-        .message { margin-bottom: 20px; display: flex; animation: fadeIn 0.3s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .message.user { justify-content: flex-end; }
-        
-        .message.ai { justify-content: flex-start; width: 100%; align-items: flex-start; gap: 10px; }
-        .ai-icon { font-size: 1.3rem; margin-top: 8px; flex-shrink: 0; }
-        
-        .message-content {
-            max-width: 75%; padding: 15px 20px; border-radius: 20px; line-height: 1.5; word-wrap: break-word;
-        }
-        .user .message-content { background: var(--user-msg-bg); color: white; border-bottom-right-radius: 5px; }
-        
-        .ai .message-content { 
-            background: transparent; color: var(--text-ai-msg); border: none; 
-            max-width: 100%; width: 100%; padding: 10px 0px; box-shadow: none; 
-        }
+        /* FIX: Messages list ki scrolling ko smooth aur stable banane ke liye */
+        .messages { 
+            flex: 1; padding: 20px; 
+            overflow-y: scroll; /* auto ki jagah scroll */
+            background: var(--bg-messages); 
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain;
+            overflow-anchor: none;
+        }
+        
+        .message { margin-bottom: 20px; display: flex; animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .message.user { justify-content: flex-end; }
+        
+        .message.ai { justify-content: flex-start; width: 100%; align-items: flex-start; gap: 10px; }
+        .ai-icon { font-size: 1.3rem; margin-top: 8px; flex-shrink: 0; }
+        
+        .message-content {
+            max-width: 75%; padding: 15px 20px; border-radius: 20px; line-height: 1.5; word-wrap: break-word;
+        }
+        .user .message-content { background: var(--user-msg-bg); color: white; border-bottom-right-radius: 5px; }
+        
+        .ai .message-content { 
+            background: transparent; color: var(--text-ai-msg); border: none; 
+            max-width: 100%; width: 100%; padding: 10px 0px; box-shadow: none; 
+        }
 
-        /* FIX: Code Box ki styling mein width stability */
-        .message-content pre {
-            background: #282c34; border-radius: 10px; padding: 15px; padding-top: 35px;
-            margin: 10px 0; overflow-x: auto; position: relative;
-            max-width: 100%; box-sizing: border-box; /* overflow rokne ke liye */
-        }
-        .message-content pre code {
-            font-family: 'Consolas', 'Courier New', Courier, monospace;
-            font-size: 0.9rem; color: #abb2bf;
-        }
-        .copy-code-btn {
-            position: absolute; top: 8px; right: 8px;
-            background: #4facfe; color: white; border: none;
-            border-radius: 5px; padding: 4px 10px; font-size: 0.75rem;
-            cursor: pointer; font-weight: bold; transition: 0.2s;
-        }
-        .copy-code-btn:hover { background: #00f2fe; }
-        .message-content p { margin-bottom: 10px; }
-        .message-content p:last-child { margin-bottom: 0; }
-        
-        .typing-indicator { display: none; padding: 15px 20px; color: var(--typing-text); font-style: italic; background: var(--bg-messages); align-items: center; }
-        .typing-indicator::after {
-            content: ''; display: inline-block; width: 18px; height: 18px;
-            border: 2px solid #555; border-radius: 50%; border-top-color: #3498db; animation: spin 1s linear infinite; margin-left: 10px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .input-area { padding: 20px; background: var(--bg-input-area); border-top: var(--border-input-area); display: flex; gap: 10px; flex-direction: column;}
-        .input-row { display: flex; gap: 10px; width: 100%; }
-        #messageInput { flex: 1; padding: 15px 20px; background: var(--bg-input); color: var(--text-input); border: var(--border-input); border-radius: 25px; outline: none; }
-        #sendBtn { padding: 15px 25px; background: var(--user-msg-bg); color: white; border: none; border-radius: 25px; cursor: pointer; }
-        
-        .chat-counter { font-size: 0.8rem; color: #e74c3c; font-weight: bold; text-align: right; padding-right: 10px; display: none; }
+        /* FIX: Code Box ki styling mein width stability */
+        .message-content pre {
+            background: #282c34; border-radius: 10px; padding: 15px; padding-top: 35px;
+            margin: 10px 0; overflow-x: auto; position: relative;
+            max-width: 100%; box-sizing: border-box; /* overflow rokne ke liye */
+        }
+        .message-content pre code {
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            font-size: 0.9rem; color: #abb2bf;
+        }
+        .copy-code-btn {
+            position: absolute; top: 8px; right: 8px;
+            background: #4facfe; color: white; border: none;
+            border-radius: 5px; padding: 4px 10px; font-size: 0.75rem;
+            cursor: pointer; font-weight: bold; transition: 0.2s;
+        }
+        .copy-code-btn:hover { background: #00f2fe; }
+        .message-content p { margin-bottom: 10px; }
+        .message-content p:last-child { margin-bottom: 0; }
+        
+        .typing-indicator { display: none; padding: 15px 20px; color: var(--typing-text); font-style: italic; background: var(--bg-messages); align-items: center; }
+        .typing-indicator::after {
+            content: ''; display: inline-block; width: 18px; height: 18px;
+            border: 2px solid #555; border-radius: 50%; border-top-color: #3498db; animation: spin 1s linear infinite; margin-left: 10px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .input-area { padding: 20px; background: var(--bg-input-area); border-top: var(--border-input-area); display: flex; gap: 10px; flex-direction: column;}
+        .input-row { display: flex; gap: 10px; width: 100%; }
+        #messageInput { flex: 1; padding: 15px 20px; background: var(--bg-input); color: var(--text-input); border: var(--border-input); border-radius: 25px; outline: none; }
+        #sendBtn { padding: 15px 25px; background: var(--user-msg-bg); color: white; border: none; border-radius: 25px; cursor: pointer; }
+        
+        .chat-counter { font-size: 0.8rem; color: #e74c3c; font-weight: bold; text-align: right; padding-right: 10px; display: none; }
 
-        .modal-overlay {
-            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center; flex-direction: column;
-        }
-        .ad-modal {
-            background: var(--bg-container); padding: 30px; border-radius: 20px; text-align: center; max-width: 80%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .ad-modal h2 { margin-bottom: 10px; color: var(--text-main); }
-        .ad-modal p { margin-bottom: 20px; color: var(--typing-text); }
-        .ad-progress { font-size: 1.2rem; font-weight: bold; color: #3498db; margin-bottom: 20px; }
-        .watch-ad-btn {
-            background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%); color: white;
-            border: none; padding: 12px 24px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; font-weight: bold;
-        }
-        .cancel-btn { background: none; border: none; color: #e74c3c; margin-top: 15px; cursor: pointer; text-decoration: underline; }
+        .modal-overlay {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center; flex-direction: column;
+        }
+        .ad-modal {
+            background: var(--bg-container); padding: 30px; border-radius: 20px; text-align: center; max-width: 80%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .ad-modal h2 { margin-bottom: 10px; color: var(--text-main); }
+        .ad-modal p { margin-bottom: 20px; color: var(--typing-text); }
+        .ad-progress { font-size: 1.2rem; font-weight: bold; color: #3498db; margin-bottom: 20px; }
+        .watch-ad-btn {
+            background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%); color: white;
+            border: none; padding: 12px 24px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; font-weight: bold;
+        }
+        .cancel-btn { background: none; border: none; color: #e74c3c; margin-top: 15px; cursor: pointer; text-decoration: underline; }
 
-        @media (max-width: 600px) {
-            .chat-container { width: 95%; height: 95vh; }
-            .chat-header h1 { font-size: 1.1rem; }
-        }
-    </style>
+        @media (max-width: 600px) {
+            .chat-container { width: 95%; height: 95vh; }
+            .chat-header h1 { font-size: 1.1rem; }
+        }
+    </style>
 </head>
 <body data-theme="dark">
-    <div class="chat-container">
-        <div class="modal-overlay" id="adModalOverlay">
-            <div class="ad-modal">
-                <h2 id="modalTitle">Unlock Premium Mode 🔒</h2>
-                <p>Watch 3 short ads to get 5 FREE chats with this premium AI persona!</p>
-                <div class="ad-progress" id="adProgressText">Ads Watched: 0 / 3</div>
-                <button class="watch-ad-btn" onclick="watchAd()">🎬 Watch Ad Now</button>
-                <br>
-                <button class="cancel-btn" onclick="cancelAd()">Cancel & Go Back</button>
-            </div>
-        </div>
+    <div class="chat-container">
+        <div class="modal-overlay" id="adModalOverlay">
+            <div class="ad-modal">
+                <h2 id="modalTitle">Unlock Premium Mode 🔒</h2>
+                <p>Watch 3 short ads to get 5 FREE chats with this premium AI persona!</p>
+                <div class="ad-progress" id="adProgressText">Ads Watched: 0 / 3</div>
+                <button class="watch-ad-btn" onclick="watchAd()">🎬 Watch Ad Now</button>
+                <br>
+                <button class="cancel-btn" onclick="cancelAd()">Cancel & Go Back</button>
+            </div>
+        </div>
 
-        <div class="chat-header">
-            <div class="title-and-profile">
-                <div class="profile-pic">🤖</div>
-                <div class="title-text">
-                    <h1>SG AI</h1>
-                    <p>Talk about anything!</p>
-                </div>
-            </div>
-            
-            <div class="header-controls">
-                <button id="themeToggle" class="theme-btn" onclick="toggleTheme()">☀️</button>
-                <div class="persona-selector">
-                    <select id="personaSelect" onchange="checkPersonaAccess()">
-                        <option value="general">🤖 General Assistant</option>
-                        <option value="friendly">💖 Bestie 🔒</option>
-                        <option value="professional">💼 Professional</option>
-                        <option value="coder">&lt;/&gt; Code Helper 🔒</option>
-                        <option value="teacher">🎓 Teacher Mode 🔒</option>
-                        <option value="funny">😂 Funny Bot 🔒</option>
-                        <option value="motivator">🏆 Motivator 🔒</option>
-                        <option value="shayari">🪶 Shayari Mode 🔒</option> 
-                    </select>
-                </div>
-            </div>
-        </div>
-        
-        <div class="messages" id="messages">
-            <div class="message ai">
-                <div class="ai-icon">✨</div>
-                <div class="message-content">
-                    👋 Hi! I'm SG AI Assistant. How can I help you today?
-                </div>
-            </div>
-        </div>
-        
-        <div class="typing-indicator" id="typingIndicator">SG AI is typing...</div>
-        
-        <div class="input-area">
-            <div class="chat-counter" id="chatCounter">Premium Chats Left: 5</div>
-            <div class="input-row">
-                <input type="text" id="messageInput" placeholder="Type your message here..." autocomplete="off">
-                <button id="sendBtn" onclick="sendMessage()">Send 🚀</button>
-            </div>
-        </div>
-    </div>
+        <div class="chat-header">
+            <div class="title-and-profile">
+                <div class="profile-pic">🤖</div>
+                <div class="title-text">
+                    <h1>SG AI</h1>
+                    <p>Talk about anything!</p>
+                </div>
+            </div>
+            
+            <div class="header-controls">
+                <button id="themeToggle" class="theme-btn" onclick="toggleTheme()">☀️</button>
+                <div class="persona-selector">
+                    <select id="personaSelect" onchange="checkPersonaAccess()">
+                        <option value="general">General Assistant</option>
+                        <option value="friendly">Friendly Friend 🔒</option>
+                        <option value="professional">Professional</option>
+                        <option value="coder">Code Helper 🔒</option>
+                        <option value="teacher">Teacher Mode 🔒</option>
+                        <option value="funny">Funny Bot 🔒</option>
+                        <option value="motivator">Motivator 🔒</option>
+                        <option value="shayari">Shayari Mode ✨🔒</option> 
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="messages" id="messages">
+            <div class="message ai">
+                <div class="ai-icon">✨</div>
+                <div class="message-content">
+                    👋 Hi! I'm SG AI Assistant. How can I help you today?
+                </div>
+            </div>
+        </div>
+        
+        <div class="typing-indicator" id="typingIndicator">SG AI is typing...</div>
+        
+        <div class="input-area">
+            <div class="chat-counter" id="chatCounter">Premium Chats Left: 5</div>
+            <div class="input-row">
+                <input type="text" id="messageInput" placeholder="Type your message here..." autocomplete="off">
+                <button id="sendBtn" onclick="sendMessage()">Send 🚀</button>
+            </div>
+        </div>
+    </div>
 
-    <script>
-        function resetAdButton() {
-            let btn = document.querySelector('.watch-ad-btn');
-            if (btn) {
-                btn.innerText = "🎬 Watch Ad Now";
-                btn.disabled = false;
-            }
-        }
+    <script>
+        function resetAdButton() {
+            let btn = document.querySelector('.watch-ad-btn');
+            if (btn) {
+                btn.innerText = "🎬 Watch Ad Now";
+                btn.disabled = false;
+            }
+        }
 
-        function updateAdUI(count) {
-            adsWatchedCount = count;
-            let progressText = document.getElementById('adProgressText');
-            if (progressText) {
-                progressText.innerText = `Ads Watched: ${count} / 3`;
-            }
-        }
+        function updateAdUI(count) {
+            adsWatchedCount = count;
+            let progressText = document.getElementById('adProgressText');
+            if (progressText) {
+                progressText.innerText = `Ads Watched: ${count} / 3`;
+            }
+        }
 
-        function toggleTheme() {
-            const body = document.body;
-            const themeBtn = document.getElementById('themeToggle');
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme'); themeBtn.innerHTML = '🌙'; 
-            } else {
-                body.setAttribute('data-theme', 'dark'); themeBtn.innerHTML = '☀️';
-            }
-        }
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('themeToggle');
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme'); themeBtn.innerHTML = '🌙'; 
+            } else {
+                body.setAttribute('data-theme', 'dark'); themeBtn.innerHTML = '☀️';
+            }
+        }
 
-        const messagesEl = document.getElementById('messages');
-        const inputEl = document.getElementById('messageInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const typingEl = document.getElementById('typingIndicator');
-        const personaSelect = document.getElementById('personaSelect');
-        const adModalOverlay = document.getElementById('adModalOverlay');
-        const adProgressText = document.getElementById('adProgressText');
-        const chatCounter = document.getElementById('chatCounter');
-        
-        const premiumModes = ['friendly', 'coder', 'teacher', 'funny', 'motivator', 'shayari'];
-        let previousPersona = 'general';
-        let currentPersona = 'general';
-        let modeTryingToUnlock = '';
-        let adsWatchedCount = 0;
-        
-        let freePremiumChatsLeft = parseInt(localStorage.getItem('premiumChats')) || 0;
-        
-        const personas = {
-            general: "🤖 You are a helpful AI assistant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user's prompt (e.g., if the user types in Hinglish/Roman Hindi, reply in Hinglish. If English, reply in English).",
-            
-            friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If funny, be hilarious. If romantic, respond playfully. If sad, be comforting. 2. Always reply in the EXACT SAME LANGUAGE as the user. 3. Use emojis naturally! 😊",
-            
-            professional: "💼 You are a formal, professional consultant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user.",
-            
-            coder: "💻 You are an expert programmer. STRICT RULE: Explain code clearly and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
-            
-            teacher: "🎓 You are a patient, encouraging teacher. STRICT RULE: Explain concepts step-by-step and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
-            
-            funny: "😂 You are a hilarious stand-up comedian AI. STRICT RULE: Make jokes and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
-            
-            motivator: "🏆 You are an energetic motivational coach. STRICT RULE: Inspire the user and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
-            
-            shayari: "🪶 You are a poetic AI. STRICT RULES: 1. Directly output ONLY the Shayari. 2. Write the Shayari strictly in the EXACT SAME LANGUAGE the user asked in."
-        };
-        
-        inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-        
-        function checkPersonaAccess() {
-            const selectedMode = personaSelect.value;
-            
-            if (!premiumModes.includes(selectedMode)) {
-                switchMode(selectedMode);
-                return;
-            }
+        const messagesEl = document.getElementById('messages');
+        const inputEl = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingEl = document.getElementById('typingIndicator');
+        const personaSelect = document.getElementById('personaSelect');
+        const adModalOverlay = document.getElementById('adModalOverlay');
+        const adProgressText = document.getElementById('adProgressText');
+        const chatCounter = document.getElementById('chatCounter');
+        
+        // 🚀 YAHAN 'friendly' KO PREMIUM LIST MEIN ADD KIYA
+        const premiumModes = ['friendly', 'coder', 'teacher', 'funny', 'motivator', 'shayari'];
+        let previousPersona = 'general';
+        let currentPersona = 'general';
+        let modeTryingToUnlock = '';
+        let adsWatchedCount = 0;
+        
+        let freePremiumChatsLeft = parseInt(localStorage.getItem('premiumChats')) || 0;
+        
+        const personas = {
+            general: "You are a helpful AI assistant named SG AI.",
+            friendly: "You are a close, friendly, and highly adaptable companion named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If the user is funny, be hilarious. If the user talks romantically or flirts, respond romantically and playfully. If the user is sad, be deeply comforting. 2. Always reply in the EXACT SAME LANGUAGE as the user (e.g., Hinglish for Hinglish, English for English). 3. Use emojis naturally! 😊",
+            professional: "You are a professional consultant named SG AI. Be formal.",
+            coder: "You are a coding expert. Explain code clearly.",
+            teacher: "You are a patient teacher. Explain concepts step-by-step.",
+            funny: "You are a hilarious comedian AI. Make jokes! 😂",
+            motivator: "You are a motivational coach. Inspire the user! 💪",
+            shayari: "You are a poetic AI. Use beautiful Shayari in your responses."
+        };
+        
+        inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+        
+        function checkPersonaAccess() {
+            const selectedMode = personaSelect.value;
+            
+            if (!premiumModes.includes(selectedMode)) {
+                switchMode(selectedMode);
+                return;
+            }
 
-            if (premiumModes.includes(selectedMode) && freePremiumChatsLeft > 0) {
-                switchMode(selectedMode);
-                return; 
-            }
+            if (premiumModes.includes(selectedMode) && freePremiumChatsLeft > 0) {
+                switchMode(selectedMode);
+                return; 
+            }
 
-            modeTryingToUnlock = selectedMode;
-            personaSelect.value = previousPersona;
-            
-            adsWatchedCount = 0;
-            adProgressText.innerText = `Ads Watched: 0 / 3`;
-            document.getElementById('modalTitle').innerText = `Unlock ${selectedMode.toUpperCase()} 🔒`;
-            adModalOverlay.style.display = 'flex';
-        }
+            modeTryingToUnlock = selectedMode;
+            personaSelect.value = previousPersona;
+            
+            adsWatchedCount = 0;
+            adProgressText.innerText = `Ads Watched: 0 / 3`;
+            document.getElementById('modalTitle').innerText = `Unlock ${selectedMode.toUpperCase()} 🔒`;
+            adModalOverlay.style.display = 'flex';
+        }
 
-        function cancelAd() {
-            adModalOverlay.style.display = 'none';
-            personaSelect.value = previousPersona;
-        }
+        function cancelAd() {
+            adModalOverlay.style.display = 'none';
+            personaSelect.value = previousPersona;
+        }
 
-        // 🚀 YAHAN MAIN CHANGE KIYA HAI WEBSITE BYPASS ROKNE KE LIYE
-        function watchAd() {
-            let btn = document.querySelector('.watch-ad-btn');
-            btn.innerText = "Loading Ad... ⏳";
-            btn.disabled = true;
+        function watchAd() {
+            let btn = document.querySelector('.watch-ad-btn');
+            btn.innerText = "Loading Ad... ⏳";
+            btn.disabled = true;
 
-            if (typeof AndroidBridge !== "undefined") {
-                // Agar user asli Android App me hai, toh Ad dikhao
-                AndroidBridge.showAd();
-            } else {
-                // Agar user website/browser me hai, toh usko block karo aur App download karne ko bolo
-                setTimeout(() => {
-                    alert("⚠️ Premium Mode Locked!\n\nYeh premium features aur Ads sirf App mein chalte hain. Please Google Play Store se hamari App download karein. 🚀");
-                    cancelAd();
-                    resetAdButton();
-                }, 500);
-            }
-        }
+            if (typeof AndroidBridge !== "undefined") {
+                AndroidBridge.showAd();
+            } else {
+                setTimeout(() => { adWatchedSuccessfully(); }, 1500);
+            }
+        }
 
-        function adWatchedSuccessfully() {
-            let btn = document.querySelector('.watch-ad-btn');
-            adsWatchedCount++;
-            document.getElementById('adProgressText').innerText = `Ads Watched: ${adsWatchedCount} / 3`;
-            btn.innerText = "🎬 Watch Ad Now";
-            btn.disabled = false;
+        function adWatchedSuccessfully() {
+            let btn = document.querySelector('.watch-ad-btn');
+            adsWatchedCount++;
+            document.getElementById('adProgressText').innerText = `Ads Watched: ${adsWatchedCount} / 3`;
+            btn.innerText = "🎬 Watch Ad Now";
+            btn.disabled = false;
 
-            if (adsWatchedCount >= 3) {
-                alert("🎉 Reward Granted! You unlocked 5 free chats.");
-                document.getElementById('adModalOverlay').style.display = 'none';
-                
-                freePremiumChatsLeft = 5;
-                localStorage.setItem('premiumChats', freePremiumChatsLeft);
-                
-                switchMode(modeTryingToUnlock); 
-            }
-        }
+            if (adsWatchedCount >= 3) {
+                alert("🎉 Reward Granted! You unlocked 5 free chats.");
+                document.getElementById('adModalOverlay').style.display = 'none';
+                
+                freePremiumChatsLeft = 5;
+                localStorage.setItem('premiumChats', freePremiumChatsLeft);
+                
+                switchMode(modeTryingToUnlock); 
+            }
+        }
 
-        function switchMode(newMode) {
-            currentPersona = newMode;
-            previousPersona = newMode;
-            personaSelect.value = newMode;
-            
-            if (premiumModes.includes(newMode)) {
-                chatCounter.style.display = 'block';
-                chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
-                addMessage('SG AI', `Premium Mode Active! You have ${freePremiumChatsLeft} chats remaining. ✨`, 'ai');
-            } else {
-                chatCounter.style.display = 'none';
-                addMessage('SG AI', `Switched to ${newMode} mode! 🎉`, 'ai');
-            }
+        function switchMode(newMode) {
+            currentPersona = newMode;
+            previousPersona = newMode;
+            personaSelect.value = newMode;
+            
+            if (premiumModes.includes(newMode)) {
+                chatCounter.style.display = 'block';
+                chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
+                addMessage('SG AI', `Premium Mode Active! You have ${freePremiumChatsLeft} chats remaining. ✨`, 'ai');
+            } else {
+                chatCounter.style.display = 'none';
+                addMessage('SG AI', `Switched to ${newMode} mode! 🎉`, 'ai');
+            }
 
-            if (typeof AndroidBridge !== "undefined" && typeof AndroidBridge.showInterstitial === "function") {
-                AndroidBridge.showInterstitial();
-            }
-        }
-        
-        async function sendMessage() {
-            const message = inputEl.value.trim();
-            if (!message) return;
-            
-            addMessage('You', message, 'user');
-            inputEl.value = '';
-            sendBtn.disabled = true;
-            typingEl.style.display = 'flex';
-            scrollToBottom();
-            
-            try {
-                const BACKEND_URL = `https://sg-ai-backend.onrender.com/api/chat`;
-                const personaInstruction = personas[currentPersona] || personas.general;
-                
-                const response = await fetch(BACKEND_URL, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message, persona: personaInstruction })
-                });
-                const data = await response.json();
-                if (data.candidates && data.candidates.length > 0) {
-                    addMessage('SG AI', data.candidates[0].content.parts[0].text, 'ai');
-                    
-                    if (premiumModes.includes(currentPersona)) {
-                        freePremiumChatsLeft--;
-                        localStorage.setItem('premiumChats', freePremiumChatsLeft);
-                        chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
-                        
-                        if (freePremiumChatsLeft <= 0) {
-                            setTimeout(() => {
-                                alert("⚠️ Your free premium chats are over! Locking mode back.");
-                                chatCounter.style.display = 'none';
-                                switchMode('general'); 
-                            }, 1000);
-                        }
-                    }
-                } else {
-                    addMessage('SG AI', "🚨 Backend Error!", 'ai');
-                }
-            } catch (error) {
-                addMessage('SG AI', "Sorry, error aa gaya.", 'ai');
-            } finally {
-                typingEl.style.display = 'none';
-                sendBtn.disabled = false;
-                inputEl.focus();
-            }
-        }
-        
-        function addMessage(sender, text, type) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
-            
-            if (type === 'ai') {
-                const iconDiv = document.createElement('div');
-                iconDiv.className = 'ai-icon';
-                iconDiv.innerHTML = '✨'; 
-                messageDiv.appendChild(iconDiv);
-            }
+            if (typeof AndroidBridge !== "undefined" && typeof AndroidBridge.showInterstitial === "function") {
+                AndroidBridge.showInterstitial();
+            }
+        }
+        
+        async function sendMessage() {
+            const message = inputEl.value.trim();
+            if (!message) return;
+            
+            addMessage('You', message, 'user');
+            inputEl.value = '';
+            sendBtn.disabled = true;
+            typingEl.style.display = 'flex';
+            scrollToBottom();
+            
+            try {
+                const BACKEND_URL = `https://sg-ai-backend.onrender.com/api/chat`;
+                const personaInstruction = personas[currentPersona] || personas.general;
+                
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message, persona: personaInstruction })
+                });
+                const data = await response.json();
+                if (data.candidates && data.candidates.length > 0) {
+                    addMessage('SG AI', data.candidates[0].content.parts[0].text, 'ai');
+                    
+                    if (premiumModes.includes(currentPersona)) {
+                        freePremiumChatsLeft--;
+                        localStorage.setItem('premiumChats', freePremiumChatsLeft);
+                        chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
+                        
+                        if (freePremiumChatsLeft <= 0) {
+                            setTimeout(() => {
+                                alert("⚠️ Your free premium chats are over! Locking mode back.");
+                                chatCounter.style.display = 'none';
+                                switchMode('general'); 
+                            }, 1000);
+                        }
+                    }
+                } else {
+                    addMessage('SG AI', "🚨 Backend Error!", 'ai');
+                }
+            } catch (error) {
+                addMessage('SG AI', "Sorry, error aa gaya.", 'ai');
+            } finally {
+                typingEl.style.display = 'none';
+                sendBtn.disabled = false;
+                inputEl.focus();
+            }
+        }
+        
+        function addMessage(sender, text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            if (type === 'ai') {
+                const iconDiv = document.createElement('div');
+                iconDiv.className = 'ai-icon';
+                iconDiv.innerHTML = '✨'; 
+                messageDiv.appendChild(iconDiv);
+            }
 
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content';
-            
-            if (type === 'ai') {
-                contentDiv.innerHTML = marked.parse(text);
-                
-                const preTags = contentDiv.querySelectorAll('pre');
-                preTags.forEach((pre) => {
-                    const copyBtn = document.createElement('button');
-                    copyBtn.className = 'copy-code-btn';
-                    copyBtn.innerText = 'Copy';
-                    
-                    copyBtn.onclick = () => {
-                        const codeText = pre.querySelector('code').innerText;
-                        navigator.clipboard.writeText(codeText).then(() => {
-                            copyBtn.innerText = 'Copied! ✔';
-                            setTimeout(() => { copyBtn.innerText = 'Copy'; }, 2000);
-                        });
-                    };
-                    pre.appendChild(copyBtn);
-                });
-                
-                contentDiv.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightElement(block);
-                });
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            if (type === 'ai') {
+                contentDiv.innerHTML = marked.parse(text);
+                
+                const preTags = contentDiv.querySelectorAll('pre');
+                preTags.forEach((pre) => {
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-code-btn';
+                    copyBtn.innerText = 'Copy';
+                    
+                    copyBtn.onclick = () => {
+                        const codeText = pre.querySelector('code').innerText;
+                        navigator.clipboard.writeText(codeText).then(() => {
+                            copyBtn.innerText = 'Copied! ✔';
+                            setTimeout(() => { copyBtn.innerText = 'Copy'; }, 2000);
+                        });
+                    };
+                    pre.appendChild(copyBtn);
+                });
+                
+                contentDiv.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
 
-            } else {
-                contentDiv.innerText = text;
-            }
-            
-            messageDiv.appendChild(contentDiv); 
-            messagesEl.appendChild(messageDiv); 
-            scrollToBottom();
-        }
-        
-        function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
-        
-        window.onload = () => inputEl.focus();
-    </script>
+            } else {
+                contentDiv.innerText = text;
+            }
+            
+            messageDiv.appendChild(contentDiv); 
+            messagesEl.appendChild(messageDiv); 
+            scrollToBottom();
+        }
+        
+        function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
+        
+        window.onload = () => inputEl.focus();
+    </script>
 </body>
 </html>
