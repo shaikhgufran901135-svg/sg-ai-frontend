@@ -282,7 +282,6 @@
         const sheet = document.getElementById('personaSheet');
         const btnText = document.getElementById('currentPersonaBtn');
 
-        // 🚀 DYNAMIC MENU BADGES SYSTEM
         function updateMenuBadges() {
             const proOptions = document.querySelectorAll('.persona-option[data-locked="true"]');
             
@@ -369,15 +368,15 @@
         const personas = {
             general: "🤖 You are a helpful AI assistant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user's prompt (e.g., if the user types in Hinglish/Roman Hindi, reply in Hinglish. If English, reply in English).",
             
-            // 🚀 Bestie rule removed
-            friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If funny, be hilarious. If romantic, respond playfully. If sad, be comforting. 2. Use emojis naturally! 😊",
+            friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If funny, be hilarious. If romantic, respond playfully. If sad, be comforting. 2. Always reply in the EXACT SAME LANGUAGE as the user. 3. Use emojis naturally! 😊",
             
             professional: "💼 You are a formal, professional consultant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user.",
             coder: "💻 You are an expert programmer. STRICT RULE: Explain code clearly and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
             teacher: "🎓 You are a patient, encouraging teacher. STRICT RULE: Explain concepts step-by-step and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
             funny: "😂 You are a hilarious stand-up comedian AI. STRICT RULE: Make jokes and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
             motivator: "🏆 You are an energetic motivational coach. STRICT RULE: Inspire the user and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
-            shayari: "🪶 You are a poetic AI. STRICT RULES: 1. Directly output ONLY the Shayari. 2. Write the Shayari strictly in the EXACT SAME LANGUAGE the user asked in."
+            
+            shayari: "🪶 You are a poetic AI. STRICT RULES: 1. Directly output ONLY the Shayari. 2. Mirror the user's exact language and script perfectly. If they ask using English letters (Roman script, e.g. Hinglish), you MUST write the shayari using English letters ONLY. DO NOT use Devanagari script."
         };
         
         inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
@@ -394,12 +393,15 @@
             if (typeof AndroidBridge !== "undefined") {
                 AndroidBridge.showAd();
             } else {
-                // 🚀 Play Store alert removed, test mode on
-                setTimeout(() => { adWatchedSuccessfully(); }, 1500);
+                alert("Please download the SG App from the Play Store to watch ads.");
+                cancelAd();
+                resetAdButton();
             }
         }
 
-        function adWatchedSuccessfully() {
+        // 🚀 MAI FUNCTION KO WINDOW OBJECT PAR EXPOSE KAR RAHA HOON 
+        // Taaki Android WebView seedha isko call kar sake!
+        window.adWatchedSuccessfully = function() {
             let btn = document.querySelector('.watch-ad-btn');
             adsWatchedCount++;
             document.getElementById('adProgressText').innerText = `Ads Watched: ${adsWatchedCount} / 3`;
@@ -413,10 +415,10 @@
                 freePremiumChatsLeft = 5;
                 localStorage.setItem('premiumChats', freePremiumChatsLeft);
                 
-                updateMenuBadges(); // Menu Update
+                updateMenuBadges(); 
                 switchMode(modeTryingToUnlock); 
             }
-        }
+        };
 
         function switchMode(newMode) {
             currentPersona = newMode;
@@ -463,7 +465,7 @@
                         localStorage.setItem('premiumChats', freePremiumChatsLeft);
                         chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
                         
-                        updateMenuBadges(); // Menu Update
+                        updateMenuBadges(); 
 
                         if (freePremiumChatsLeft <= 0) {
                             setTimeout(() => {
