@@ -223,11 +223,11 @@
                         <option value="general">🤖 General Assistant</option>
                         <option value="friendly">💖 Bestie 🔒</option>
                         <option value="professional">💼 Professional</option>
-                        <option value="coder">💻 Code Helper 🔒</option>
-                        <option value="teacher">👨‍🏫 Teacher Mode 🔒</option>
+                        <option value="coder">&lt;/&gt; Code Helper 🔒</option>
+                        <option value="teacher">🎓 Teacher Mode 🔒</option>
                         <option value="funny">😂 Funny Bot 🔒</option>
-                        <option value="motivator">💪 Motivator 🔒</option>
-                        <option value="shayari">✨ Shayari Mode 🔒</option> 
+                        <option value="motivator">🏆 Motivator 🔒</option>
+                        <option value="shayari">🪶 Shayari Mode 🔒</option> 
                     </select>
                 </div>
             </div>
@@ -300,20 +300,19 @@
         const personas = {
             general: "🤖 You are a helpful AI assistant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user's prompt (e.g., if the user types in Hinglish/Roman Hindi, reply in Hinglish. If English, reply in English).",
             
-            // 🚀 YAHAN BESTIE SE LANGUAGE RULE HATA DIYA
             friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If funny, be hilarious. If romantic, respond playfully. If sad, be comforting. 2. Use emojis naturally! 😊",
             
             professional: "💼 You are a formal, professional consultant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user.",
             
             coder: "💻 You are an expert programmer. STRICT RULE: Explain code clearly and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
             
-            teacher: "👨‍🏫 You are a patient, encouraging teacher. STRICT RULE: Explain concepts step-by-step and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            teacher: "🎓 You are a patient, encouraging teacher. STRICT RULE: Explain concepts step-by-step and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
             
             funny: "😂 You are a hilarious stand-up comedian AI. STRICT RULE: Make jokes and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
             
-            motivator: "💪 You are an energetic motivational coach. STRICT RULE: Inspire the user and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            motivator: "🏆 You are an energetic motivational coach. STRICT RULE: Inspire the user and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
             
-            shayari: "✨ You are a poetic AI. STRICT RULES: 1. Directly output ONLY the Shayari. 2. Write the Shayari strictly in the EXACT SAME LANGUAGE the user asked in."
+            shayari: "🪶 You are a poetic AI. STRICT RULES: 1. Directly output ONLY the Shayari. 2. Write the Shayari strictly in the EXACT SAME LANGUAGE the user asked in."
         };
         
         inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
