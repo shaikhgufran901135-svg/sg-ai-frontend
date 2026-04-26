@@ -56,50 +56,38 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* FIX: Android native bounce ko disable karne ke liye */
-        html, body {
-            overscroll-behavior-y: none;
-        }
+        html, body { overscroll-behavior-y: none; }
         
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background: var(--bg-body); height: 100vh; display: flex; 
             justify-content: center; align-items: center; color: var(--text-main);
-            transition: background 0.5s ease;
-            overflow: hidden; 
+            transition: background 0.5s ease; overflow: hidden; 
         }
         
         .chat-container {
-            width: 90%; max-width: 800px; height: 90vh;
-            background: var(--bg-container); border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            display: flex; flex-direction: column; overflow: hidden; position: relative;
+            width: 90%; max-width: 800px; height: 90vh; background: var(--bg-container); border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; overflow: hidden; position: relative;
             transform: translateZ(0); 
         }
         
         .chat-header {
-            background: var(--bg-header); color: var(--text-header);
-            padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
+            background: var(--bg-header); color: var(--text-header); padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
             display: flex; justify-content: space-between; align-items: center;
         }
 
         .title-and-profile { display: flex; align-items: center; gap: 10px; }
-        .profile-pic {
-            width: 40px; height: 40px; border-radius: 50%; background: white;
-            display: flex; justify-content: center; align-items: center; font-size: 24px;
-        }
+        .profile-pic { width: 40px; height: 40px; border-radius: 50%; background: white; display: flex; justify-content: center; align-items: center; font-size: 24px; }
         .title-text { display: flex; flex-direction: column; text-align: left; }
         .title-text h1 { font-size: 1.2rem; margin: 0; font-weight: bold; }
         .title-text p { font-size: 0.8rem; margin: 0; opacity: 0.9; }
         
         .header-controls { display: flex; gap: 8px; align-items: center; }
         .theme-btn {
-            background: var(--bg-selector); border: 1px solid var(--border-input);
-            border-radius: 50%; width: 38px; height: 38px; cursor: pointer;
+            background: var(--bg-selector); border: 1px solid var(--border-input); border-radius: 50%; width: 38px; height: 38px; cursor: pointer;
             display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
-        /* NAYA BUTTON (Dropdown Select Hata Diya) */
         .custom-select-btn {
             background: var(--bg-selector); padding: 8px 12px; border-radius: 15px; border: 1px solid var(--border-input);
             font-weight: bold; color: var(--text-selector); cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 0.9rem;
@@ -107,84 +95,45 @@
         }
         .custom-select-btn:active { transform: scale(0.95); }
 
-        .messages { 
-            flex: 1; padding: 20px; 
-            overflow-y: scroll; 
-            background: var(--bg-messages); 
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior-y: contain;
-            overflow-anchor: none;
-        }
-        
+        .messages { flex: 1; padding: 20px; overflow-y: scroll; background: var(--bg-messages); scroll-behavior: smooth; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; overflow-anchor: none; }
         .message { margin-bottom: 20px; display: flex; animation: fadeIn 0.3s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .message.user { justify-content: flex-end; }
-        
         .message.ai { justify-content: flex-start; width: 100%; align-items: flex-start; gap: 10px; }
         .ai-icon { font-size: 1.3rem; margin-top: 8px; flex-shrink: 0; }
         
-        .message-content {
-            max-width: 75%; padding: 15px 20px; border-radius: 20px; line-height: 1.5; word-wrap: break-word;
-        }
+        .message-content { max-width: 75%; padding: 15px 20px; border-radius: 20px; line-height: 1.5; word-wrap: break-word; }
         .user .message-content { background: var(--user-msg-bg); color: white; border-bottom-right-radius: 5px; }
-        
-        .ai .message-content { 
-            background: transparent; color: var(--text-ai-msg); border: none; 
-            max-width: 100%; width: 100%; padding: 10px 0px; box-shadow: none; 
-        }
+        .ai .message-content { background: transparent; color: var(--text-ai-msg); border: none; max-width: 100%; width: 100%; padding: 10px 0px; box-shadow: none; }
 
-        .message-content pre {
-            background: #282c34; border-radius: 10px; padding: 15px; padding-top: 35px;
-            margin: 10px 0; overflow-x: auto; position: relative;
-            max-width: 100%; box-sizing: border-box; 
-        }
-        .message-content pre code {
-            font-family: 'Consolas', 'Courier New', Courier, monospace;
-            font-size: 0.9rem; color: #abb2bf;
-        }
-        .copy-code-btn {
-            position: absolute; top: 8px; right: 8px;
-            background: #4facfe; color: white; border: none;
-            border-radius: 5px; padding: 4px 10px; font-size: 0.75rem;
-            cursor: pointer; font-weight: bold; transition: 0.2s;
-        }
+        .message-content pre { background: #282c34; border-radius: 10px; padding: 15px; padding-top: 35px; margin: 10px 0; overflow-x: auto; position: relative; max-width: 100%; box-sizing: border-box; }
+        .message-content pre code { font-family: 'Consolas', 'Courier New', Courier, monospace; font-size: 0.9rem; color: #abb2bf; }
+        .copy-code-btn { position: absolute; top: 8px; right: 8px; background: #4facfe; color: white; border: none; border-radius: 5px; padding: 4px 10px; font-size: 0.75rem; cursor: pointer; font-weight: bold; transition: 0.2s; }
         .copy-code-btn:hover { background: #00f2fe; }
         .message-content p { margin-bottom: 10px; }
         .message-content p:last-child { margin-bottom: 0; }
         
         .typing-indicator { display: none; padding: 15px 20px; color: var(--typing-text); font-style: italic; background: var(--bg-messages); align-items: center; }
-        .typing-indicator::after {
-            content: ''; display: inline-block; width: 18px; height: 18px;
-            border: 2px solid #555; border-radius: 50%; border-top-color: #3498db; animation: spin 1s linear infinite; margin-left: 10px;
-        }
+        .typing-indicator::after { content: ''; display: inline-block; width: 18px; height: 18px; border: 2px solid #555; border-radius: 50%; border-top-color: #3498db; animation: spin 1s linear infinite; margin-left: 10px; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
         .input-area { padding: 20px; background: var(--bg-input-area); border-top: var(--border-input-area); display: flex; gap: 10px; flex-direction: column;}
         .input-row { display: flex; gap: 10px; width: 100%; }
         #messageInput { flex: 1; padding: 15px 20px; background: var(--bg-input); color: var(--text-input); border: var(--border-input); border-radius: 25px; outline: none; }
         #sendBtn { padding: 15px 25px; background: var(--user-msg-bg); color: white; border: none; border-radius: 25px; cursor: pointer; }
-        
         .chat-counter { font-size: 0.8rem; color: #e74c3c; font-weight: bold; text-align: right; padding-right: 10px; display: none; }
 
-        .modal-overlay {
-            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center; flex-direction: column;
-        }
-        .ad-modal {
-            background: var(--bg-container); padding: 30px; border-radius: 20px; text-align: center; max-width: 80%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+        /* Ad Modal */
+        .modal-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
+        .ad-modal { background: var(--bg-container); padding: 30px; border-radius: 20px; text-align: center; max-width: 80%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .ad-modal h2 { margin-bottom: 10px; color: var(--text-main); }
         .ad-modal p { margin-bottom: 20px; color: var(--typing-text); }
         .ad-progress { font-size: 1.2rem; font-weight: bold; color: #3498db; margin-bottom: 20px; }
-        .watch-ad-btn {
-            background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%); color: white;
-            border: none; padding: 12px 24px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; font-weight: bold;
-        }
+        .watch-ad-btn { background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .watch-ad-btn:disabled { opacity: 0.7; cursor: not-allowed; }
         .cancel-btn { background: none; border: none; color: #e74c3c; margin-top: 15px; cursor: pointer; text-decoration: underline; }
 
-        /* 🚀 BOTTOM SHEET UI & TAGS CSS */
+        /* BOTTOM SHEET UI */
         .bottom-sheet-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 900; align-items: flex-end; opacity: 0; transition: opacity 0.3s; }
         .bottom-sheet { background: var(--bg-container); width: 100%; border-radius: 25px 25px 0 0; padding: 20px 20px 30px 20px; box-shadow: 0 -5px 25px rgba(0,0,0,0.2); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; max-height: 80%; }
         .sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-input); }
@@ -211,10 +160,7 @@
         }
         .lock-icon { color: #f1c40f; font-size: 1.1rem; opacity: 0.9; transition: 0.3s; }
 
-        @media (max-width: 600px) {
-            .chat-container { width: 95%; height: 95vh; }
-            .chat-header h1 { font-size: 1.1rem; }
-        }
+        @media (max-width: 600px) { .chat-container { width: 95%; height: 95vh; } .chat-header h1 { font-size: 1.1rem; } }
     </style>
 </head>
 <body data-theme="dark">
@@ -330,17 +276,20 @@
         
         // TUMHARA EXACT VARIABLE
         let adsWatchedCount = 0; 
-        
         let freePremiumChatsLeft = parseInt(localStorage.getItem('premiumChats')) || 0;
 
+        // 🚀 FIX: Yahan saare variables declare kar diye
         const sheetOverlay = document.getElementById('personaSheetOverlay');
         const sheet = document.getElementById('personaSheet');
         const btnText = document.getElementById('currentPersonaBtn');
+        const messagesEl = document.getElementById('messages');
+        const inputEl = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingEl = document.getElementById('typingIndicator');
+        const chatCounter = document.getElementById('chatCounter');
 
-        // UI SYNC FUNCTION
         function updateMenuBadges() {
             const proOptions = document.querySelectorAll('.persona-option[data-locked="true"]');
-            
             proOptions.forEach(opt => {
                 const badge = opt.querySelector('.pro-badge');
                 const lock = opt.querySelector('.lock-icon');
@@ -378,7 +327,6 @@
             setTimeout(() => { sheetOverlay.style.display = 'none'; }, 300);
         }
 
-        // NEW SHEET CLICK HANDLER WITH YOUR EXACT AD LOGIC
         function handlePersonaClick(selectedMode, element) {
             const isLocked = element.getAttribute('data-locked') === 'true';
 
@@ -386,7 +334,7 @@
                 closeSheet();
                 modeTryingToUnlock = selectedMode;
                 
-                // EXACT USER LOGIC: Resets to 0 here
+                // EXACT USER LOGIC
                 adsWatchedCount = 0;
                 document.getElementById('adProgressText').innerText = `Ads Watched: 0 / 3`;
                 
@@ -449,7 +397,7 @@
                 freePremiumChatsLeft = 5;
                 localStorage.setItem('premiumChats', freePremiumChatsLeft);
                 
-                updateMenuBadges(); // Only added this line to update list UI
+                updateMenuBadges(); 
                 switchMode(modeTryingToUnlock); 
             }
         }
@@ -499,7 +447,7 @@
                         localStorage.setItem('premiumChats', freePremiumChatsLeft);
                         chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
                         
-                        updateMenuBadges(); // Sync UI
+                        updateMenuBadges(); 
 
                         if (freePremiumChatsLeft <= 0) {
                             setTimeout(() => {
@@ -531,7 +479,6 @@
             }
         }
 
-        // 🚀 UNIVERSAL LANGUAGE RULE PERSONAS
         const personas = {
             general: "🤖 You are a helpful AI assistant named SG AI. STRICT RULE: Mirror the user's exact language and script perfectly. If they type a local language using English letters (e.g., Roman Hindi), you MUST reply in that exact same local language using English letters ONLY.",
             friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. Mirror the user's vibe. 2. Mirror the user's exact language and script perfectly. 3. Use emojis naturally! 😊",
