@@ -278,7 +278,6 @@
         let adsWatchedCount = 0; 
         let freePremiumChatsLeft = parseInt(localStorage.getItem('premiumChats')) || 0;
 
-        // 🚀 FIX: Yahan saare variables declare kar diye
         const sheetOverlay = document.getElementById('personaSheetOverlay');
         const sheet = document.getElementById('personaSheet');
         const btnText = document.getElementById('currentPersonaBtn');
@@ -290,6 +289,7 @@
 
         function updateMenuBadges() {
             const proOptions = document.querySelectorAll('.persona-option[data-locked="true"]');
+            
             proOptions.forEach(opt => {
                 const badge = opt.querySelector('.pro-badge');
                 const lock = opt.querySelector('.lock-icon');
@@ -350,7 +350,6 @@
             }
         }
 
-        // TUMHARA EXACT FUNCTIONS
         function resetAdButton() {
             let btn = document.querySelector('.watch-ad-btn');
             if (btn) {
@@ -479,15 +478,23 @@
             }
         }
 
+        // 🚀 UPDATED PERSONAS RULES
         const personas = {
-            general: "🤖 You are a helpful AI assistant named SG AI. STRICT RULE: Mirror the user's exact language and script perfectly. If they type a local language using English letters (e.g., Roman Hindi), you MUST reply in that exact same local language using English letters ONLY.",
-            friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. Mirror the user's vibe. 2. Mirror the user's exact language and script perfectly. 3. Use emojis naturally! 😊",
-            professional: "💼 You are a formal, professional consultant named SG AI. STRICT RULE: Mirror the user's exact language and script perfectly.",
-            coder: "💻 You are an expert programmer. STRICT RULE: Explain code clearly. Mirror the user's exact language and script perfectly.",
-            teacher: "🎓 You are a patient, encouraging teacher. STRICT RULE: Explain concepts step-by-step. Mirror the user's exact language and script perfectly.",
-            funny: "😂 You are a hilarious stand-up comedian AI. STRICT RULE: Make jokes. Mirror the user's exact language and script perfectly.",
-            motivator: "🏆 You are an energetic motivational coach. STRICT RULE: Inspire the user. Mirror the user's exact language and script perfectly.",
-            shayari: "🪶 You are a poetic AI. STRICT RULES: 1. Output ONLY the Shayari. 2. Mirror the user's exact language and script perfectly. If they use English letters (Roman script), you MUST write the shayari using English letters ONLY."
+            general: "🤖 You are a helpful AI assistant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user's prompt (e.g., if the user types in Hinglish/Roman Hindi, reply in Hinglish. If English, reply in English).",
+            
+            friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If funny, be hilarious. If romantic, respond playfully. If sad, be comforting. 2. Always reply in the EXACT SAME LANGUAGE as the user. 3. Use emojis naturally! 😊",
+            
+            professional: "💼 You are a formal, professional consultant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            
+            coder: "💻 You are an expert programmer. STRICT RULE: Explain code clearly and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            
+            teacher: "🎓 You are a patient, encouraging teacher. STRICT RULE: Explain concepts step-by-step and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            
+            funny: "😂 You are a hilarious stand-up comedian AI. STRICT RULE: Make jokes and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            
+            motivator: "🏆 You are an energetic motivational coach. STRICT RULE: Inspire the user and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            
+            shayari: "🪶 You are a poetic AI. STRICT RULES: 1. Output ONLY the Shayari. 2. Mirror the user's exact language and script perfectly. If they use English letters (Roman script, e.g., Hinglish), you MUST write the shayari using English letters ONLY. DO NOT use Devanagari script."
         };
         
         function addMessage(sender, text, type) {
