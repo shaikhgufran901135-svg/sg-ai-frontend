@@ -143,7 +143,7 @@
         .persona-option.active { border-color: #3498db; background: rgba(52, 152, 219, 0.1); }
         .persona-info { display: flex; align-items: center; gap: 10px; font-weight: bold; color: var(--text-main); font-size: 1rem; }
         
-        /* 🚀 TAGS DESIGN (Chhota aur Upar Wala Free Tag) */
+        /* 🚀 TAGS DESIGN */
         .status-tags { display: flex; align-items: center; gap: 10px; }
         
         .pro-badge {
@@ -151,18 +151,16 @@
             padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 900;
             letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.3);
             box-shadow: 0 2px 5px rgba(245, 127, 23, 0.4);
+            transition: all 0.3s ease; white-space: nowrap;
         }
         
-        /* 🚀 NEW SUPER-SCRIPT FREE BADGE */
         .free-badge {
             background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3);
             padding: 2px 5px; border-radius: 6px; font-size: 0.55rem; font-weight: 900;
-            text-transform: lowercase; /* Chote letters */
-            vertical-align: super; /* Upar ki taraf */
-            margin-left: 2px; letter-spacing: 0.5px;
+            text-transform: lowercase; vertical-align: super; margin-left: 2px; letter-spacing: 0.5px;
         }
         
-        .lock-icon { color: #f1c40f; font-size: 1.1rem; opacity: 0.9; }
+        .lock-icon { color: #f1c40f; font-size: 1.1rem; opacity: 0.9; transition: 0.3s; }
 
         @media (max-width: 600px) { .chat-container { width: 95%; height: 95vh; } .chat-header h1 { font-size: 1.1rem; } }
     </style>
@@ -284,6 +282,26 @@
         const sheet = document.getElementById('personaSheet');
         const btnText = document.getElementById('currentPersonaBtn');
 
+        // 🚀 DYNAMIC MENU BADGES SYSTEM
+        function updateMenuBadges() {
+            const proOptions = document.querySelectorAll('.persona-option[data-locked="true"]');
+            
+            proOptions.forEach(opt => {
+                const badge = opt.querySelector('.pro-badge');
+                const lock = opt.querySelector('.lock-icon');
+                
+                if (freePremiumChatsLeft > 0) {
+                    badge.innerText = `🔥 ${freePremiumChatsLeft} Left`;
+                    badge.style.background = 'linear-gradient(45deg, #2ecc71, #27ae60)'; 
+                    if(lock) lock.style.display = 'none'; 
+                } else {
+                    badge.innerText = 'PRO';
+                    badge.style.background = 'linear-gradient(45deg, #fbc02d, #f57f17)'; 
+                    if(lock) lock.style.display = 'block'; 
+                }
+            });
+        }
+
         function openSheet() {
             sheetOverlay.style.display = 'flex';
             setTimeout(() => {
@@ -350,7 +368,10 @@
         
         const personas = {
             general: "🤖 You are a helpful AI assistant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user's prompt (e.g., if the user types in Hinglish/Roman Hindi, reply in Hinglish. If English, reply in English).",
-            friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If funny, be hilarious. If romantic, respond playfully. If sad, be comforting. 2. Always reply in the EXACT SAME LANGUAGE as the user. 3. Use emojis naturally! 😊",
+            
+            // 🚀 Bestie rule removed
+            friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If funny, be hilarious. If romantic, respond playfully. If sad, be comforting. 2. Use emojis naturally! 😊",
+            
             professional: "💼 You are a formal, professional consultant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user.",
             coder: "💻 You are an expert programmer. STRICT RULE: Explain code clearly and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
             teacher: "🎓 You are a patient, encouraging teacher. STRICT RULE: Explain concepts step-by-step and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
@@ -373,11 +394,8 @@
             if (typeof AndroidBridge !== "undefined") {
                 AndroidBridge.showAd();
             } else {
-                setTimeout(() => {
-                    alert("⚠️ Premium Mode Locked!\n\nYeh premium features aur Ads sirf App mein chalte hain. Please Google Play Store se hamari App download karein. 🚀");
-                    cancelAd();
-                    resetAdButton();
-                }, 500);
+                // 🚀 Play Store alert removed, test mode on
+                setTimeout(() => { adWatchedSuccessfully(); }, 1500);
             }
         }
 
@@ -395,6 +413,7 @@
                 freePremiumChatsLeft = 5;
                 localStorage.setItem('premiumChats', freePremiumChatsLeft);
                 
+                updateMenuBadges(); // Menu Update
                 switchMode(modeTryingToUnlock); 
             }
         }
@@ -444,6 +463,8 @@
                         localStorage.setItem('premiumChats', freePremiumChatsLeft);
                         chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
                         
+                        updateMenuBadges(); // Menu Update
+
                         if (freePremiumChatsLeft <= 0) {
                             setTimeout(() => {
                                 alert("⚠️ Your free premium chats are over! Locking mode back.");
@@ -512,7 +533,10 @@
         
         function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
         
-        window.onload = () => inputEl.focus();
+        window.onload = () => {
+            inputEl.focus();
+            updateMenuBadges();
+        };
     </script>
 </body>
 </html>
