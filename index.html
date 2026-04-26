@@ -93,7 +93,7 @@
         }
         .custom-select-btn:active { transform: scale(0.95); }
 
-        .messages { flex: 1; padding: 20px; overflow-y: scroll; background: var(--bg-messages); scroll-behavior: smooth; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; overflow-anchor: none; }
+        .messages { flex: 1; padding: 20px; overflow-y: scroll; background: var(--bg-messages); scroll-behavior: smooth; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; }
         .message { margin-bottom: 20px; display: flex; animation: fadeIn 0.3s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .message.user { justify-content: flex-end; }
@@ -125,12 +125,12 @@
         .modal-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
         .ad-modal { background: var(--bg-container); padding: 30px; border-radius: 20px; text-align: center; max-width: 80%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .ad-modal h2 { margin-bottom: 10px; color: var(--text-main); }
-        .ad-modal p { margin-bottom: 25px; color: var(--typing-text); font-size: 1.1rem; }
-        .watch-ad-btn { background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .watch-ad-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+        .ad-modal p { margin-bottom: 20px; color: var(--typing-text); }
+        .ad-progress { font-size: 1.2rem; font-weight: bold; color: #3498db; margin-bottom: 20px; }
+        .watch-ad-btn { background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; font-weight: bold; }
         .cancel-btn { background: none; border: none; color: #e74c3c; margin-top: 15px; cursor: pointer; text-decoration: underline; }
 
-        /* 🚀 NAYI BOTTOM SHEET UI & TAGS */
+        /* 🚀 BOTTOM SHEET UI */
         .bottom-sheet-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 900; align-items: flex-end; opacity: 0; transition: opacity 0.3s; }
         .bottom-sheet { background: var(--bg-container); width: 100%; border-radius: 25px 25px 0 0; padding: 20px 20px 30px 20px; box-shadow: 0 -5px 25px rgba(0,0,0,0.2); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; max-height: 80%; }
         .sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-input); }
@@ -143,18 +143,23 @@
         .persona-option.active { border-color: #3498db; background: rgba(52, 152, 219, 0.1); }
         .persona-info { display: flex; align-items: center; gap: 10px; font-weight: bold; color: var(--text-main); font-size: 1rem; }
         
+        /* 🚀 TAGS DESIGN */
         .status-tags { display: flex; align-items: center; gap: 10px; }
+        
         .pro-badge {
             background: linear-gradient(45deg, #fbc02d, #f57f17); color: #fff;
             padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 900;
             letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-            box-shadow: 0 2px 5px rgba(245, 127, 23, 0.4); transition: all 0.3s ease; white-space: nowrap;
+            box-shadow: 0 2px 5px rgba(245, 127, 23, 0.4);
+            transition: all 0.3s ease; white-space: nowrap;
         }
+        
         .free-badge {
             background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3);
             padding: 2px 5px; border-radius: 6px; font-size: 0.55rem; font-weight: 900;
             text-transform: lowercase; vertical-align: super; margin-left: 2px; letter-spacing: 0.5px;
         }
+        
         .lock-icon { color: #f1c40f; font-size: 1.1rem; opacity: 0.9; transition: 0.3s; }
 
         @media (max-width: 600px) { .chat-container { width: 95%; height: 95vh; } .chat-header h1 { font-size: 1.1rem; } }
@@ -166,7 +171,8 @@
         <div class="modal-overlay" id="adModalOverlay">
             <div class="ad-modal">
                 <h2 id="modalTitle">Unlock Premium Mode 🔒</h2>
-                <p>Watch a short Ad to get 5 FREE chats with this premium AI persona!</p>
+                <p>Watch 3 short ads to get 5 FREE chats with this premium AI persona!</p>
+                <div class="ad-progress" id="adProgressText">Ads Watched: 0 / 3</div>
                 <button class="watch-ad-btn" onclick="watchAd()">🎬 Watch Ad Now</button>
                 <br>
                 <button class="cancel-btn" onclick="cancelAd()">Cancel & Go Back</button>
@@ -269,13 +275,14 @@
         const premiumModes = ['friendly', 'coder', 'teacher', 'funny', 'motivator', 'shayari'];
         let currentPersona = 'general';
         let modeTryingToUnlock = '';
-        
+        let adsWatchedCount = 0;
         let freePremiumChatsLeft = parseInt(localStorage.getItem('premiumChats')) || 0;
 
         const sheetOverlay = document.getElementById('personaSheetOverlay');
         const sheet = document.getElementById('personaSheet');
         const btnText = document.getElementById('currentPersonaBtn');
 
+        // 🚀 DYNAMIC MENU BADGES SYSTEM
         function updateMenuBadges() {
             const proOptions = document.querySelectorAll('.persona-option[data-locked="true"]');
             
@@ -322,6 +329,8 @@
             if (isLocked && freePremiumChatsLeft <= 0) {
                 closeSheet();
                 modeTryingToUnlock = selectedMode;
+                adsWatchedCount = 0;
+                document.getElementById('adProgressText').innerText = `Ads Watched: 0 / 3`;
                 
                 let rawTitle = personaDisplayNames[selectedMode].replace(/&lt;\/&gt;/g, '</>').replace(/[^a-zA-Z \u00a9-\u02ff\u1d00-\u1d7f\u2100-\u214f\u2600-\u26ff\u2700-\u27bf\u2800-\u28ff\u2b00-\u2bff\u2c00-\u2cff\u2d00-\u2dff\u2e00-\u2eff\u3000-\u303f\u31c0-\u31ef\u3200-\u32ff\u3300-\u33ff\u3400-\u4dbf\u4dc0-\u4dff\u4e00-\u9fff\ua000-\ua48f\ua490-\ua4cf\uf900-\ufaff\ufe30-\ufe4f\ufe50-\ufe6f\ufe70-\ufeff\uff00-\uffef\U0001f000-\U0001f02f\U0001f030-\U0001f09f\U0001f0a0-\U0001f0ff\U0001f100-\U0001f1ff\U0001f200-\U0001f2ff\U0001f300-\U0001f5ff\U0001f600-\U0001f64f\U0001f650-\U0001f67f\U0001f680-\U0001f6ff\U0001f700-\U0001f77f\U0001f780-\U0001f7ff\U0001f800-\U0001f8ff\U0001f900-\U0001f9ff\U0001fa00-\U0001fa6f\U0001fa70-\U0001faff\U0001fb00-\U0001fbff]/g, "").trim();
                 document.getElementById('modalTitle').innerText = `Unlock ${rawTitle} 🔒`;
@@ -335,8 +344,46 @@
             }
         }
 
+        function resetAdButton() {
+            let btn = document.querySelector('.watch-ad-btn');
+            if (btn) { btn.innerText = "🎬 Watch Ad Now"; btn.disabled = false; }
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('themeToggle');
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme'); themeBtn.innerHTML = '🌙'; 
+            } else {
+                body.setAttribute('data-theme', 'dark'); themeBtn.innerHTML = '☀️';
+            }
+        }
+
+        const messagesEl = document.getElementById('messages');
+        const inputEl = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingEl = document.getElementById('typingIndicator');
+        const adModalOverlay = document.getElementById('adModalOverlay');
+        const chatCounter = document.getElementById('chatCounter');
+        
+        const personas = {
+            general: "🤖 You are a helpful AI assistant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user's prompt (e.g., if the user types in Hinglish/Roman Hindi, reply in Hinglish. If English, reply in English).",
+            
+            // 🚀 Bestie rule removed
+            friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If funny, be hilarious. If romantic, respond playfully. If sad, be comforting. 2. Use emojis naturally! 😊",
+            
+            professional: "💼 You are a formal, professional consultant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user.",
+            coder: "💻 You are an expert programmer. STRICT RULE: Explain code clearly and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            teacher: "🎓 You are a patient, encouraging teacher. STRICT RULE: Explain concepts step-by-step and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            funny: "😂 You are a hilarious stand-up comedian AI. STRICT RULE: Make jokes and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            motivator: "🏆 You are an energetic motivational coach. STRICT RULE: Inspire the user and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            shayari: "🪶 You are a poetic AI. STRICT RULES: 1. Directly output ONLY the Shayari. 2. Write the Shayari strictly in the EXACT SAME LANGUAGE the user asked in."
+        };
+        
+        inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+        
         function cancelAd() {
-            document.getElementById('adModalOverlay').style.display = 'none';
+            adModalOverlay.style.display = 'none';
         }
 
         function watchAd() {
@@ -346,33 +393,30 @@
 
             if (typeof AndroidBridge !== "undefined") {
                 AndroidBridge.showAd();
-                setTimeout(() => {
-                    if (btn.disabled) {
-                        btn.innerText = "🎬 Watch Ad Now";
-                        btn.disabled = false;
-                    }
-                }, 8000);
             } else {
-                setTimeout(() => { window.adWatchedSuccessfully(); }, 1500);
+                // 🚀 Play Store alert removed, test mode on
+                setTimeout(() => { adWatchedSuccessfully(); }, 1500);
             }
         }
 
-        window.adWatchedSuccessfully = function() {
+        function adWatchedSuccessfully() {
             let btn = document.querySelector('.watch-ad-btn');
-            if(btn) {
-                btn.innerText = "🎬 Watch Ad Now";
-                btn.disabled = false;
-            }
+            adsWatchedCount++;
+            document.getElementById('adProgressText').innerText = `Ads Watched: ${adsWatchedCount} / 3`;
+            btn.innerText = "🎬 Watch Ad Now";
+            btn.disabled = false;
 
-            alert("🎉 Reward Granted! You unlocked 5 free chats.");
-            document.getElementById('adModalOverlay').style.display = 'none';
-            
-            freePremiumChatsLeft = 5;
-            localStorage.setItem('premiumChats', freePremiumChatsLeft);
-            
-            updateMenuBadges(); 
-            switchMode(modeTryingToUnlock); 
-        };
+            if (adsWatchedCount >= 3) {
+                alert("🎉 Reward Granted! You unlocked 5 free chats.");
+                document.getElementById('adModalOverlay').style.display = 'none';
+                
+                freePremiumChatsLeft = 5;
+                localStorage.setItem('premiumChats', freePremiumChatsLeft);
+                
+                updateMenuBadges(); // Menu Update
+                switchMode(modeTryingToUnlock); 
+            }
+        }
 
         function switchMode(newMode) {
             currentPersona = newMode;
@@ -419,7 +463,7 @@
                         localStorage.setItem('premiumChats', freePremiumChatsLeft);
                         chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
                         
-                        updateMenuBadges(); 
+                        updateMenuBadges(); // Menu Update
 
                         if (freePremiumChatsLeft <= 0) {
                             setTimeout(() => {
@@ -441,17 +485,6 @@
             }
         }
         
-        const personas = {
-            general: "🤖 You are a helpful AI assistant named SG AI. STRICT RULE: Mirror the user's exact language and script perfectly. If they type a local language using English letters (e.g., Roman Hindi), you MUST reply in that exact same local language using English letters ONLY.",
-            friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. Mirror the user's vibe. 2. Mirror the user's exact language and script perfectly. 3. Use emojis naturally! 😊",
-            professional: "💼 You are a formal, professional consultant named SG AI. STRICT RULE: Mirror the user's exact language and script perfectly.",
-            coder: "💻 You are an expert programmer. STRICT RULE: Explain code clearly. Mirror the user's exact language and script perfectly.",
-            teacher: "🎓 You are a patient, encouraging teacher. STRICT RULE: Explain concepts step-by-step. Mirror the user's exact language and script perfectly.",
-            funny: "😂 You are a hilarious stand-up comedian AI. STRICT RULE: Make jokes. Mirror the user's exact language and script perfectly.",
-            motivator: "🏆 You are an energetic motivational coach. STRICT RULE: Inspire the user. Mirror the user's exact language and script perfectly.",
-            shayari: "🪶 You are a poetic AI. STRICT RULES: 1. Output ONLY the Shayari. 2. Mirror the user's exact language and script perfectly. If they use English letters (Roman script), you MUST write the shayari using English letters ONLY."
-        };
-
         function addMessage(sender, text, type) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}`;
@@ -499,18 +532,6 @@
         }
         
         function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
-        
-        function toggleTheme() {
-            const body = document.body;
-            const themeBtn = document.getElementById('themeToggle');
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme'); themeBtn.innerHTML = '🌙'; 
-            } else {
-                body.setAttribute('data-theme', 'dark'); themeBtn.innerHTML = '☀️';
-            }
-        }
-        
-        inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
         
         window.onload = () => {
             inputEl.focus();
