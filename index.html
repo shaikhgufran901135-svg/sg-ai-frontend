@@ -220,14 +220,14 @@
                 <button id="themeToggle" class="theme-btn" onclick="toggleTheme()">☀️</button>
                 <div class="persona-selector">
                     <select id="personaSelect" onchange="checkPersonaAccess()">
-                        <option value="general">General Assistant</option>
-                        <option value="friendly">Friendly Friend 🔒</option>
-                        <option value="professional">Professional</option>
-                        <option value="coder">Code Helper 🔒</option>
-                        <option value="teacher">Teacher Mode 🔒</option>
-                        <option value="funny">Funny Bot 🔒</option>
-                        <option value="motivator">Motivator 🔒</option>
-                        <option value="shayari">Shayari Mode ✨🔒</option> 
+                        <option value="general">🤖 General Assistant</option>
+                        <option value="friendly">💖 Bestie 🔒</option>
+                        <option value="professional">💼 Professional</option>
+                        <option value="coder">💻 Code Helper 🔒</option>
+                        <option value="teacher">👨‍🏫 Teacher Mode 🔒</option>
+                        <option value="funny">😂 Funny Bot 🔒</option>
+                        <option value="motivator">💪 Motivator 🔒</option>
+                        <option value="shayari">✨ Shayari Mode 🔒</option> 
                     </select>
                 </div>
             </div>
@@ -289,7 +289,6 @@
         const adProgressText = document.getElementById('adProgressText');
         const chatCounter = document.getElementById('chatCounter');
         
-        // 🚀 YAHAN 'friendly' KO PREMIUM LIST MEIN ADD KIYA
         const premiumModes = ['friendly', 'coder', 'teacher', 'funny', 'motivator', 'shayari'];
         let previousPersona = 'general';
         let currentPersona = 'general';
@@ -298,15 +297,23 @@
         
         let freePremiumChatsLeft = parseInt(localStorage.getItem('premiumChats')) || 0;
         
+        // 🚀 YAHAN SAB MEIN STRICT LANGUAGE RULE LAGA DIYA HAI
         const personas = {
-            general: "You are a helpful AI assistant named SG AI.",
-            friendly: "You are a close, friendly, and highly adaptable companion named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If the user is funny, be hilarious. If the user talks romantically or flirts, respond romantically and playfully. If the user is sad, be deeply comforting. 2. Always reply in the EXACT SAME LANGUAGE as the user (e.g., Hinglish for Hinglish, English for English). 3. Use emojis naturally! 😊",
-            professional: "You are a professional consultant named SG AI. Be formal.",
-            coder: "You are a coding expert. Explain code clearly.",
-            teacher: "You are a patient teacher. Explain concepts step-by-step.",
-            funny: "You are a hilarious comedian AI. Make jokes! 😂",
-            motivator: "You are a motivational coach. Inspire the user! 💪",
-            shayari: "You are a poetic AI. Use beautiful Shayari in your responses."
+            general: "🤖 You are a helpful AI assistant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user's prompt (e.g., if the user types in Hinglish/Roman Hindi, reply in Hinglish. If English, reply in English).",
+            
+            friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If funny, be hilarious. If romantic, respond playfully. If sad, be comforting. 2. Always reply in the EXACT SAME LANGUAGE as the user. 3. Use emojis naturally! 😊",
+            
+            professional: "💼 You are a formal, professional consultant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user.",
+            
+            coder: "💻 You are an expert programmer. STRICT RULE: Explain code clearly and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            
+            teacher: "👨‍🏫 You are a patient, encouraging teacher. STRICT RULE: Explain concepts step-by-step and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            
+            funny: "😂 You are a hilarious stand-up comedian AI. STRICT RULE: Make jokes and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            
+            motivator: "💪 You are an energetic motivational coach. STRICT RULE: Inspire the user and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
+            
+            shayari: "✨ You are a poetic AI. STRICT RULES: 1. Directly output ONLY the Shayari. 2. Write the Shayari strictly in the EXACT SAME LANGUAGE the user asked in."
         };
         
         inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
