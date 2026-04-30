@@ -76,22 +76,24 @@
             --user-msg-bg: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
             --text-selector: var(--accent-1);
             --border-input: 2px solid var(--accent-1);
-            font-family: 'Inter', sans-serif; background: var(--bg-body); height: 100vh; display: flex; justify-content: center; align-items: center; color: var(--text-main); transition: all 0.5s ease; overflow: hidden; position: relative; 
+            font-family: 'Inter', sans-serif; background: var(--bg-body); height: 100vh; display: flex; justify-content: center; align-items: center; color: var(--text-main); transition: all 0.5s ease; overflow: hidden; position: relative; margin: 0; padding: 0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { overscroll-behavior-y: none; }
         
         .chat-container { width: 92%; max-width: 900px; height: 92vh; background: var(--bg-container); backdrop-filter: blur(20px); border-radius: 32px; box-shadow: 0 25px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1); display: flex; flex-direction: column; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); transition: all 0.5s ease; }
-        .chat-header { background: var(--bg-header); color: #fff; padding: 20px 25px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); display: flex; justify-content: space-between; align-items: center; transition: background 0.5s ease; flex-shrink: 0; }
-        .title-and-profile { display: flex; align-items: center; gap: 15px; }
+        
+        .chat-header { background: var(--bg-header); color: #fff; padding: 20px 25px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); display: flex; justify-content: space-between; align-items: center; transition: background 0.5s ease; flex-shrink: 0; position: relative; z-index: 50; }
+        .title-and-profile { display: flex; align-items: center; gap: 15px; position: relative; z-index: 51; }
         .profile-pic { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; font-size: 28px; border: 2px solid rgba(255,255,255,0.3); flex-shrink: 0;}
         .title-text { display: flex; flex-direction: column; }
         .title-text h1 { font-size: 1.4rem; margin: 0; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
         .title-text p { font-size: 0.85rem; margin: 0; opacity: 0.9; }
-        .header-controls { display: flex; gap: 12px; align-items: center; }
-        .theme-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 16px; width: 44px; height: 44px; cursor: pointer; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.2rem; transition: 0.3s; flex-shrink: 0; }
-        .custom-select-btn { background: var(--bg-selector); backdrop-filter: blur(15px); padding: 12px 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.3); font-weight: 600; color: var(--text-selector); cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.5s ease; white-space: nowrap; }
+        .header-controls { display: flex; gap: 12px; align-items: center; position: relative; z-index: 51; }
+        .theme-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 16px; width: 44px; height: 44px; cursor: pointer; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.2rem; transition: 0.3s; flex-shrink: 0; position: relative; z-index: 55; }
+        .custom-select-btn { background: var(--bg-selector); backdrop-filter: blur(15px); padding: 12px 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.3); font-weight: 600; color: var(--text-selector); cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.5s ease; white-space: nowrap; position: relative; z-index: 55; }
+        .custom-select-btn:active, .theme-btn:active { transform: scale(0.95); }
         
         .messages { 
             flex: 1; 
@@ -111,27 +113,9 @@
         .message.ai { justify-content: flex-start; width: 100%; gap: 15px; }
         
         /* 🚀 ADVANCED GEMINI-STYLE AI ICON */
-        .ai-icon { 
-            width: 28px; 
-            height: 28px; 
-            margin-top: 12px; 
-            flex-shrink: 0; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .ai-icon svg {
-            width: 100%;
-            height: 100%;
-            animation: aiStarSpin 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-            filter: drop-shadow(0 0 8px var(--accent-1));
-            transition: all 0.5s ease;
-        }
-        @keyframes aiStarSpin {
-            0% { transform: rotate(0deg) scale(0.9); }
-            50% { transform: rotate(180deg) scale(1.15); filter: drop-shadow(0 0 12px var(--accent-2)); }
-            100% { transform: rotate(360deg) scale(0.9); }
-        }
+        .ai-icon { width: 28px; height: 28px; margin-top: 12px; flex-shrink: 0; display: flex; justify-content: center; align-items: center; }
+        .ai-icon svg { width: 100%; height: 100%; animation: aiStarSpin 4s cubic-bezier(0.4, 0, 0.2, 1) infinite; filter: drop-shadow(0 0 8px var(--accent-1)); transition: all 0.5s ease; }
+        @keyframes aiStarSpin { 0% { transform: rotate(0deg) scale(0.9); } 50% { transform: rotate(180deg) scale(1.15); filter: drop-shadow(0 0 12px var(--accent-2)); } 100% { transform: rotate(360deg) scale(0.9); } }
 
         .message-content { max-width: 75%; padding: 20px 25px; border-radius: 24px; line-height: 1.6; word-wrap: break-word; }
         .user .message-content { background: var(--user-msg-bg); color: white; border-bottom-right-radius: 8px; transition: background 0.5s ease; }
@@ -141,50 +125,15 @@
         .copy-code-btn { position: absolute; top: 12px; right: 12px; background: var(--user-msg-bg); color: white; border: none; border-radius: 12px; padding: 8px 16px; font-size: 0.8rem; cursor: pointer; transition: background 0.5s ease; }
         
         /* 🚀 ADVANCED DYNAMIC TYPING INDICATOR */
-        .typing-indicator { 
-            display: none; 
-            align-items: flex-start;
-            gap: 15px;
-            margin-bottom: 25px; 
-            position: relative; 
-            z-index: 1; 
-            animation: slideInUp 0.3s ease-out;
-        }
-        .typing-ai-icon svg {
-            animation: aiStarSpinPulse 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-        @keyframes aiStarSpinPulse {
-            0% { transform: rotate(0deg) scale(0.8); filter: drop-shadow(0 0 5px var(--accent-1)); }
-            50% { transform: rotate(180deg) scale(1.3); filter: drop-shadow(0 0 20px var(--accent-2)); }
-            100% { transform: rotate(360deg) scale(0.8); filter: drop-shadow(0 0 5px var(--accent-1)); }
-        }
-        .typing-content {
-            background: var(--bg-ai-msg); 
-            color: var(--text-ai-msg); 
-            border: 1px solid rgba(255,255,255,0.1); 
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1); 
-            backdrop-filter: blur(10px);
-            padding: 18px 25px; 
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 500;
-            font-style: italic;
-            opacity: 0.9;
-        }
+        .typing-indicator { display: none; align-items: flex-start; gap: 15px; margin-bottom: 25px; position: relative; z-index: 1; animation: slideInUp 0.3s ease-out; }
+        .typing-ai-icon svg { animation: aiStarSpinPulse 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+        @keyframes aiStarSpinPulse { 0% { transform: rotate(0deg) scale(0.8); filter: drop-shadow(0 0 5px var(--accent-1)); } 50% { transform: rotate(180deg) scale(1.3); filter: drop-shadow(0 0 20px var(--accent-2)); } 100% { transform: rotate(360deg) scale(0.8); filter: drop-shadow(0 0 5px var(--accent-1)); } }
+        .typing-content { background: var(--bg-ai-msg); color: var(--text-ai-msg); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 32px rgba(0,0,0,0.1); backdrop-filter: blur(10px); padding: 18px 25px; border-radius: 24px; display: flex; align-items: center; gap: 12px; font-weight: 500; font-style: italic; opacity: 0.9; }
         .typing-dots { display: flex; gap: 5px; margin-top: 5px; }
-        .typing-dots span {
-            width: 8px; height: 8px; border-radius: 50%;
-            background-color: var(--accent-1);
-            animation: typingBounce 1.4s infinite ease-in-out both;
-        }
+        .typing-dots span { width: 8px; height: 8px; border-radius: 50%; background-color: var(--accent-1); animation: typingBounce 1.4s infinite ease-in-out both; }
         .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
         .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes typingBounce {
-            0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
-            40% { transform: scale(1); opacity: 1; box-shadow: 0 0 10px var(--accent-1); }
-        }
+        @keyframes typingBounce { 0%, 80%, 100% { transform: scale(0); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; box-shadow: 0 0 10px var(--accent-1); } }
         
         .input-area { padding: 30px; background: var(--bg-input-area); border-top: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; gap: 15px; flex-shrink: 0;}
         .input-row { display: flex; gap: 15px; width: 100%; align-items: center;}
@@ -202,12 +151,12 @@
         .cancel-btn { background: none; border: none; color: #ff6b6b; margin-top: 15px; cursor: pointer; text-decoration: underline; }
         
         .bottom-sheet-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 900; align-items: flex-end; opacity: 0; transition: opacity 0.3s; backdrop-filter: blur(5px); }
-        .bottom-sheet { background: var(--bg-container); width: 100%; border-radius: 32px 32px 0 0; padding: 30px 25px; transform: translateY(100%); transition: transform 0.4s ease; display: flex; flex-direction: column; max-height: 85%; }
+        .bottom-sheet { background: var(--bg-container); width: 100%; border-radius: 32px 32px 0 0; padding: 30px 25px; transform: translateY(100%); transition: transform 0.4s ease; display: flex; flex-direction: column; max-height: 85%; position: relative; z-index: 901; }
         .sheet-header { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
         .sheet-header h3 { margin: 0; font-size: 1.4rem; color: var(--text-main); }
         .close-sheet { font-size: 1.8rem; color: #a8b2d1; cursor: pointer; background: none; border: none; }
-        .persona-list { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
-        .persona-option { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; cursor: pointer; border: 2px solid transparent; transition: 0.3s; }
+        .persona-list { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; padding-bottom: 20px; }
+        .persona-option { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; cursor: pointer; border: 2px solid transparent; transition: 0.3s; position: relative; z-index: 902; }
         .persona-option.active { border-color: var(--accent-1); background: rgba(255,255,255,0.1); }
         .persona-info { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 1.1rem; }
         
@@ -225,43 +174,48 @@
                 border: none; 
             } 
             .chat-header { 
-                padding: 12px 15px; 
+                /* 🚀 FIX 1: Pushed Header Down from Mobile Status Bar / Notch */
+                padding: 40px 15px 15px 15px; 
+                z-index: 100;
             }
             .profile-pic { 
-                width: 38px; height: 38px; font-size: 20px; 
+                width: 44px; height: 44px; font-size: 24px; 
             }
             .title-text h1 { 
-                font-size: 1.1rem; 
+                font-size: 1.25rem; 
             }
             .title-text p { 
-                font-size: 0.75rem; 
+                font-size: 0.8rem; 
             }
             .header-controls { 
-                gap: 8px; 
+                gap: 10px; 
+                /* 🚀 FIX 2: Ensuring buttons are on top and completely clickable */
+                z-index: 100; 
             }
             .theme-btn { 
-                width: 36px; height: 36px; font-size: 1rem; border-radius: 12px;
+                width: 40px; height: 40px; font-size: 1.1rem; border-radius: 12px; z-index: 100;
             }
             .custom-select-btn { 
-                padding: 8px 12px; font-size: 0.8rem; border-radius: 14px; 
+                padding: 10px 14px; font-size: 0.85rem; border-radius: 14px; z-index: 100;
             }
             .messages { 
-                padding: 15px; 
+                padding: 20px 15px; 
             }
             .message-content { 
-                max-width: 85%; padding: 12px 16px; font-size: 0.95rem; border-radius: 18px; 
+                max-width: 85%; padding: 14px 18px; font-size: 0.95rem; border-radius: 20px; 
             }
             .input-area { 
-                padding: 15px; gap: 10px; 
+                /* 🚀 FIX 3: Perfectly adjusted bottom area */
+                padding: 15px; gap: 10px; padding-bottom: 25px;
             }
             .input-row { 
                 gap: 10px; 
             }
             #messageInput { 
-                padding: 14px 18px; font-size: 0.95rem; border-radius: 24px; 
+                padding: 15px 20px; font-size: 0.95rem; border-radius: 24px; 
             }
             #sendBtn { 
-                padding: 14px 20px; font-size: 0.95rem; border-radius: 24px; 
+                padding: 15px 22px; font-size: 0.95rem; border-radius: 24px; 
             }
             .bottom-sheet { 
                 padding: 20px 15px 30px 15px; 
