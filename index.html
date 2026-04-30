@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 🚀 FIX: Mobile status bar ko system level par black karne ke liye -->
+    <meta name="theme-color" content="#000000">
     <title>SG AI Chat - Premium Features</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -12,8 +15,9 @@
         
         /* 🚀 PERSONA COLOR THEMES & DYNAMIC BACKGROUND PATTERNS */
         :root { 
-            --accent-1: #4facfe; 
-            --accent-2: #00f2fe; 
+            /* 🚀 FIX: Deep Professional Dark Blue (Pehle ye light Cyan tha) */
+            --accent-1: #1e3c72; 
+            --accent-2: #2a5298; 
             --chat-bg-pattern: none; 
         }
         [data-persona="friendly"] { 
@@ -167,8 +171,20 @@
         
         /* 📱 100% FIXED RESPONSIVE DESIGN FOR MOBILE */
         @media (max-width: 600px) { 
-            .chat-container { width: 100%; height: 100dvh; border-radius: 0; border: none; } 
-            .chat-header { padding: 40px 15px 15px 15px; z-index: 100; }
+            .chat-container { 
+                width: 100%; 
+                height: 100dvh; 
+                border-radius: 0; 
+                border: none; 
+                /* 🚀 FIX: Ye code completely mobile ka status bar (time/battery) ko solid black kar dega */
+                border-top: 40px solid #000000; 
+                box-sizing: border-box;
+            } 
+            .chat-header { 
+                /* 🚀 FIX: Extra space jo uper ban gaya tha wo hata diya taaki buttons na dabein */
+                padding: 15px; 
+                z-index: 100; 
+            }
             .profile-pic { width: 44px; height: 44px; font-size: 24px; }
             .title-text h1 { font-size: 1.25rem; }
             .title-text p { font-size: 0.8rem; }
@@ -245,6 +261,7 @@
         
         <div class="messages" id="messages">
             <div class="message ai">
+                <!-- 🚀 DYNAMIC SVG ICON -->
                 <div class="ai-icon">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
@@ -260,6 +277,7 @@
             </div>
         </div>
         
+        <!-- 🚀 NEW PREMIUM TYPING INDICATOR HTML WITH SVG ICON -->
         <div class="typing-indicator" id="typingIndicator">
             <div class="ai-icon typing-ai-icon">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
