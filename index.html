@@ -4,175 +4,229 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SG AI Chat - Premium Features</title>
-    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    
     <style>
-        :root {
-            --bg-body: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --bg-container: rgba(255, 255, 255, 0.95);
-            --text-main: #333;
-            --bg-header: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --text-header: white;
-            --bg-messages: #f8f9fa;
-            --bg-ai-msg: white;
-            --text-ai-msg: #333;
-            --border-ai: 1px solid #e0e0e0;
-            --shadow-ai: 0 2px 10px rgba(0,0,0,0.05);
-            --bg-input-area: white;
-            --border-input-area: 1px solid #eee;
-            --bg-input: white;
-            --text-input: #333;
-            --border-input: 2px solid #e0e0e0;
-            --bg-selector: rgba(255, 255, 255, 0.9);
-            --text-selector: #4facfe;
-            --typing-text: #666;
-            --user-msg-bg: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        /* 🚀 PERSONA COLOR THEMES & DYNAMIC BACKGROUND PATTERNS */
+        :root { 
+            --accent-1: #4facfe; 
+            --accent-2: #00f2fe; 
+            --chat-bg-pattern: none; 
+        }
+        [data-persona="friendly"] { 
+            --accent-1: #ff758c; --accent-2: #ff7eb3; 
+            --chat-bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ctext x='20' y='50' font-size='30' opacity='0.08'%3E💖%3C/text%3E%3C/svg%3E"); 
+        }
+        [data-persona="professional"] { 
+            --accent-1: #2c3e50; --accent-2: #3498db; 
+            --chat-bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='2' cy='2' r='1' fill='rgba(128,128,128,0.2)'/%3E%3C/svg%3E"); 
+        }
+        [data-persona="coder"] { 
+            --accent-1: #11998e; --accent-2: #38ef7d; 
+            --chat-bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ctext x='15' y='50' font-size='26' font-family='monospace' font-weight='bold' fill='%2338ef7d' opacity='0.15'%3E%26lt%3B/%26gt%3B%3C/text%3E%3C/svg%3E"); 
+        }
+        [data-persona="teacher"] { 
+            --accent-1: #f12711; --accent-2: #f5af19; 
+            --chat-bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0,0 L40,0 L40,40' fill='none' stroke='rgba(128,128,128,0.15)' stroke-width='1'/%3E%3C/svg%3E"); 
+        }
+        [data-persona="funny"] { 
+            --accent-1: #8E2DE2; --accent-2: #4A00E0; 
+            --chat-bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Ctext x='25' y='55' font-size='30' opacity='0.06'%3E😂%3C/text%3E%3C/svg%3E"); 
+        }
+        [data-persona="motivator"] { 
+            --accent-1: #fc4a1a; --accent-2: #f7b733; 
+            --chat-bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Ctext x='25' y='55' font-size='30' opacity='0.06'%3E🚀%3C/text%3E%3C/svg%3E"); 
+        }
+        [data-persona="shayari"] { 
+            --accent-1: #b224ef; --accent-2: #7579ff; 
+            --chat-bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ctext x='20' y='50' font-size='30' opacity='0.08'%3E✨%3C/text%3E%3C/svg%3E"); 
         }
 
-        [data-theme="dark"] {
-            --bg-body: linear-gradient(135deg, #1a1c24 0%, #2d3436 100%);
-            --bg-container: rgba(30, 30, 30, 0.95);
-            --text-main: #e0e0e0;
-            --bg-header: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            --text-header: #ecf0f1;
-            --bg-messages: #121212;
-            --bg-ai-msg: transparent;
-            --text-ai-msg: #e0e0e0;
-            --border-ai: none; 
-            --shadow-ai: none;
-            --bg-input-area: #1e1e1e;
-            --border-input-area: 1px solid #333;
-            --bg-input: #2c2c2c;
-            --text-input: #e0e0e0;
-            --border-input: 2px solid #444;
-            --bg-selector: rgba(30, 30, 30, 0.9);
-            --text-selector: #3498db;
-            --typing-text: #aaa;
-            --user-msg-bg: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        /* BASE THEME COLORS */
+        :root, [data-theme="dark"] {
+            --bg-body: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            --bg-container: linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%), rgba(20, 20, 40, 0.95);
+            --text-main: #e8eaf6;
+            --bg-messages: rgba(15, 15, 35, 0.9);
+            --bg-ai-msg: rgba(255,255,255,0.05);
+            --text-ai-msg: #f0f4f8;
+            --bg-input: rgba(255,255,255,0.1);
+            --text-input: #e8eaf6;
+            --bg-selector: rgba(255,255,255,0.15);
+        }
+
+        [data-theme="light"] {
+            --bg-body: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --bg-container: rgba(255, 255, 255, 0.92);
+            --text-main: #2c3e50;
+            --bg-messages: rgba(248, 249, 250, 0.95);
+            --bg-ai-msg: rgba(255,255,255,1);
+            --text-ai-msg: #2c3e50;
+            --bg-input: rgba(240,244,248,1);
+            --text-input: #2c3e50;
+            --bg-selector: rgba(255,255,255,0.8);
+        }
+
+        /* DYNAMIC APP COLORS */
+        body { 
+            --bg-header: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+            --user-msg-bg: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+            --text-selector: var(--accent-1);
+            --border-input: 2px solid var(--accent-1);
+            font-family: 'Inter', sans-serif; background: var(--bg-body); height: 100vh; display: flex; justify-content: center; align-items: center; color: var(--text-main); transition: all 0.5s ease; overflow: hidden; position: relative; 
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         html, body { overscroll-behavior-y: none; }
         
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: var(--bg-body); height: 100vh; display: flex; 
-            justify-content: center; align-items: center; color: var(--text-main);
-            transition: background 0.5s ease; overflow: hidden; 
-        }
+        .chat-container { width: 92%; max-width: 900px; height: 92vh; background: var(--bg-container); backdrop-filter: blur(20px); border-radius: 32px; box-shadow: 0 25px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1); display: flex; flex-direction: column; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); transition: all 0.5s ease; }
+        .chat-header { background: var(--bg-header); color: #fff; padding: 20px 25px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); display: flex; justify-content: space-between; align-items: center; transition: background 0.5s ease; }
+        .title-and-profile { display: flex; align-items: center; gap: 15px; }
+        .profile-pic { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; font-size: 28px; border: 2px solid rgba(255,255,255,0.3); }
+        .title-text { display: flex; flex-direction: column; }
+        .title-text h1 { font-size: 1.4rem; margin: 0; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+        .title-text p { font-size: 0.85rem; margin: 0; opacity: 0.9; }
+        .header-controls { display: flex; gap: 12px; align-items: center; }
+        .theme-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 16px; width: 44px; height: 44px; cursor: pointer; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.2rem; transition: 0.3s; }
+        .custom-select-btn { background: var(--bg-selector); backdrop-filter: blur(15px); padding: 12px 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.3); font-weight: 600; color: var(--text-selector); cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.5s ease; }
         
-        .chat-container {
-            width: 90%; max-width: 800px; height: 90vh; background: var(--bg-container); border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; overflow: hidden; position: relative;
-            transform: translateZ(0); 
+        .messages { 
+            flex: 1; 
+            padding: 30px; 
+            overflow-y: scroll; 
+            background-color: var(--bg-messages); 
+            background-image: var(--chat-bg-pattern);
+            background-repeat: repeat;
+            scroll-behavior: smooth; 
+            -webkit-overflow-scrolling: touch; 
+            transition: background-color 0.5s ease, background-image 0.5s ease;
         }
-        
-        .chat-header {
-            background: var(--bg-header); color: var(--text-header); padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
-            display: flex; justify-content: space-between; align-items: center;
-        }
-
-        .title-and-profile { display: flex; align-items: center; gap: 10px; }
-        .profile-pic { width: 40px; height: 40px; border-radius: 50%; background: white; display: flex; justify-content: center; align-items: center; font-size: 24px; }
-        .title-text { display: flex; flex-direction: column; text-align: left; }
-        .title-text h1 { font-size: 1.2rem; margin: 0; font-weight: bold; }
-        .title-text p { font-size: 0.8rem; margin: 0; opacity: 0.9; }
-        
-        .header-controls { display: flex; gap: 8px; align-items: center; }
-        .theme-btn {
-            background: var(--bg-selector); border: 1px solid var(--border-input); border-radius: 50%; width: 38px; height: 38px; cursor: pointer;
-            display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .custom-select-btn {
-            background: var(--bg-selector); padding: 8px 12px; border-radius: 15px; border: 1px solid var(--border-input);
-            font-weight: bold; color: var(--text-selector); cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 0.9rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.2s;
-        }
-        .custom-select-btn:active { transform: scale(0.95); }
-
-        .messages { flex: 1; padding: 20px; overflow-y: scroll; background: var(--bg-messages); scroll-behavior: smooth; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; overflow-anchor: none; }
-        .message { margin-bottom: 20px; display: flex; animation: fadeIn 0.3s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .messages::-webkit-scrollbar { width: 6px; } .messages::-webkit-scrollbar-thumb { background: var(--user-msg-bg); border-radius: 10px; }
+        .message { margin-bottom: 25px; display: flex; animation: slideInUp 0.4s ease-out; position: relative; z-index: 1; }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .message.user { justify-content: flex-end; }
-        .message.ai { justify-content: flex-start; width: 100%; align-items: flex-start; gap: 10px; }
-        .ai-icon { font-size: 1.3rem; margin-top: 8px; flex-shrink: 0; }
+        .message.ai { justify-content: flex-start; width: 100%; gap: 15px; }
         
-        .message-content { max-width: 75%; padding: 15px 20px; border-radius: 20px; line-height: 1.5; word-wrap: break-word; }
-        .user .message-content { background: var(--user-msg-bg); color: white; border-bottom-right-radius: 5px; }
-        .ai .message-content { background: transparent; color: var(--text-ai-msg); border: none; max-width: 100%; width: 100%; padding: 10px 0px; box-shadow: none; }
+        /* 🚀 ADVANCED GEMINI-STYLE AI ICON */
+        .ai-icon { 
+            width: 28px; 
+            height: 28px; 
+            margin-top: 12px; 
+            flex-shrink: 0; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .ai-icon svg {
+            width: 100%;
+            height: 100%;
+            animation: aiStarSpin 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            filter: drop-shadow(0 0 8px var(--accent-1));
+            transition: all 0.5s ease;
+        }
+        @keyframes aiStarSpin {
+            0% { transform: rotate(0deg) scale(0.9); }
+            50% { transform: rotate(180deg) scale(1.15); filter: drop-shadow(0 0 12px var(--accent-2)); }
+            100% { transform: rotate(360deg) scale(0.9); }
+        }
 
-        .message-content pre { background: #282c34; border-radius: 10px; padding: 15px; padding-top: 35px; margin: 10px 0; overflow-x: auto; position: relative; max-width: 100%; box-sizing: border-box; }
-        .message-content pre code { font-family: 'Consolas', 'Courier New', Courier, monospace; font-size: 0.9rem; color: #abb2bf; }
-        .copy-code-btn { position: absolute; top: 8px; right: 8px; background: #4facfe; color: white; border: none; border-radius: 5px; padding: 4px 10px; font-size: 0.75rem; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .copy-code-btn:hover { background: #00f2fe; }
-        .message-content p { margin-bottom: 10px; }
-        .message-content p:last-child { margin-bottom: 0; }
+        .message-content { max-width: 75%; padding: 20px 25px; border-radius: 24px; line-height: 1.6; word-wrap: break-word; }
+        .user .message-content { background: var(--user-msg-bg); color: white; border-bottom-right-radius: 8px; transition: background 0.5s ease; }
+        .ai .message-content { background: var(--bg-ai-msg); color: var(--text-ai-msg); border: 1px solid rgba(255,255,255,0.1); width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.1); backdrop-filter: blur(10px); }
+        .message-content pre { background: rgba(40,44,52,0.9); border-radius: 16px; padding: 25px; padding-top: 50px; margin: 15px 0; overflow-x: auto; position: relative; border: 1px solid rgba(255,255,255,0.1); }
+        .message-content pre code { font-family: 'Fira Code', 'Consolas', monospace; font-size: 0.9rem; color: #abb2bf; }
+        .copy-code-btn { position: absolute; top: 12px; right: 12px; background: var(--user-msg-bg); color: white; border: none; border-radius: 12px; padding: 8px 16px; font-size: 0.8rem; cursor: pointer; transition: background 0.5s ease; }
         
-        .typing-indicator { display: none; padding: 15px 20px; color: var(--typing-text); font-style: italic; background: var(--bg-messages); align-items: center; }
-        .typing-indicator::after { content: ''; display: inline-block; width: 18px; height: 18px; border: 2px solid #555; border-radius: 50%; border-top-color: #3498db; animation: spin 1s linear infinite; margin-left: 10px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        /* 🚀 ADVANCED DYNAMIC TYPING INDICATOR */
+        .typing-indicator { 
+            display: none; 
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 25px; 
+            position: relative; 
+            z-index: 1; 
+            animation: slideInUp 0.3s ease-out;
+        }
+        .typing-ai-icon svg {
+            animation: aiStarSpinPulse 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        @keyframes aiStarSpinPulse {
+            0% { transform: rotate(0deg) scale(0.8); filter: drop-shadow(0 0 5px var(--accent-1)); }
+            50% { transform: rotate(180deg) scale(1.3); filter: drop-shadow(0 0 20px var(--accent-2)); }
+            100% { transform: rotate(360deg) scale(0.8); filter: drop-shadow(0 0 5px var(--accent-1)); }
+        }
+        .typing-content {
+            background: var(--bg-ai-msg); 
+            color: var(--text-ai-msg); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1); 
+            backdrop-filter: blur(10px);
+            padding: 18px 25px; 
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            font-style: italic;
+            opacity: 0.9;
+        }
+        .typing-dots { display: flex; gap: 5px; margin-top: 5px; }
+        .typing-dots span {
+            width: 8px; height: 8px; border-radius: 50%;
+            background-color: var(--accent-1);
+            animation: typingBounce 1.4s infinite ease-in-out both;
+        }
+        .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
+            40% { transform: scale(1); opacity: 1; box-shadow: 0 0 10px var(--accent-1); }
+        }
         
-        .input-area { padding: 20px; background: var(--bg-input-area); border-top: var(--border-input-area); display: flex; gap: 10px; flex-direction: column;}
-        .input-row { display: flex; gap: 10px; width: 100%; }
-        #messageInput { flex: 1; padding: 15px 20px; background: var(--bg-input); color: var(--text-input); border: var(--border-input); border-radius: 25px; outline: none; }
-        #sendBtn { padding: 15px 25px; background: var(--user-msg-bg); color: white; border: none; border-radius: 25px; cursor: pointer; }
-        .chat-counter { font-size: 0.8rem; color: #e74c3c; font-weight: bold; text-align: right; padding-right: 10px; display: none; }
-
-        /* Ad Modal */
-        .modal-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
-        .ad-modal { background: var(--bg-container); padding: 30px; border-radius: 20px; text-align: center; max-width: 80%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .input-area { padding: 30px; background: var(--bg-input-area); border-top: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; gap: 15px; }
+        .input-row { display: flex; gap: 15px; width: 100%; }
+        #messageInput { flex: 1; padding: 20px 25px; background: var(--bg-input); color: var(--text-input); border: var(--border-input); border-radius: 28px; outline: none; transition: all 0.3s ease; }
+        #messageInput:focus { box-shadow: 0 0 15px var(--accent-1); }
+        #sendBtn { padding: 20px 30px; background: var(--user-msg-bg); color: white; border: none; border-radius: 28px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: background 0.5s ease; }
+        .chat-counter { font-size: 0.85rem; color: #ff6b6b; font-weight: 700; text-align: right; padding-right: 10px; display: none; }
+        
+        .modal-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(10px); }
+        .ad-modal { background: var(--bg-container); padding: 40px; border-radius: 28px; text-align: center; border: 1px solid rgba(255,255,255,0.2); }
         .ad-modal h2 { margin-bottom: 10px; color: var(--text-main); }
-        .ad-modal p { margin-bottom: 20px; color: var(--typing-text); }
-        .ad-progress { font-size: 1.2rem; font-weight: bold; color: #3498db; margin-bottom: 20px; }
-        .watch-ad-btn { background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .watch-ad-btn:disabled { opacity: 0.7; cursor: not-allowed; }
-        .cancel-btn { background: none; border: none; color: #e74c3c; margin-top: 15px; cursor: pointer; text-decoration: underline; }
-
-        /* BOTTOM SHEET UI */
-        .bottom-sheet-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 900; align-items: flex-end; opacity: 0; transition: opacity 0.3s; }
-        .bottom-sheet { background: var(--bg-container); width: 100%; border-radius: 25px 25px 0 0; padding: 20px 20px 30px 20px; box-shadow: 0 -5px 25px rgba(0,0,0,0.2); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; max-height: 80%; }
-        .sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-input); }
-        .sheet-header h3 { color: var(--text-main); margin: 0; font-size: 1.2rem; }
-        .close-sheet { font-size: 1.5rem; color: var(--typing-text); cursor: pointer; background: none; border: none; }
-        .persona-list { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; padding-right: 5px; }
+        .ad-modal p { margin-bottom: 20px; color: #a8b2d1; }
+        .ad-progress { font-size: 1.2rem; font-weight: bold; color: var(--accent-1); margin-bottom: 20px; }
+        .watch-ad-btn { background: var(--user-msg-bg); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; font-weight: bold; }
+        .cancel-btn { background: none; border: none; color: #ff6b6b; margin-top: 15px; cursor: pointer; text-decoration: underline; }
         
-        .persona-option { display: flex; justify-content: space-between; align-items: center; background: var(--bg-messages); padding: 16px; border-radius: 15px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
-        .persona-option:active { transform: scale(0.98); }
-        .persona-option.active { border-color: #3498db; background: rgba(52, 152, 219, 0.1); }
-        .persona-info { display: flex; align-items: center; gap: 10px; font-weight: bold; color: var(--text-main); font-size: 1rem; }
+        .bottom-sheet-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 900; align-items: flex-end; opacity: 0; transition: opacity 0.3s; backdrop-filter: blur(5px); }
+        .bottom-sheet { background: var(--bg-container); width: 100%; border-radius: 32px 32px 0 0; padding: 30px 25px; transform: translateY(100%); transition: transform 0.4s ease; display: flex; flex-direction: column; max-height: 85%; }
+        .sheet-header { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
+        .sheet-header h3 { margin: 0; font-size: 1.4rem; color: var(--text-main); }
+        .close-sheet { font-size: 1.8rem; color: #a8b2d1; cursor: pointer; background: none; border: none; }
+        .persona-list { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+        .persona-option { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; cursor: pointer; border: 2px solid transparent; transition: 0.3s; }
+        .persona-option.active { border-color: var(--accent-1); background: rgba(255,255,255,0.1); }
+        .persona-info { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 1.1rem; }
         
         .status-tags { display: flex; align-items: center; gap: 10px; }
-        .pro-badge {
-            background: linear-gradient(45deg, #fbc02d, #f57f17); color: #fff;
-            padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 900;
-            letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-            box-shadow: 0 2px 5px rgba(245, 127, 23, 0.4); transition: all 0.3s ease; white-space: nowrap;
-        }
-        .free-badge {
-            background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3);
-            padding: 2px 5px; border-radius: 6px; font-size: 0.55rem; font-weight: 900;
-            text-transform: lowercase; vertical-align: super; margin-left: 2px; letter-spacing: 0.5px;
-        }
-        .lock-icon { color: #f1c40f; font-size: 1.1rem; opacity: 0.9; transition: 0.3s; }
-
-        @media (max-width: 600px) { .chat-container { width: 95%; height: 95vh; } .chat-header h1 { font-size: 1.1rem; } }
+        .pro-badge { background: linear-gradient(145deg, #fbc02d, #f57f17); color: #fff; padding: 6px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 900; }
+        .free-badge { background: rgba(46, 204, 113, 0.2); color: #2ecc71; padding: 4px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; vertical-align: super; margin-left: 5px; }
+        .lock-icon { color: #f1c40f; font-size: 1.3rem; }
+        
+        @media (max-width: 600px) { .chat-container { width: 97%; height: 97vh; border-radius: 24px; } .input-area, .messages { padding: 20px; } }
     </style>
 </head>
-<body data-theme="dark">
+<body data-theme="dark" data-persona="general">
     <div class="chat-container">
-        
         <div class="modal-overlay" id="adModalOverlay">
             <div class="ad-modal">
                 <h2 id="modalTitle">Unlock Premium Mode 🔒</h2>
                 <p>Watch 3 short ads to get 5 FREE chats with this premium AI persona!</p>
                 <div class="ad-progress" id="adProgressText">Ads Watched: 0 / 3</div>
-                <button class="watch-ad-btn" onclick="watchAd()">🎬 Watch Ad Now</button>
-                <br>
+                <button class="watch-ad-btn" onclick="watchAd()">🎬 Watch Ad Now</button><br><br>
                 <button class="cancel-btn" onclick="cancelAd()">Cancel & Go Back</button>
             </div>
         </div>
@@ -185,37 +239,28 @@
                 </div>
                 <div class="persona-list">
                     <div class="persona-option active" data-locked="false" onclick="handlePersonaClick('general', this)">
-                        <div class="persona-info">🤖 General Assistant <sup class="free-badge">free</sup></div>
-                        <div class="status-tags"></div>
+                        <div class="persona-info">🤖 General Assistant <sup class="free-badge">free</sup></div><div class="status-tags"></div>
                     </div>
-                    
                     <div class="persona-option" data-locked="true" onclick="handlePersonaClick('friendly', this)">
-                        <div class="persona-info">💖 Bestie</div> 
-                        <div class="status-tags"><div class="pro-badge">PRO</div><div class="lock-icon">🔒</div></div>
+                        <div class="persona-info">💖 Bestie</div><div class="status-tags"><div class="pro-badge">PRO</div><div class="lock-icon">🔒</div></div>
                     </div>
                     <div class="persona-option" data-locked="false" onclick="handlePersonaClick('professional', this)">
-                        <div class="persona-info">💼 Professional <sup class="free-badge">free</sup></div>
-                        <div class="status-tags"></div>
+                        <div class="persona-info">💼 Professional <sup class="free-badge">free</sup></div><div class="status-tags"></div>
                     </div>
                     <div class="persona-option" data-locked="true" onclick="handlePersonaClick('coder', this)">
-                        <div class="persona-info">&lt;/&gt; Code Helper</div> 
-                        <div class="status-tags"><div class="pro-badge">PRO</div><div class="lock-icon">🔒</div></div>
+                        <div class="persona-info">&lt;/&gt; Code Helper</div><div class="status-tags"><div class="pro-badge">PRO</div><div class="lock-icon">🔒</div></div>
                     </div>
                     <div class="persona-option" data-locked="true" onclick="handlePersonaClick('teacher', this)">
-                        <div class="persona-info">🎓 Teacher Mode</div> 
-                        <div class="status-tags"><div class="pro-badge">PRO</div><div class="lock-icon">🔒</div></div>
+                        <div class="persona-info">🎓 Teacher Mode</div><div class="status-tags"><div class="pro-badge">PRO</div><div class="lock-icon">🔒</div></div>
                     </div>
                     <div class="persona-option" data-locked="true" onclick="handlePersonaClick('funny', this)">
-                        <div class="persona-info">😂 Funny Bot</div> 
-                        <div class="status-tags"><div class="pro-badge">PRO</div><div class="lock-icon">🔒</div></div>
+                        <div class="persona-info">😂 Funny Bot</div><div class="status-tags"><div class="pro-badge">PRO</div><div class="lock-icon">🔒</div></div>
                     </div>
                     <div class="persona-option" data-locked="true" onclick="handlePersonaClick('motivator', this)">
-                        <div class="persona-info">🏆 Motivator</div> 
-                        <div class="status-tags"><div class="pro-badge">PRO</div><div class="lock-icon">🔒</div></div>
+                        <div class="persona-info">🏆 Motivator</div><div class="status-tags"><div class="pro-badge">PRO</div><div class="lock-icon">🔒</div></div>
                     </div>
                     <div class="persona-option" data-locked="true" onclick="handlePersonaClick('shayari', this)">
-                        <div class="persona-info">🪶 Shayari Mode</div> 
-                        <div class="status-tags"><div class="pro-badge">PRO</div><div class="lock-icon">🔒</div></div>
+                        <div class="persona-info">🪶 Shayari Mode</div><div class="status-tags"><div class="pro-badge">PRO</div><div class="lock-icon">🔒</div></div>
                     </div>
                 </div>
             </div>
@@ -224,30 +269,44 @@
         <div class="chat-header">
             <div class="title-and-profile">
                 <div class="profile-pic">🤖</div>
-                <div class="title-text">
-                    <h1>SG AI</h1>
-                    <p>Talk about anything!</p>
-                </div>
+                <div class="title-text"><h1>SG AI</h1><p>Talk about anything!</p></div>
             </div>
-            
             <div class="header-controls">
                 <button id="themeToggle" class="theme-btn" onclick="toggleTheme()">☀️</button>
-                <div id="currentPersonaBtn" class="custom-select-btn" onclick="openSheet()">
-                    🤖 General Assistant ▾
-                </div>
+                <div id="currentPersonaBtn" class="custom-select-btn" onclick="openSheet()">🤖 General Assistant ▾</div>
             </div>
         </div>
         
         <div class="messages" id="messages">
             <div class="message ai">
-                <div class="ai-icon">✨</div>
-                <div class="message-content">
-                    👋 Hi! I'm SG AI Assistant. How can I help you today?
+                <div class="ai-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="aiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="var(--accent-1)" />
+                                <stop offset="100%" stop-color="var(--accent-2)" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" fill="url(#aiGrad)"/>
+                    </svg>
                 </div>
+                <div class="message-content">👋 Hi! I'm SG AI Assistant. How can I help you today?</div>
             </div>
         </div>
         
-        <div class="typing-indicator" id="typingIndicator">SG AI is typing...</div>
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="ai-icon typing-ai-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" fill="url(#aiGrad)"/>
+                </svg>
+            </div>
+            <div class="typing-content">
+                SG AI is thinking 
+                <div class="typing-dots">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
         
         <div class="input-area">
             <div class="chat-counter" id="chatCounter">Premium Chats Left: 5</div>
@@ -259,25 +318,13 @@
     </div>
 
     <script>
-        const personaDisplayNames = {
-            'general': '🤖 General Assistant',
-            'friendly': '💖 Bestie',
-            'professional': '💼 Professional',
-            'coder': '&lt;/&gt; Code Helper',
-            'teacher': '🎓 Teacher Mode',
-            'funny': '😂 Funny Bot',
-            'motivator': '🏆 Motivator',
-            'shayari': '🪶 Shayari Mode'
-        };
-
+        const personaDisplayNames = { 'general': '🤖 General Assistant', 'friendly': '💖 Bestie', 'professional': '💼 Professional', 'coder': '&lt;/&gt; Code Helper', 'teacher': '🎓 Teacher Mode', 'funny': '😂 Funny Bot', 'motivator': '🏆 Motivator', 'shayari': '🪶 Shayari Mode' };
         const premiumModes = ['friendly', 'coder', 'teacher', 'funny', 'motivator', 'shayari'];
         let currentPersona = 'general';
         let modeTryingToUnlock = '';
-        
-        // TUMHARA EXACT VARIABLE
         let adsWatchedCount = 0; 
         let freePremiumChatsLeft = parseInt(localStorage.getItem('premiumChats')) || 0;
-
+        
         const sheetOverlay = document.getElementById('personaSheetOverlay');
         const sheet = document.getElementById('personaSheet');
         const btnText = document.getElementById('currentPersonaBtn');
@@ -287,270 +334,167 @@
         const typingEl = document.getElementById('typingIndicator');
         const chatCounter = document.getElementById('chatCounter');
 
+        // 🚀 DYNAMIC SVG STRING FOR JS
+        const AI_SVG_ICON = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" fill="url(#aiGrad)"/></svg>`;
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('themeToggle');
+            if (body.getAttribute('data-theme') === 'light') {
+                body.setAttribute('data-theme', 'dark'); themeBtn.innerHTML = '☀️'; 
+            } else {
+                body.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙'; 
+            }
+        }
+
         function updateMenuBadges() {
             const proOptions = document.querySelectorAll('.persona-option[data-locked="true"]');
-            
             proOptions.forEach(opt => {
                 const badge = opt.querySelector('.pro-badge');
                 const lock = opt.querySelector('.lock-icon');
-                
                 if (freePremiumChatsLeft > 0) {
-                    badge.innerText = `🔥 ${freePremiumChatsLeft} Left`;
-                    badge.style.background = 'linear-gradient(45deg, #2ecc71, #27ae60)'; 
-                    if(lock) lock.style.display = 'none'; 
+                    badge.innerText = `🔥 ${freePremiumChatsLeft} Left`; badge.style.background = 'linear-gradient(45deg, #2ecc71, #27ae60)'; if(lock) lock.style.display = 'none'; 
                 } else {
-                    badge.innerText = 'PRO';
-                    badge.style.background = 'linear-gradient(45deg, #fbc02d, #f57f17)'; 
-                    if(lock) lock.style.display = 'block'; 
+                    badge.innerText = 'PRO'; badge.style.background = 'linear-gradient(45deg, #fbc02d, #f57f17)'; if(lock) lock.style.display = 'block'; 
                 }
             });
         }
 
         function openSheet() {
             sheetOverlay.style.display = 'flex';
-            setTimeout(() => {
-                sheetOverlay.style.opacity = '1';
-                sheet.style.transform = 'translateY(0)';
-            }, 10);
-            
+            setTimeout(() => { sheetOverlay.style.opacity = '1'; sheet.style.transform = 'translateY(0)'; }, 10);
             document.querySelectorAll('.persona-option').forEach(opt => {
                 opt.classList.remove('active');
-                if(opt.getAttribute('onclick').includes(`'${currentPersona}'`)) {
-                    opt.classList.add('active');
-                }
+                if(opt.getAttribute('onclick').includes(`'${currentPersona}'`)) { opt.classList.add('active'); }
             });
         }
 
         function closeSheet() {
-            sheetOverlay.style.opacity = '0';
-            sheet.style.transform = 'translateY(100%)';
+            sheetOverlay.style.opacity = '0'; sheet.style.transform = 'translateY(100%)';
             setTimeout(() => { sheetOverlay.style.display = 'none'; }, 300);
         }
 
         function handlePersonaClick(selectedMode, element) {
             const isLocked = element.getAttribute('data-locked') === 'true';
-
             if (isLocked && freePremiumChatsLeft <= 0) {
-                closeSheet();
-                modeTryingToUnlock = selectedMode;
-                
-                // EXACT USER LOGIC
-                adsWatchedCount = 0;
+                closeSheet(); modeTryingToUnlock = selectedMode; adsWatchedCount = 0;
                 document.getElementById('adProgressText').innerText = `Ads Watched: 0 / 3`;
-                
                 let rawTitle = personaDisplayNames[selectedMode].replace(/&lt;\/&gt;/g, '</>').replace(/[^a-zA-Z \u00a9-\u02ff\u1d00-\u1d7f\u2100-\u214f\u2600-\u26ff\u2700-\u27bf\u2800-\u28ff\u2b00-\u2bff\u2c00-\u2cff\u2d00-\u2dff\u2e00-\u2eff\u3000-\u303f\u31c0-\u31ef\u3200-\u32ff\u3300-\u33ff\u3400-\u4dbf\u4dc0-\u4dff\u4e00-\u9fff\ua000-\ua48f\ua490-\ua4cf\uf900-\ufaff\ufe30-\ufe4f\ufe50-\ufe6f\ufe70-\ufeff\uff00-\uffef\U0001f000-\U0001f02f\U0001f030-\U0001f09f\U0001f0a0-\U0001f0ff\U0001f100-\U0001f1ff\U0001f200-\U0001f2ff\U0001f300-\U0001f5ff\U0001f600-\U0001f64f\U0001f650-\U0001f67f\U0001f680-\U0001f6ff\U0001f700-\U0001f77f\U0001f780-\U0001f7ff\U0001f800-\U0001f8ff\U0001f900-\U0001f9ff\U0001fa00-\U0001fa6f\U0001fa70-\U0001faff\U0001fb00-\U0001fbff]/g, "").trim();
                 document.getElementById('modalTitle').innerText = `Unlock ${rawTitle} 🔒`;
-                document.getElementById('adModalOverlay').style.display = 'flex';
-                return;
+                document.getElementById('adModalOverlay').style.display = 'flex'; return;
             }
-
             closeSheet();
-            if (selectedMode !== currentPersona) {
-                switchMode(selectedMode);
-            }
+            if (selectedMode !== currentPersona) { switchMode(selectedMode); }
         }
 
         function resetAdButton() {
             let btn = document.querySelector('.watch-ad-btn');
-            if (btn) {
-                btn.innerText = "🎬 Watch Ad Now";
-                btn.disabled = false;
-            }
+            if (btn) { btn.innerText = "🎬 Watch Ad Now"; btn.disabled = false; }
         }
 
         function updateAdUI(count) {
             adsWatchedCount = count;
             let progressText = document.getElementById('adProgressText');
-            if (progressText) {
-                progressText.innerText = `Ads Watched: ${count} / 3`;
-            }
+            if (progressText) { progressText.innerText = `Ads Watched: ${count} / 3`; }
         }
 
-        function cancelAd() {
-            document.getElementById('adModalOverlay').style.display = 'none';
-        }
+        function cancelAd() { document.getElementById('adModalOverlay').style.display = 'none'; }
 
         function watchAd() {
             let btn = document.querySelector('.watch-ad-btn');
-            btn.innerText = "Loading Ad... ⏳";
-            btn.disabled = true;
-
-            if (typeof AndroidBridge !== "undefined") {
-                AndroidBridge.showAd();
-            } else {
-                setTimeout(() => { adWatchedSuccessfully(); }, 1500);
-            }
+            btn.innerText = "Loading Ad... ⏳"; btn.disabled = true;
+            if (typeof AndroidBridge !== "undefined") { AndroidBridge.showAd(); } 
+            else { setTimeout(() => { adWatchedSuccessfully(); }, 1500); }
         }
 
         function adWatchedSuccessfully() {
             let btn = document.querySelector('.watch-ad-btn');
             adsWatchedCount++;
             document.getElementById('adProgressText').innerText = `Ads Watched: ${adsWatchedCount} / 3`;
-            btn.innerText = "🎬 Watch Ad Now";
-            btn.disabled = false;
-
+            btn.innerText = "🎬 Watch Ad Now"; btn.disabled = false;
             if (adsWatchedCount >= 3) {
                 alert("🎉 Reward Granted! You unlocked 5 free chats.");
                 document.getElementById('adModalOverlay').style.display = 'none';
-                
-                freePremiumChatsLeft = 5;
-                localStorage.setItem('premiumChats', freePremiumChatsLeft);
-                
-                updateMenuBadges(); 
-                switchMode(modeTryingToUnlock); 
+                freePremiumChatsLeft = 5; localStorage.setItem('premiumChats', freePremiumChatsLeft);
+                updateMenuBadges(); switchMode(modeTryingToUnlock); 
             }
         }
-        
+
         function switchMode(newMode) {
-            currentPersona = newMode;
+            currentPersona = newMode; 
             btnText.innerHTML = personaDisplayNames[newMode] + ' ▾';
-            
+            document.body.setAttribute('data-persona', newMode); 
+
             if (premiumModes.includes(newMode)) {
-                chatCounter.style.display = 'block';
-                chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
+                chatCounter.style.display = 'block'; chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
                 addMessage('SG AI', `Premium Mode Active! You have ${freePremiumChatsLeft} chats remaining. ✨`, 'ai');
             } else {
-                chatCounter.style.display = 'none';
-                addMessage('SG AI', `Switched to ${personaDisplayNames[newMode]}! 🎉`, 'ai');
+                chatCounter.style.display = 'none'; addMessage('SG AI', `Switched to ${personaDisplayNames[newMode]}! 🎉`, 'ai');
             }
-
-            if (typeof AndroidBridge !== "undefined" && typeof AndroidBridge.showInterstitial === "function") {
-                AndroidBridge.showInterstitial();
-            }
+            if (typeof AndroidBridge !== "undefined" && typeof AndroidBridge.showInterstitial === "function") { AndroidBridge.showInterstitial(); }
         }
-        
+
         async function sendMessage() {
             const message = inputEl.value.trim();
             if (!message) return;
-            
-            addMessage('You', message, 'user');
-            inputEl.value = '';
-            sendBtn.disabled = true;
-            typingEl.style.display = 'flex';
-            scrollToBottom();
-            
+            addMessage('You', message, 'user'); inputEl.value = ''; sendBtn.disabled = true; typingEl.style.display = 'flex'; scrollToBottom();
             try {
                 const BACKEND_URL = `https://sg-ai-backend.onrender.com/api/chat`;
                 const personaInstruction = personas[currentPersona] || personas.general;
-                
-                const response = await fetch(BACKEND_URL, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message, persona: personaInstruction })
-                });
+                const response = await fetch(BACKEND_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: message, persona: personaInstruction }) });
                 const data = await response.json();
                 if (data.candidates && data.candidates.length > 0) {
                     addMessage('SG AI', data.candidates[0].content.parts[0].text, 'ai');
-                    
                     if (premiumModes.includes(currentPersona)) {
-                        freePremiumChatsLeft--;
-                        localStorage.setItem('premiumChats', freePremiumChatsLeft);
-                        chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`;
-                        
-                        updateMenuBadges(); 
-
+                        freePremiumChatsLeft--; localStorage.setItem('premiumChats', freePremiumChatsLeft);
+                        chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`; updateMenuBadges(); 
                         if (freePremiumChatsLeft <= 0) {
-                            setTimeout(() => {
-                                alert("⚠️ Your free premium chats are over! Locking mode back.");
-                                chatCounter.style.display = 'none';
-                                switchMode('general'); 
-                            }, 1000);
+                            setTimeout(() => { alert("⚠️ Your free premium chats are over! Locking mode back."); chatCounter.style.display = 'none'; switchMode('general'); }, 1000);
                         }
                     }
-                } else {
-                    addMessage('SG AI', "🚨 Backend Error!", 'ai');
-                }
-            } catch (error) {
-                addMessage('SG AI', "Sorry, error aa gaya.", 'ai');
-            } finally {
-                typingEl.style.display = 'none';
-                sendBtn.disabled = false;
-                inputEl.focus();
-            }
+                } else { addMessage('SG AI', "🚨 Backend Error!", 'ai'); }
+            } catch (error) { addMessage('SG AI', "Sorry, error aa gaya.", 'ai'); } 
+            finally { typingEl.style.display = 'none'; sendBtn.disabled = false; inputEl.focus(); }
         }
 
-        function toggleTheme() {
-            const body = document.body;
-            const themeBtn = document.getElementById('themeToggle');
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme'); themeBtn.innerHTML = '🌙'; 
-            } else {
-                body.setAttribute('data-theme', 'dark'); themeBtn.innerHTML = '☀️';
-            }
-        }
-
-        // 🚀 UPDATED PERSONAS RULES
         const personas = {
-            general: "🤖 You are a helpful AI assistant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user's prompt (e.g., if the user types in Hinglish/Roman Hindi, reply in Hinglish. If English, reply in English).",
-            
+            general: "🤖 You are a helpful AI assistant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user's prompt.",
             friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If funny, be hilarious. If romantic, respond playfully. If sad, be comforting. 2. Always reply in the EXACT SAME LANGUAGE as the user. 3. Use emojis naturally! 😊",
-            
             professional: "💼 You are a formal, professional consultant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user's prompt.",
-            
             coder: "💻 You are an expert programmer. STRICT RULE: Explain code clearly and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
-            
             teacher: "🎓 You are a patient, encouraging teacher. STRICT RULE: Explain concepts step-by-step and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
-            
             funny: "😂 You are a hilarious stand-up comedian AI. STRICT RULE: Make jokes and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
-            
             motivator: "🏆 You are an energetic motivational coach. STRICT RULE: Inspire the user and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
-            
             shayari: "🪶 You are a poetic AI. STRICT RULES: 1. Output ONLY the Shayari. 2. Mirror the user's exact language and script perfectly. If they use English letters (Roman script, e.g., Hinglish), you MUST write the shayari using English letters ONLY. DO NOT use Devanagari script."
         };
-        
-        function addMessage(sender, text, type) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
-            
-            if (type === 'ai') {
-                const iconDiv = document.createElement('div');
-                iconDiv.className = 'ai-icon';
-                iconDiv.innerHTML = '✨'; 
-                messageDiv.appendChild(iconDiv);
-            }
 
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content';
-            
+        function addMessage(sender, text, type) {
+            const messageDiv = document.createElement('div'); messageDiv.className = `message ${type}`;
+            if (type === 'ai') { 
+                const iconDiv = document.createElement('div'); iconDiv.className = 'ai-icon'; 
+                iconDiv.innerHTML = AI_SVG_ICON; 
+                messageDiv.appendChild(iconDiv); 
+            }
+            const contentDiv = document.createElement('div'); contentDiv.className = 'message-content';
             if (type === 'ai') {
                 contentDiv.innerHTML = marked.parse(text);
-                
                 const preTags = contentDiv.querySelectorAll('pre');
                 preTags.forEach((pre) => {
-                    const copyBtn = document.createElement('button');
-                    copyBtn.className = 'copy-code-btn';
-                    copyBtn.innerText = 'Copy';
-                    
+                    const copyBtn = document.createElement('button'); copyBtn.className = 'copy-code-btn'; copyBtn.innerText = 'Copy';
                     copyBtn.onclick = () => {
                         const codeText = pre.querySelector('code').innerText;
-                        navigator.clipboard.writeText(codeText).then(() => {
-                            copyBtn.innerText = 'Copied! ✔';
-                            setTimeout(() => { copyBtn.innerText = 'Copy'; }, 2000);
-                        });
+                        navigator.clipboard.writeText(codeText).then(() => { copyBtn.innerText = 'Copied! ✔'; setTimeout(() => { copyBtn.innerText = 'Copy'; }, 2000); });
                     };
                     pre.appendChild(copyBtn);
                 });
-                
-                contentDiv.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightElement(block);
-                });
-
-            } else {
-                contentDiv.innerText = text;
-            }
-            
-            messageDiv.appendChild(contentDiv); 
-            messagesEl.appendChild(messageDiv); 
-            scrollToBottom();
+                contentDiv.querySelectorAll('pre code').forEach((block) => { hljs.highlightElement(block); });
+            } else { contentDiv.innerText = text; }
+            messageDiv.appendChild(contentDiv); messagesEl.appendChild(messageDiv); scrollToBottom();
         }
-        
+
         function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
-        
         inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-        
-        window.onload = () => {
-            inputEl.focus();
-            updateMenuBadges();
-        };
+        window.onload = () => { inputEl.focus(); updateMenuBadges(); document.body.setAttribute('data-persona', currentPersona); };
     </script>
 </body>
 </html>
