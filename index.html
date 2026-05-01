@@ -93,8 +93,14 @@
         .title-text { display: flex; flex-direction: column; }
         .title-text h1 { font-size: 1.4rem; margin: 0; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
         .title-text p { font-size: 0.85rem; margin: 0; opacity: 0.9; }
+        
         .header-controls { display: flex; gap: 12px; align-items: center; position: relative; z-index: 51; }
         .theme-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 16px; width: 44px; height: 44px; cursor: pointer; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.2rem; transition: 0.3s; flex-shrink: 0; position: relative; z-index: 55; }
+        
+        /* 🚀 NEW: Mode Label CSS */
+        .mode-wrapper { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+        .mode-label { font-size: 0.65rem; color: rgba(255,255,255,0.85); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; margin-left: 6px; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        
         .custom-select-btn { background: var(--bg-selector); backdrop-filter: blur(15px); padding: 12px 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.3); font-weight: 600; color: var(--text-selector); cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.5s ease; white-space: nowrap; position: relative; z-index: 55; }
         .custom-select-btn:active, .theme-btn:active { transform: scale(0.95); }
         
@@ -174,8 +180,13 @@
             .profile-pic { width: 44px; height: 44px; font-size: 24px; }
             .title-text h1 { font-size: 1.25rem; }
             .title-text p { font-size: 0.8rem; }
-            .header-controls { gap: 10px; z-index: 100; }
-            .theme-btn { width: 40px; height: 40px; font-size: 1.1rem; border-radius: 12px; z-index: 100; }
+            
+            /* 🚀 NEW: Mobile fixes for the label */
+            .header-controls { gap: 10px; z-index: 100; align-items: center; }
+            .mode-wrapper { align-items: flex-start; }
+            .mode-label { font-size: 0.6rem; margin-bottom: 2px; margin-left: 4px; }
+            
+            .theme-btn { width: 40px; height: 40px; font-size: 1.1rem; border-radius: 12px; z-index: 100; margin-top: 10px;}
             .custom-select-btn { padding: 10px 14px; font-size: 0.85rem; border-radius: 14px; z-index: 100; }
             .messages { padding: 20px 15px; }
             .message-content { max-width: 85%; padding: 14px 18px; font-size: 0.95rem; border-radius: 20px; }
@@ -184,7 +195,6 @@
             #messageInput { padding: 15px 20px; font-size: 0.95rem; border-radius: 24px; }
             #sendBtn { padding: 15px 22px; font-size: 0.95rem; border-radius: 24px; }
             
-            /* 🚀 FIX: Mobile Persona Menu Sleek Design */
             .bottom-sheet { padding: 20px 15px 25px 15px; }
             .sheet-header { margin-bottom: 12px; padding-bottom: 10px; }
             .sheet-header h3 { font-size: 1.2rem; }
@@ -248,10 +258,16 @@
                 <div class="profile-pic">🤖</div>
                 <div class="title-text"><h1>SG AI</h1><p>Talk about anything!</p></div>
             </div>
+            
+            <!-- 🚀 NEW: Mode Wrapper and Label added here -->
             <div class="header-controls">
                 <button id="themeToggle" class="theme-btn" onclick="toggleTheme()">☀️</button>
-                <div id="currentPersonaBtn" class="custom-select-btn" onclick="openSheet()">🤖 General Assistant ▾</div>
+                <div class="mode-wrapper">
+                    <span class="mode-label">AI Mode</span>
+                    <div id="currentPersonaBtn" class="custom-select-btn" onclick="openSheet()">🤖 General Assistant ▾</div>
+                </div>
             </div>
+            
         </div>
         
         <div class="messages" id="messages">
