@@ -15,7 +15,6 @@
         
         /* 🚀 PERSONA COLOR THEMES & DYNAMIC BACKGROUND PATTERNS */
         :root { 
-            /* 🚀 FIX: Deep Professional Dark Blue (Pehle ye light Cyan tha) */
             --accent-1: #1e3c72; 
             --accent-2: #2a5298; 
             --chat-bg-pattern: none; 
@@ -117,7 +116,6 @@
         .message.user { justify-content: flex-end; }
         .message.ai { justify-content: flex-start; width: 100%; gap: 15px; }
         
-        /* 🚀 ADVANCED GEMINI-STYLE AI ICON */
         .ai-icon { width: 28px; height: 28px; margin-top: 12px; flex-shrink: 0; display: flex; justify-content: center; align-items: center; }
         .ai-icon svg { width: 100%; height: 100%; animation: aiStarSpin 4s cubic-bezier(0.4, 0, 0.2, 1) infinite; filter: drop-shadow(0 0 8px var(--accent-1)); transition: all 0.5s ease; }
         @keyframes aiStarSpin { 0% { transform: rotate(0deg) scale(0.9); } 50% { transform: rotate(180deg) scale(1.15); filter: drop-shadow(0 0 12px var(--accent-2)); } 100% { transform: rotate(360deg) scale(0.9); } }
@@ -129,7 +127,6 @@
         .message-content pre code { font-family: 'Fira Code', 'Consolas', monospace; font-size: 0.9rem; color: #abb2bf; }
         .copy-code-btn { position: absolute; top: 12px; right: 12px; background: var(--user-msg-bg); color: white; border: none; border-radius: 12px; padding: 8px 16px; font-size: 0.8rem; cursor: pointer; transition: background 0.5s ease; }
         
-        /* 🚀 ADVANCED DYNAMIC TYPING INDICATOR */
         .typing-indicator { display: none; align-items: flex-start; gap: 15px; margin-bottom: 25px; position: relative; z-index: 1; animation: slideInUp 0.3s ease-out; }
         .typing-ai-icon svg { animation: aiStarSpinPulse 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
         @keyframes aiStarSpinPulse { 0% { transform: rotate(0deg) scale(0.8); filter: drop-shadow(0 0 5px var(--accent-1)); } 50% { transform: rotate(180deg) scale(1.3); filter: drop-shadow(0 0 20px var(--accent-2)); } 100% { transform: rotate(360deg) scale(0.8); filter: drop-shadow(0 0 5px var(--accent-1)); } }
@@ -186,7 +183,16 @@
             .input-row { gap: 10px; }
             #messageInput { padding: 15px 20px; font-size: 0.95rem; border-radius: 24px; }
             #sendBtn { padding: 15px 22px; font-size: 0.95rem; border-radius: 24px; }
-            .bottom-sheet { padding: 20px 15px 30px 15px; }
+            
+            /* 🚀 FIX: Mobile Persona Menu Sleek Design */
+            .bottom-sheet { padding: 20px 15px 25px 15px; }
+            .sheet-header { margin-bottom: 12px; padding-bottom: 10px; }
+            .sheet-header h3 { font-size: 1.2rem; }
+            .persona-list { gap: 8px; padding-bottom: 10px; }
+            .persona-option { padding: 12px 15px; border-radius: 14px; }
+            .persona-info { font-size: 0.95rem; gap: 8px; }
+            .pro-badge { padding: 4px 10px; font-size: 0.7rem; }
+            .free-badge { padding: 3px 6px; font-size: 0.6rem; }
         }
     </style>
 </head>
@@ -250,7 +256,6 @@
         
         <div class="messages" id="messages">
             <div class="message ai">
-                <!-- 🚀 DYNAMIC SVG ICON -->
                 <div class="ai-icon">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
@@ -265,7 +270,6 @@
                 <div class="message-content">👋 Hi! I'm SG AI Assistant. How can I help you today?</div>
             </div>
             
-            <!-- 🚀 FIX 1: Move Typing Indicator INSIDE .messages container -->
             <div class="typing-indicator" id="typingIndicator">
                 <div class="ai-icon typing-ai-icon">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -279,7 +283,6 @@
                     </div>
                 </div>
             </div>
-            
         </div>
         
         <div class="input-area">
@@ -463,7 +466,6 @@
             finally { typingEl.style.display = 'none'; sendBtn.disabled = false; inputEl.focus(); }
         }
 
-        // 🚀 FIX 2: Updated Shayari Mode Prompt
         const personas = {
             general: "🤖 You are a helpful AI assistant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user's prompt.",
             friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If funny, be hilarious. If romantic, respond playfully. If sad, be comforting. 2. Always reply in the EXACT SAME LANGUAGE as the user. 3. Use emojis naturally! 😊",
@@ -499,7 +501,6 @@
             messageDiv.appendChild(contentDiv); 
             messagesEl.appendChild(messageDiv); 
             
-            // 🚀 FIX: Typing indicator ko hamesha list ke last mein push karne ka logic
             if (typingEl) {
                 messagesEl.appendChild(typingEl);
             }
