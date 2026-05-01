@@ -109,6 +109,7 @@
             scroll-behavior: smooth; 
             -webkit-overflow-scrolling: touch; 
             transition: background-color 0.5s ease, background-image 0.5s ease;
+            position: relative;
         }
         .messages::-webkit-scrollbar { width: 6px; } .messages::-webkit-scrollbar-thumb { background: var(--user-msg-bg); border-radius: 10px; }
         .message { margin-bottom: 25px; display: flex; animation: slideInUp 0.4s ease-out; position: relative; z-index: 1; }
@@ -171,20 +172,8 @@
         
         /* 📱 100% FIXED RESPONSIVE DESIGN FOR MOBILE */
         @media (max-width: 600px) { 
-            .chat-container { 
-                width: 100%; 
-                height: 100dvh; 
-                border-radius: 0; 
-                border: none; 
-                /* 🚀 FIX: Ye code completely mobile ka status bar (time/battery) ko solid black kar dega */
-                border-top: 40px solid #000000; 
-                box-sizing: border-box;
-            } 
-            .chat-header { 
-                /* 🚀 FIX: Extra space jo uper ban gaya tha wo hata diya taaki buttons na dabein */
-                padding: 15px; 
-                z-index: 100; 
-            }
+            .chat-container { width: 100%; height: 100dvh; border-radius: 0; border: none; border-top: 40px solid #000000; box-sizing: border-box; } 
+            .chat-header { padding: 15px; z-index: 100; }
             .profile-pic { width: 44px; height: 44px; font-size: 24px; }
             .title-text h1 { font-size: 1.25rem; }
             .title-text p { font-size: 0.8rem; }
@@ -275,21 +264,22 @@
                 </div>
                 <div class="message-content">👋 Hi! I'm SG AI Assistant. How can I help you today?</div>
             </div>
-        </div>
-        
-        <!-- 🚀 NEW PREMIUM TYPING INDICATOR HTML WITH SVG ICON -->
-        <div class="typing-indicator" id="typingIndicator">
-            <div class="ai-icon typing-ai-icon">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" fill="url(#aiGrad)"/>
-                </svg>
-            </div>
-            <div class="typing-content">
-                SG AI is thinking 
-                <div class="typing-dots">
-                    <span></span><span></span><span></span>
+            
+            <!-- 🚀 FIX 1: Move Typing Indicator INSIDE .messages container -->
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="ai-icon typing-ai-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" fill="url(#aiGrad)"/>
+                    </svg>
+                </div>
+                <div class="typing-content">
+                    SG AI is thinking 
+                    <div class="typing-dots">
+                        <span></span><span></span><span></span>
+                    </div>
                 </div>
             </div>
+            
         </div>
         
         <div class="input-area">
@@ -309,7 +299,6 @@
         let adsWatchedCount = 0; 
         let freePremiumChatsLeft = parseInt(localStorage.getItem('premiumChats')) || 0;
         
-        // 🚀 THE NEW CHAT HISTORY ARRAY FOR CONTEXT MEMORY
         let chatHistory = []; 
 
         const sheetOverlay = document.getElementById('personaSheetOverlay');
@@ -411,7 +400,6 @@
             btnText.innerHTML = personaDisplayNames[newMode] + ' ▾';
             document.body.setAttribute('data-persona', newMode); 
             
-            // 🚀 Reset History when switching modes so AI doesn't mix personas
             chatHistory = [];
 
             if (premiumModes.includes(newMode)) {
@@ -433,7 +421,6 @@
             typingEl.style.display = 'flex'; 
             scrollToBottom();
             
-            // 🚀 Add User message to local history
             chatHistory.push({
                 role: "user",
                 parts: [{ text: message }]
@@ -443,14 +430,13 @@
                 const BACKEND_URL = `https://sg-ai-backend.onrender.com/api/chat`;
                 const personaInstruction = personas[currentPersona] || personas.general;
                 
-                // 🚀 Send history array along with the current message
                 const response = await fetch(BACKEND_URL, { 
                     method: 'POST', 
                     headers: { 'Content-Type': 'application/json' }, 
                     body: JSON.stringify({ 
                         message: message, 
                         persona: personaInstruction,
-                        history: chatHistory  // Added History here!
+                        history: chatHistory 
                     }) 
                 });
                 
@@ -460,7 +446,6 @@
                     const aiReply = data.candidates[0].content.parts[0].text;
                     addMessage('SG AI', aiReply, 'ai');
                     
-                    // 🚀 Add Model reply to local history
                     chatHistory.push({
                         role: "model",
                         parts: [{ text: aiReply }]
@@ -478,6 +463,7 @@
             finally { typingEl.style.display = 'none'; sendBtn.disabled = false; inputEl.focus(); }
         }
 
+        // 🚀 FIX 2: Updated Shayari Mode Prompt
         const personas = {
             general: "🤖 You are a helpful AI assistant named SG AI. STRICT RULE: Always reply in the EXACT SAME LANGUAGE as the user's prompt.",
             friendly: "💖 You are a close, casual, and highly adaptable best friend (Bestie) named SG AI. STRICT RULES: 1. MIRROR THE USER'S VIBE: If funny, be hilarious. If romantic, respond playfully. If sad, be comforting. 2. Always reply in the EXACT SAME LANGUAGE as the user. 3. Use emojis naturally! 😊",
@@ -486,7 +472,7 @@
             teacher: "🎓 You are a patient, encouraging teacher. STRICT RULE: Explain concepts step-by-step and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
             funny: "😂 You are a hilarious stand-up comedian AI. STRICT RULE: Make jokes and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
             motivator: "🏆 You are an energetic motivational coach. STRICT RULE: Inspire the user and always reply in the EXACT SAME LANGUAGE as the user's prompt.",
-            shayari: "🪶 You are a poetic AI. STRICT RULES: 1. Output ONLY the Shayari. 2. Mirror the user's exact language and script perfectly. If they use English letters (Roman script, e.g., Hinglish), you MUST write the shayari using English letters ONLY. DO NOT use Devanagari script."
+            shayari: "🪶 You are a poetic AI. STRICT RULES: 1. Output ONLY the Shayari. 2. By default, mirror the user's exact language and script perfectly (e.g., if they use Roman script/Hinglish, reply in Roman script). 3. EXCEPTION: If the user specifically requests a script or language (like 'Urdu', 'Hindi', 'Devanagari'), you MUST write the shayari natively in that requested script (e.g., actual Urdu script), ignoring the default mirroring rule."
         };
 
         function addMessage(sender, text, type) {
@@ -510,7 +496,15 @@
                 });
                 contentDiv.querySelectorAll('pre code').forEach((block) => { hljs.highlightElement(block); });
             } else { contentDiv.innerText = text; }
-            messageDiv.appendChild(contentDiv); messagesEl.appendChild(messageDiv); scrollToBottom();
+            messageDiv.appendChild(contentDiv); 
+            messagesEl.appendChild(messageDiv); 
+            
+            // 🚀 FIX: Typing indicator ko hamesha list ke last mein push karne ka logic
+            if (typingEl) {
+                messagesEl.appendChild(typingEl);
+            }
+            
+            scrollToBottom();
         }
 
         function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
