@@ -205,7 +205,6 @@
         }
     </style>
 </head>
-<!-- 🚀 FIX: Default Theme revert back to "dark" -->
 <body data-theme="dark" data-persona="general">
     <div class="chat-container">
         <div class="modal-overlay" id="adModalOverlay">
@@ -260,7 +259,6 @@
             </div>
             
             <div class="header-controls">
-                <!-- 🚀 FIX: Default Icon changed back to Sun (☀️) because dark is default -->
                 <button id="themeToggle" class="theme-btn" onclick="toggleTheme()">☀️</button>
                 <div class="mode-wrapper">
                     <span class="mode-label">AI Mode</span>
@@ -381,6 +379,7 @@
             if (selectedMode !== currentPersona) { switchMode(selectedMode); }
         }
 
+        // 🚀 FIX: SMART TIMER LOGIC EXACTLY SET TO 3000ms (3 SECONDS)
         function watchAd() {
             let btn = document.querySelector('.watch-ad-btn');
             
@@ -393,11 +392,10 @@
                 AndroidBridge.showAd(); 
             } 
             
-            // 3. Android studio callback nahi de raha, toh hum apna SMART TIMER lagayenge
-            // Yahan 4000 milliseconds (4 seconds) baad khud ba khud ad ko successful maan liya jayega
+            // 3. Exactly 3 seconds (3000ms) baad next button active
             setTimeout(() => { 
                 adWatchedSuccessfully(); 
-            }, 4000); 
+            }, 3000); 
         }
 
         function adWatchedSuccessfully() {
@@ -418,8 +416,9 @@
                 btn.innerText = "🎬 Watch Ad Now"; 
                 btn.disabled = false;
             } else {
-                // Ad khatam hone ke baad button wapas naye text ke sath active
-                btn.innerText = "🎬 Watch Next Ad"; 
+                // 🚀 FIX: Ad khatam hone ke baad button clear text ke sath active hoga
+                let leftAds = 3 - adsWatchedCount;
+                btn.innerText = `🎬 Watch Next Ad (${leftAds} Left)`; 
                 btn.disabled = false;
             }
         }
