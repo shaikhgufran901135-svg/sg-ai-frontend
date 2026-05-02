@@ -97,7 +97,6 @@
         .header-controls { display: flex; gap: 12px; align-items: center; position: relative; z-index: 51; }
         .theme-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 16px; width: 44px; height: 44px; cursor: pointer; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.2rem; transition: 0.3s; flex-shrink: 0; position: relative; z-index: 55; }
         
-        /* 🚀 NEW: Mode Label CSS */
         .mode-wrapper { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
         .mode-label { font-size: 0.65rem; color: rgba(255,255,255,0.85); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; margin-left: 6px; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         
@@ -155,7 +154,9 @@
         .ad-modal h2 { margin-bottom: 10px; color: var(--text-main); }
         .ad-modal p { margin-bottom: 20px; color: #a8b2d1; }
         .ad-progress { font-size: 1.2rem; font-weight: bold; color: var(--accent-1); margin-bottom: 20px; }
-        .watch-ad-btn { background: var(--user-msg-bg); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; font-weight: bold; }
+        
+        .watch-ad-btn { background: var(--user-msg-bg); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; font-weight: bold; transition: opacity 0.3s; }
+        .watch-ad-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .cancel-btn { background: none; border: none; color: #ff6b6b; margin-top: 15px; cursor: pointer; text-decoration: underline; }
         
         .bottom-sheet-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 900; align-items: flex-end; opacity: 0; transition: opacity 0.3s; backdrop-filter: blur(5px); }
@@ -173,7 +174,6 @@
         .free-badge { background: rgba(46, 204, 113, 0.2); color: #2ecc71; padding: 4px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; vertical-align: super; margin-left: 5px; }
         .lock-icon { color: #f1c40f; font-size: 1.3rem; }
         
-        /* 📱 100% FIXED RESPONSIVE DESIGN FOR MOBILE */
         @media (max-width: 600px) { 
             .chat-container { width: 100%; height: 100dvh; border-radius: 0; border: none; border-top: 40px solid #000000; box-sizing: border-box; } 
             .chat-header { padding: 15px; z-index: 100; }
@@ -181,7 +181,6 @@
             .title-text h1 { font-size: 1.25rem; }
             .title-text p { font-size: 0.8rem; }
             
-            /* 🚀 NEW: Mobile fixes for the label */
             .header-controls { gap: 10px; z-index: 100; align-items: center; }
             .mode-wrapper { align-items: flex-start; }
             .mode-label { font-size: 0.6rem; margin-bottom: 2px; margin-left: 4px; }
@@ -206,6 +205,7 @@
         }
     </style>
 </head>
+<!-- 🚀 FIX: Default Theme revert back to "dark" -->
 <body data-theme="dark" data-persona="general">
     <div class="chat-container">
         <div class="modal-overlay" id="adModalOverlay">
@@ -259,8 +259,8 @@
                 <div class="title-text"><h1>SG AI</h1><p>Talk about anything!</p></div>
             </div>
             
-            <!-- 🚀 NEW: Mode Wrapper and Label added here -->
             <div class="header-controls">
+                <!-- 🚀 FIX: Default Icon changed back to Sun (☀️) because dark is default -->
                 <button id="themeToggle" class="theme-btn" onclick="toggleTheme()">☀️</button>
                 <div class="mode-wrapper">
                     <span class="mode-label">AI Mode</span>
@@ -381,38 +381,50 @@
             if (selectedMode !== currentPersona) { switchMode(selectedMode); }
         }
 
-        function resetAdButton() {
-            let btn = document.querySelector('.watch-ad-btn');
-            if (btn) { btn.innerText = "🎬 Watch Ad Now"; btn.disabled = false; }
-        }
-
-        function updateAdUI(count) {
-            adsWatchedCount = count;
-            let progressText = document.getElementById('adProgressText');
-            if (progressText) { progressText.innerText = `Ads Watched: ${count} / 3`; }
-        }
-
-        function cancelAd() { document.getElementById('adModalOverlay').style.display = 'none'; }
-
         function watchAd() {
             let btn = document.querySelector('.watch-ad-btn');
-            btn.innerText = "Loading Ad... ⏳"; btn.disabled = true;
-            if (typeof AndroidBridge !== "undefined") { AndroidBridge.showAd(); } 
-            else { setTimeout(() => { adWatchedSuccessfully(); }, 1500); }
+            
+            // 1. User click karte hi button loading pe jayega aur disable ho jayega
+            btn.innerText = "Loading Ad... ⏳"; 
+            btn.disabled = true;
+            
+            // 2. Android ki ad chalu karwane ki request bhejo
+            if (typeof AndroidBridge !== "undefined" && typeof AndroidBridge.showAd === "function") { 
+                AndroidBridge.showAd(); 
+            } 
+            
+            // 3. Android studio callback nahi de raha, toh hum apna SMART TIMER lagayenge
+            // Yahan 4000 milliseconds (4 seconds) baad khud ba khud ad ko successful maan liya jayega
+            setTimeout(() => { 
+                adWatchedSuccessfully(); 
+            }, 4000); 
         }
 
         function adWatchedSuccessfully() {
             let btn = document.querySelector('.watch-ad-btn');
             adsWatchedCount++;
             document.getElementById('adProgressText').innerText = `Ads Watched: ${adsWatchedCount} / 3`;
-            btn.innerText = "🎬 Watch Ad Now"; btn.disabled = false;
+            
             if (adsWatchedCount >= 3) {
                 alert("🎉 Reward Granted! You unlocked 5 free chats.");
                 document.getElementById('adModalOverlay').style.display = 'none';
-                freePremiumChatsLeft = 5; localStorage.setItem('premiumChats', freePremiumChatsLeft);
-                updateMenuBadges(); switchMode(modeTryingToUnlock); 
+                freePremiumChatsLeft = 5; 
+                localStorage.setItem('premiumChats', freePremiumChatsLeft);
+                updateMenuBadges(); 
+                switchMode(modeTryingToUnlock); 
+                
+                // Agli baar ke liye sab reset
+                adsWatchedCount = 0;
+                btn.innerText = "🎬 Watch Ad Now"; 
+                btn.disabled = false;
+            } else {
+                // Ad khatam hone ke baad button wapas naye text ke sath active
+                btn.innerText = "🎬 Watch Next Ad"; 
+                btn.disabled = false;
             }
         }
+
+        function cancelAd() { document.getElementById('adModalOverlay').style.display = 'none'; }
 
         function switchMode(newMode) {
             currentPersona = newMode; 
