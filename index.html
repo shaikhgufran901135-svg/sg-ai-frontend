@@ -97,6 +97,7 @@
         .header-controls { display: flex; gap: 12px; align-items: center; position: relative; z-index: 51; }
         .theme-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 16px; width: 44px; height: 44px; cursor: pointer; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.2rem; transition: 0.3s; flex-shrink: 0; position: relative; z-index: 55; }
         
+        /* 🚀 NEW: Mode Label CSS */
         .mode-wrapper { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
         .mode-label { font-size: 0.65rem; color: rgba(255,255,255,0.85); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; margin-left: 6px; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         
@@ -180,6 +181,7 @@
             .title-text h1 { font-size: 1.25rem; }
             .title-text p { font-size: 0.8rem; }
             
+            /* 🚀 NEW: Mobile fixes for the label */
             .header-controls { gap: 10px; z-index: 100; align-items: center; }
             .mode-wrapper { align-items: flex-start; }
             .mode-label { font-size: 0.6rem; margin-bottom: 2px; margin-left: 4px; }
@@ -204,8 +206,7 @@
         }
     </style>
 </head>
-<!-- 🚀 FIX: Default Theme changed to "light" -->
-<body data-theme="light" data-persona="general">
+<body data-theme="dark" data-persona="general">
     <div class="chat-container">
         <div class="modal-overlay" id="adModalOverlay">
             <div class="ad-modal">
@@ -258,9 +259,9 @@
                 <div class="title-text"><h1>SG AI</h1><p>Talk about anything!</p></div>
             </div>
             
+            <!-- 🚀 NEW: Mode Wrapper and Label added here -->
             <div class="header-controls">
-                <!-- 🚀 FIX: Default Icon changed to Moon (🌙) as theme is now Light by default -->
-                <button id="themeToggle" class="theme-btn" onclick="toggleTheme()">🌙</button>
+                <button id="themeToggle" class="theme-btn" onclick="toggleTheme()">☀️</button>
                 <div class="mode-wrapper">
                     <span class="mode-label">AI Mode</span>
                     <div id="currentPersonaBtn" class="custom-select-btn" onclick="openSheet()">🤖 General Assistant ▾</div>
