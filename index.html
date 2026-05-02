@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 🚀 FIX: Mobile status bar ko system level par black karne ke liye -->
     <meta name="theme-color" content="#000000">
     <title>SG AI Chat - Premium Features</title>
     
@@ -13,7 +12,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
-        /* 🚀 PERSONA COLOR THEMES & DYNAMIC BACKGROUND PATTERNS */
         :root { 
             --accent-1: #1e3c72; 
             --accent-2: #2a5298; 
@@ -48,7 +46,6 @@
             --chat-bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ctext x='20' y='50' font-size='30' opacity='0.08'%3E✨%3C/text%3E%3C/svg%3E"); 
         }
 
-        /* BASE THEME COLORS */
         :root, [data-theme="dark"] {
             --bg-body: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
             --bg-container: linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%), rgba(20, 20, 40, 0.95);
@@ -73,7 +70,6 @@
             --bg-selector: rgba(255,255,255,0.8);
         }
 
-        /* DYNAMIC APP COLORS */
         body { 
             --bg-header: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
             --user-msg-bg: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
@@ -379,26 +375,25 @@
             if (selectedMode !== currentPersona) { switchMode(selectedMode); }
         }
 
-        // 🚀 FIX: SMART TIMER LOGIC EXACTLY SET TO 3000ms (3 SECONDS)
+        // 🚀 FIX: FAKE TIMER HATAYA. Ab sirf tabhi ad count badhega jab Android permission dega!
         function watchAd() {
             let btn = document.querySelector('.watch-ad-btn');
             
-            // 1. User click karte hi button loading pe jayega aur disable ho jayega
+            // 1. Button loading pe gaya
             btn.innerText = "Loading Ad... ⏳"; 
             btn.disabled = true;
             
-            // 2. Android ki ad chalu karwane ki request bhejo
+            // 2. Android ki ad chalu karwane ki request bheji. Ab aage ka kaam Android karega!
             if (typeof AndroidBridge !== "undefined" && typeof AndroidBridge.showAd === "function") { 
                 AndroidBridge.showAd(); 
-            } 
-            
-            // 3. Exactly 3 seconds (3000ms) baad next button active
-            setTimeout(() => { 
-                adWatchedSuccessfully(); 
-            }, 3000); 
+            } else {
+                // Ye line sirf tabhi chalegi jab tum mobile ke bahar (PC browser me) check kar rahe ho
+                setTimeout(() => { adWatchedSuccessfully(); }, 3000); 
+            }
         }
 
-        function adWatchedSuccessfully() {
+        // 🚀 YE FUNCTION ANDROID STUDIO SE CALL HONA CHAHIYE JAB AD BAND HO JAYE
+        window.adWatchedSuccessfully = function() {
             let btn = document.querySelector('.watch-ad-btn');
             adsWatchedCount++;
             document.getElementById('adProgressText').innerText = `Ads Watched: ${adsWatchedCount} / 3`;
@@ -416,12 +411,11 @@
                 btn.innerText = "🎬 Watch Ad Now"; 
                 btn.disabled = false;
             } else {
-                // 🚀 FIX: Ad khatam hone ke baad button clear text ke sath active hoga
                 let leftAds = 3 - adsWatchedCount;
                 btn.innerText = `🎬 Watch Next Ad (${leftAds} Left)`; 
                 btn.disabled = false;
             }
-        }
+        };
 
         function cancelAd() { document.getElementById('adModalOverlay').style.display = 'none'; }
 
