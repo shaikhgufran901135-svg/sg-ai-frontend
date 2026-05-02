@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 🚀 FIX: Mobile status bar ko system level par black karne ke liye -->
     <meta name="theme-color" content="#000000">
     <title>SG AI Chat - Premium Features</title>
     
@@ -12,6 +13,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
+        /* 🚀 PERSONA COLOR THEMES & DYNAMIC BACKGROUND PATTERNS */
         :root { 
             --accent-1: #1e3c72; 
             --accent-2: #2a5298; 
@@ -46,6 +48,7 @@
             --chat-bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ctext x='20' y='50' font-size='30' opacity='0.08'%3E✨%3C/text%3E%3C/svg%3E"); 
         }
 
+        /* BASE THEME COLORS */
         :root, [data-theme="dark"] {
             --bg-body: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
             --bg-container: linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%), rgba(20, 20, 40, 0.95);
@@ -70,6 +73,7 @@
             --bg-selector: rgba(255,255,255,0.8);
         }
 
+        /* DYNAMIC APP COLORS */
         body { 
             --bg-header: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
             --user-msg-bg: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
@@ -93,6 +97,7 @@
         .header-controls { display: flex; gap: 12px; align-items: center; position: relative; z-index: 51; }
         .theme-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 16px; width: 44px; height: 44px; cursor: pointer; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.2rem; transition: 0.3s; flex-shrink: 0; position: relative; z-index: 55; }
         
+        /* 🚀 NEW: Mode Label CSS */
         .mode-wrapper { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
         .mode-label { font-size: 0.65rem; color: rgba(255,255,255,0.85); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; margin-left: 6px; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         
@@ -150,9 +155,7 @@
         .ad-modal h2 { margin-bottom: 10px; color: var(--text-main); }
         .ad-modal p { margin-bottom: 20px; color: #a8b2d1; }
         .ad-progress { font-size: 1.2rem; font-weight: bold; color: var(--accent-1); margin-bottom: 20px; }
-        
-        .watch-ad-btn { background: var(--user-msg-bg); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; font-weight: bold; transition: opacity 0.3s; }
-        .watch-ad-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .watch-ad-btn { background: var(--user-msg-bg); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; font-weight: bold; }
         .cancel-btn { background: none; border: none; color: #ff6b6b; margin-top: 15px; cursor: pointer; text-decoration: underline; }
         
         .bottom-sheet-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 900; align-items: flex-end; opacity: 0; transition: opacity 0.3s; backdrop-filter: blur(5px); }
@@ -170,6 +173,7 @@
         .free-badge { background: rgba(46, 204, 113, 0.2); color: #2ecc71; padding: 4px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; vertical-align: super; margin-left: 5px; }
         .lock-icon { color: #f1c40f; font-size: 1.3rem; }
         
+        /* 📱 100% FIXED RESPONSIVE DESIGN FOR MOBILE */
         @media (max-width: 600px) { 
             .chat-container { width: 100%; height: 100dvh; border-radius: 0; border: none; border-top: 40px solid #000000; box-sizing: border-box; } 
             .chat-header { padding: 15px; z-index: 100; }
@@ -177,6 +181,7 @@
             .title-text h1 { font-size: 1.25rem; }
             .title-text p { font-size: 0.8rem; }
             
+            /* 🚀 NEW: Mobile fixes for the label */
             .header-controls { gap: 10px; z-index: 100; align-items: center; }
             .mode-wrapper { align-items: flex-start; }
             .mode-label { font-size: 0.6rem; margin-bottom: 2px; margin-left: 4px; }
@@ -254,6 +259,7 @@
                 <div class="title-text"><h1>SG AI</h1><p>Talk about anything!</p></div>
             </div>
             
+            <!-- 🚀 NEW: Mode Wrapper and Label added here -->
             <div class="header-controls">
                 <button id="themeToggle" class="theme-btn" onclick="toggleTheme()">☀️</button>
                 <div class="mode-wrapper">
@@ -375,49 +381,38 @@
             if (selectedMode !== currentPersona) { switchMode(selectedMode); }
         }
 
-        // 🚀 FIX: FAKE TIMER HATAYA. Ab sirf tabhi ad count badhega jab Android permission dega!
-        function watchAd() {
+        function resetAdButton() {
             let btn = document.querySelector('.watch-ad-btn');
-            
-            // 1. Button loading pe gaya
-            btn.innerText = "Loading Ad... ⏳"; 
-            btn.disabled = true;
-            
-            // 2. Android ki ad chalu karwane ki request bheji. Ab aage ka kaam Android karega!
-            if (typeof AndroidBridge !== "undefined" && typeof AndroidBridge.showAd === "function") { 
-                AndroidBridge.showAd(); 
-            } else {
-                // Ye line sirf tabhi chalegi jab tum mobile ke bahar (PC browser me) check kar rahe ho
-                setTimeout(() => { adWatchedSuccessfully(); }, 3000); 
-            }
+            if (btn) { btn.innerText = "🎬 Watch Ad Now"; btn.disabled = false; }
         }
 
-        // 🚀 YE FUNCTION ANDROID STUDIO SE CALL HONA CHAHIYE JAB AD BAND HO JAYE
-        window.adWatchedSuccessfully = function() {
+        function updateAdUI(count) {
+            adsWatchedCount = count;
+            let progressText = document.getElementById('adProgressText');
+            if (progressText) { progressText.innerText = `Ads Watched: ${count} / 3`; }
+        }
+
+        function cancelAd() { document.getElementById('adModalOverlay').style.display = 'none'; }
+
+        function watchAd() {
+            let btn = document.querySelector('.watch-ad-btn');
+            btn.innerText = "Loading Ad... ⏳"; btn.disabled = true;
+            if (typeof AndroidBridge !== "undefined") { AndroidBridge.showAd(); } 
+            else { setTimeout(() => { adWatchedSuccessfully(); }, 1500); }
+        }
+
+        function adWatchedSuccessfully() {
             let btn = document.querySelector('.watch-ad-btn');
             adsWatchedCount++;
             document.getElementById('adProgressText').innerText = `Ads Watched: ${adsWatchedCount} / 3`;
-            
+            btn.innerText = "🎬 Watch Ad Now"; btn.disabled = false;
             if (adsWatchedCount >= 3) {
                 alert("🎉 Reward Granted! You unlocked 5 free chats.");
                 document.getElementById('adModalOverlay').style.display = 'none';
-                freePremiumChatsLeft = 5; 
-                localStorage.setItem('premiumChats', freePremiumChatsLeft);
-                updateMenuBadges(); 
-                switchMode(modeTryingToUnlock); 
-                
-                // Agli baar ke liye sab reset
-                adsWatchedCount = 0;
-                btn.innerText = "🎬 Watch Ad Now"; 
-                btn.disabled = false;
-            } else {
-                let leftAds = 3 - adsWatchedCount;
-                btn.innerText = `🎬 Watch Next Ad (${leftAds} Left)`; 
-                btn.disabled = false;
+                freePremiumChatsLeft = 5; localStorage.setItem('premiumChats', freePremiumChatsLeft);
+                updateMenuBadges(); switchMode(modeTryingToUnlock); 
             }
-        };
-
-        function cancelAd() { document.getElementById('adModalOverlay').style.display = 'none'; }
+        }
 
         function switchMode(newMode) {
             currentPersona = newMode; 
