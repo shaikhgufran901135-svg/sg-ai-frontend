@@ -131,7 +131,10 @@
         .role-tag.free { background: rgba(46, 204, 113, 0.9); color: #fff; }
         
         .role-details { flex: 1; }
-        .role-details h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: #fff; }
+        .role-details h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: #fff; display: flex; align-items: center; }
+        
+        .free-chats-text { color: #2ecc71; font-size: 0.75rem; font-weight: 800; margin-left: 8px; background: rgba(46, 204, 113, 0.15); padding: 3px 8px; border-radius: 8px; display: none; }
+        
         .role-details p { margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.6); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         
         .role-arrow { width: 35px; height: 35px; border-radius: 50%; background: rgba(46, 204, 113, 0.15); color: #2ecc71; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 1.2rem; flex-shrink: 0; }
@@ -474,9 +477,24 @@
     </div>
 
     <script>
+        // 🚀 FIX: History API lagaya gaya hai Mobile Back Button manage karne ke liye
+        
+        // App jab pehli baar load hogi toh base state banegi
+        window.onload = () => { 
+            inputEl.focus();
+            updateMenuBadges(); 
+            document.body.setAttribute('data-persona', currentPersona);
+            
+            // Home screen ka state set kar rahe hain
+            history.replaceState({page: 'home'}, "Home", "");
+        };
+
         function openChatFromHome(mode) {
             document.getElementById('mainHomeScreen').style.display = 'none';
             document.getElementById('mainChatScreen').style.display = 'flex';
+            
+            // Jaise hi user Chat me aaya, Browser History mein ek 'chat' page daal do
+            history.pushState({page: 'chat'}, "Chat", "#chat");
             
             const sheetOption = document.querySelector(`.persona-option[onclick*="'${mode}'"]`);
             if(sheetOption) {
@@ -485,10 +503,23 @@
         }
 
         function goBackToHome() {
-            document.getElementById('mainChatScreen').style.display = 'none';
-            document.getElementById('mainHomeScreen').style.display = 'flex';
+            // UI wala back button dabane se bas history me ek step peeche jao, automatically PopState call ho jayega
+            history.back();
         }
 
+        // 🚀 FIX: Ye Listener Hardware Back Button aur UI Back button dono ko catch karega!
+        window.addEventListener('popstate', (event) => {
+            // Agar hum back gaye aur current state me 'chat' nahi bacha hai, toh home dikhao
+            if (event.state && event.state.page === 'chat') {
+                document.getElementById('mainHomeScreen').style.display = 'none';
+                document.getElementById('mainChatScreen').style.display = 'flex';
+            } else {
+                document.getElementById('mainChatScreen').style.display = 'none';
+                document.getElementById('mainHomeScreen').style.display = 'flex';
+            }
+        });
+
+        // ================= EXISTING LOGIC =================
         const personaDisplayNames = { 'general': '🤖 General Assistant', 'friendly': '💖 Bestie', 'professional': '💼 Professional', 'coder': '&lt;/&gt; Code Helper', 'teacher': '🎓 Teacher Mode', 'funny': '😂 Funny Bot', 'motivator': '🏆 Motivator', 'shayari': '🪶 Shayari Mode' };
         const premiumModes = ['friendly', 'coder', 'teacher', 'funny', 'motivator', 'shayari'];
         let currentPersona = 'general';
@@ -531,13 +562,14 @@
                 }
             });
 
-            // 🚀 FIX: Update free chats count perfectly for both Home Screen & Bottom Sheet
-            const freeStatusTexts = document.querySelectorAll('.free-status-text');
-            freeStatusTexts.forEach(span => {
+            const freeTextSpans = document.querySelectorAll('.free-status-text');
+            freeTextSpans.forEach(span => {
                 if (freePremiumChatsLeft > 0) {
                     span.innerText = `(free - ${freePremiumChatsLeft} left)`;
+                    span.style.display = 'inline-block';
                 } else {
                     span.innerText = `(free)`;
+                    span.style.display = 'inline-block';
                 }
             });
         }
@@ -715,11 +747,6 @@
         function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
         inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
         
-        window.onload = () => { 
-            inputEl.focus();
-            updateMenuBadges(); 
-            document.body.setAttribute('data-persona', currentPersona);
-        };
     </script>
 </body>
 </html>
