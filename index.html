@@ -315,7 +315,7 @@
 
             <div class="role-card" onclick="openChatFromHome('coder')">
                 <div class="role-img-wrap">
-                    <div class="role-img" style="background: linear-gradient(135deg, #11998e, #38ef7d)">💻</div>
+                    <div class="role-img" style="background: linear-gradient(135deg, #11998e, #38ef7d); font-family: monospace; font-weight: 900;">&lt;/&gt;</div>
                     <div class="role-tag pro">PRO</div>
                 </div>
                 <div class="role-details">
@@ -376,7 +376,14 @@
         </div>
         
         <div class="home-bottom-nav">
-            <div class="nav-item active"><div class="nav-icon">💬</div>Chats</div>
+            <div class="nav-item active">
+                <div class="nav-icon" style="display: flex; align-items: center; justify-content: center; margin-bottom: 2px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </div>
+                Chats
+            </div>
         </div>
     </div>
 
