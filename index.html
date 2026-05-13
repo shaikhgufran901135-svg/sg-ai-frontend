@@ -6,9 +6,15 @@
     <meta name="theme-color" content="#000000">
     <title>SG AI Chat - Premium Features</title>
     
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" media="print" onload="this.media='all'">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
@@ -480,7 +486,8 @@
 
     <script>
         window.onload = () => { 
-            inputEl.focus();
+            // 🚀 SPEED FIX: Focus ko defer kiya taaki rendering block na ho
+            setTimeout(() => { if(inputEl) inputEl.focus(); }, 100);
             updateMenuBadges(); 
             document.body.setAttribute('data-persona', currentPersona);
             history.replaceState({page: 'home'}, "Home", "");
@@ -691,7 +698,7 @@
                     }
                 } else { addMessage('SG AI', "🚨 Backend Error!", 'ai'); }
             } catch (error) { addMessage('SG AI', "Sorry, error aa gaya.", 'ai'); } 
-            finally { typingEl.style.display = 'none'; sendBtn.disabled = false; inputEl.focus(); }
+            finally { typingEl.style.display = 'none'; sendBtn.disabled = false; if(inputEl) inputEl.focus(); }
         }
 
         const personas = {
@@ -714,7 +721,11 @@
             }
             const contentDiv = document.createElement('div'); contentDiv.className = 'message-content';
             if (type === 'ai') {
-                contentDiv.innerHTML = marked.parse(text);
+                if (typeof marked !== 'undefined') {
+                    contentDiv.innerHTML = marked.parse(text);
+                } else {
+                    contentDiv.innerText = text;
+                }
                 const preTags = contentDiv.querySelectorAll('pre');
                 preTags.forEach((pre) => {
                     const copyBtn = document.createElement('button'); copyBtn.className = 'copy-code-btn'; copyBtn.innerText = 'Copy';
@@ -724,7 +735,9 @@
                     };
                     pre.appendChild(copyBtn);
                 });
-                contentDiv.querySelectorAll('pre code').forEach((block) => { hljs.highlightElement(block); });
+                if (typeof hljs !== 'undefined') {
+                    contentDiv.querySelectorAll('pre code').forEach((block) => { hljs.highlightElement(block); });
+                }
             } else { contentDiv.innerText = text; }
             messageDiv.appendChild(contentDiv); 
             messagesEl.appendChild(messageDiv); 
@@ -737,7 +750,9 @@
         }
 
         function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
-        inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+        if(inputEl) {
+            inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+        }
         
     </script>
 </body>
