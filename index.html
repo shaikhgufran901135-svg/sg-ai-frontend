@@ -270,6 +270,14 @@
 </head>
 <body data-theme="dark" data-persona="general">
 
+    <div class="modal-overlay" id="welcomeModalOverlay">
+        <div class="ad-modal">
+            <h2 style="font-size: 1.8rem; margin-bottom: 15px;">🎉 Welcome Gift!</h2>
+            <p style="font-size: 1rem; line-height: 1.5; color: #e8eaf6;">Thank you for trying SG AI. Claim your <strong>5 FREE Premium Chats</strong> to explore all our PRO AI Personas right now!</p>
+            <button class="watch-ad-btn" onclick="claimWelcomeBonus()" style="background: linear-gradient(135deg, #2ecc71, #27ae60); margin-top: 10px; font-size: 1.15rem;">Claim Now 🎁</button>
+        </div>
+    </div>
+
     <div class="home-screen" id="mainHomeScreen">
         <div class="home-header-top">
             <h2>SG AI <span>Assistant</span></h2>
@@ -492,8 +500,33 @@
     </div>
 
     <script>
+        // 🚀 NEW: Check and Show Welcome Bonus Logic
+        function checkWelcomeBonus() {
+            const isClaimed = localStorage.getItem('welcomeBonusClaimed');
+            if (!isClaimed) {
+                document.getElementById('welcomeModalOverlay').style.display = 'flex';
+            }
+        }
+
+        // 🚀 NEW: Claim Button Logic
+        function claimWelcomeBonus() {
+            // Unko 5 free chats dedo
+            freePremiumChatsLeft = 5;
+            localStorage.setItem('premiumChats', freePremiumChatsLeft);
+            // System ko bata do ki bonus claim ho chuka hai (taaki dobara na aaye)
+            localStorage.setItem('welcomeBonusClaimed', 'true');
+            // UI aur badges update karo
+            updateMenuBadges();
+            // Modal ko band kar do
+            document.getElementById('welcomeModalOverlay').style.display = 'none';
+            // User ko mast notification dikhao
+            alert("🎉 Awesome! 5 Free Premium Chats have been added to your account. Enjoy!");
+        }
+
         window.onload = () => { 
-            // 🚀 SPEED FIX: Focus ko defer kiya taaki rendering block na ho
+            // 🚀 NEW: App khulte hi check hoga ki bonus dena hai ya nahi
+            checkWelcomeBonus();
+
             setTimeout(() => { if(inputEl) inputEl.focus(); }, 100);
             updateMenuBadges(); 
             document.body.setAttribute('data-persona', currentPersona);
