@@ -18,6 +18,14 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
+        /* 🔥 FIXED: Hiding the tap highlight box on mobile */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         :root {
             --accent-1: #1e3c72;
             --accent-2: #2a5298;
@@ -135,12 +143,6 @@
             right: 0;
             bottom: 0;
             width: 100%;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
         }
         
         .home-screen {
@@ -852,7 +854,7 @@
             width: 100%;
             transition: .3s;
         }
-
+        
         .watch-ad-btn {
             background: var(--user-msg-bg);
             color: #fff;
@@ -1702,6 +1704,14 @@
             if (btnT2) {
                 btnT2.innerText = "🎬 Watch Ad Now";
                 btnT2.disabled = false;
+            }
+        }
+
+        function updateAdUI(count) {
+            adsWatchedCount = count;
+            let progressText = document.getElementById('adProgressText');
+            if (progressText) {
+                progressText.innerText = `Ads Watched: ${count} / 3`;
             }
         }
 
