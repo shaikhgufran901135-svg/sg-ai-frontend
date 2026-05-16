@@ -840,21 +840,7 @@
             margin-bottom: 20px;
         }
         
-        /* 🔥 FIXED: Separate class for Welcome Button to avoid querySelector clash */
-        .welcome-btn {
-            background: var(--user-msg-bg);
-            color: #fff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            font-weight: 700;
-            width: 100%;
-            transition: .3s;
-        }
-
-        .watch-ad-btn {
+        .watch-ad-btn, .welcome-btn {
             background: var(--user-msg-bg);
             color: #fff;
             border: none;
@@ -1118,7 +1104,7 @@
             <button class="welcome-btn" onclick="claimWelcomeBonus()" style="background:linear-gradient(135deg,#2ecc71,#27ae60);margin-top:10px;font-size:1.15rem">Claim Now 🎁</button>
         </div>
     </div>
-
+    
     <div class="modal-overlay" id="adModalOverlay">
         <div class="ad-modal">
             <h2 id="modalTitle">Unlock Premium Mode 🔒</h2>
@@ -1128,7 +1114,7 @@
             <button class="cancel-btn" onclick="cancelAd()">Cancel & Go Back</button>
         </div>
     </div>
-
+    
     <div class="modal-overlay" id="toolAdModalOverlay">
         <div class="ad-modal" style="padding:20px">
             <h2 style="font-size:1.4rem">Out of Tokens 🪙</h2>
@@ -1144,54 +1130,102 @@
             <button class="cancel-btn" onclick="cancelToolAd()">Close</button>
         </div>
     </div>
-
+    
     <div class="home-screen" id="mainHomeScreen">
         <div class="home-header-top">
             <h2>SG AI <span>Assistant</span></h2>
         </div>
         <div class="roles-scroll" id="chatsView">
             <div class="role-card" onclick="openChatFromHome('general','chat')">
-                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#1e3c72,#2a5298)">🤖</div><div class="role-tag free">FREE</div></div>
-                <div class="role-details"><h4>General Assistant</h4><p>Your everyday helpful AI assistant for all queries.</p></div>
+                <div class="role-img-wrap">
+                    <div class="role-img" style="background:linear-gradient(135deg,#1e3c72,#2a5298)">🤖</div>
+                    <div class="role-tag free">FREE</div>
+                </div>
+                <div class="role-details">
+                    <h4>General Assistant</h4>
+                    <p>Your everyday helpful AI assistant for all queries.</p>
+                </div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
             <div class="role-card" onclick="openChatFromHome('friendly','chat')">
-                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#ff758c,#ff7eb3)">💖</div><div class="role-tag pro">HOT</div></div>
-                <div class="role-details"><h4>AI Bestie <span class="free-status-badge"></span></h4><p>Share every sweet moment and chat casually like friends.</p></div>
+                <div class="role-img-wrap">
+                    <div class="role-img" style="background:linear-gradient(135deg,#ff758c,#ff7eb3)">💖</div>
+                    <div class="role-tag pro">HOT</div>
+                </div>
+                <div class="role-details">
+                    <h4>AI Bestie <span class="free-status-badge"></span></h4>
+                    <p>Share every sweet moment and chat casually like friends.</p>
+                </div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
             <div class="role-card" onclick="openChatFromHome('professional','chat')">
-                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#2c3e50,#3498db)">💼</div><div class="role-tag free">FREE</div></div>
-                <div class="role-details"><h4>Professional</h4><p>Warm and professional, providing you with consultant support.</p></div>
+                <div class="role-img-wrap">
+                    <div class="role-img" style="background:linear-gradient(135deg,#2c3e50,#3498db)">💼</div>
+                    <div class="role-tag free">FREE</div>
+                </div>
+                <div class="role-details">
+                    <h4>Professional</h4>
+                    <p>Warm and professional, providing you with consultant support.</p>
+                </div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
             <div class="role-card" onclick="openChatFromHome('coder','chat')">
-                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#11998e,#38ef7d);font-family:monospace;font-weight:900">&lt;/&gt;</div><div class="role-tag pro">PRO</div></div>
-                <div class="role-details"><h4>Code Helper <span class="free-status-badge"></span></h4><p>Your expert programming assistant ready to debug.</p></div>
+                <div class="role-img-wrap">
+                    <div class="role-img" style="background:linear-gradient(135deg,#11998e,#38ef7d);font-family:monospace;font-weight:900">&lt;/&gt;</div>
+                    <div class="role-tag pro">PRO</div>
+                </div>
+                <div class="role-details">
+                    <h4>Code Helper <span class="free-status-badge"></span></h4>
+                    <p>Your expert programming assistant ready to debug.</p>
+                </div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
             <div class="role-card" onclick="openChatFromHome('teacher','chat')">
-                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#f12711,#f5af19)">🎓</div><div class="role-tag pro">PRO</div></div>
-                <div class="role-details"><h4>Teacher Mode <span class="free-status-badge"></span></h4><p>A patient and encouraging guide for learning anything.</p></div>
+                <div class="role-img-wrap">
+                    <div class="role-img" style="background:linear-gradient(135deg,#f12711,#f5af19)">🎓</div>
+                    <div class="role-tag pro">PRO</div>
+                </div>
+                <div class="role-details">
+                    <h4>Teacher Mode <span class="free-status-badge"></span></h4>
+                    <p>A patient and encouraging guide for learning anything.</p>
+                </div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
             <div class="role-card" onclick="openChatFromHome('funny','chat')">
-                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#8E2DE2,#4A00E0)">😂</div><div class="role-tag pro">PRO</div></div>
-                <div class="role-details"><h4>Funny Bot <span class="free-status-badge"></span></h4><p>Hilarious stand-up comedian ready to make you laugh.</p></div>
+                <div class="role-img-wrap">
+                    <div class="role-img" style="background:linear-gradient(135deg,#8E2DE2,#4A00E0)">😂</div>
+                    <div class="role-tag pro">PRO</div>
+                </div>
+                <div class="role-details">
+                    <h4>Funny Bot <span class="free-status-badge"></span></h4>
+                    <p>Hilarious stand-up comedian ready to make you laugh.</p>
+                </div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
             <div class="role-card" onclick="openChatFromHome('motivator','chat')">
-                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#fc4a1a,#f7b733)">🏆</div><div class="role-tag pro">PRO</div></div>
-                <div class="role-details"><h4>Motivator <span class="free-status-badge"></span></h4><p>Energetic motivational coach to keep your spirits high.</p></div>
+                <div class="role-img-wrap">
+                    <div class="role-img" style="background:linear-gradient(135deg,#fc4a1a,#f7b733)">🏆</div>
+                    <div class="role-tag pro">PRO</div>
+                </div>
+                <div class="role-details">
+                    <h4>Motivator <span class="free-status-badge"></span></h4>
+                    <p>Energetic motivational coach to keep your spirits high.</p>
+                </div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
             <div class="role-card" onclick="openChatFromHome('shayari','chat')">
-                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#b224ef,#7579ff)">🪶</div><div class="role-tag pro">HOT</div></div>
-                <div class="role-details"><h4>Shayari Mode <span class="free-status-badge"></span></h4><p>Poetic AI ready to write beautiful Shayari for you.</p></div>
+                <div class="role-img-wrap">
+                    <div class="role-img" style="background:linear-gradient(135deg,#b224ef,#7579ff)">🪶</div>
+                    <div class="role-tag pro">HOT</div>
+                </div>
+                <div class="role-details">
+                    <h4>Shayari Mode <span class="free-status-badge"></span></h4>
+                    <p>Poetic AI ready to write beautiful Shayari for you.</p>
+                </div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
         </div>
-
+        
         <div class="roles-scroll" id="toolsView" style="display:none">
             <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 5px 15px">
                 <h3 class="section-title" style="margin:0">Creative AI Tools</h3>
@@ -1218,11 +1252,13 @@
                 </div>
             </div>
         </div>
-
+        
         <div class="home-bottom-nav">
             <div class="nav-item active" id="navBtnChats" onclick="switchTab('chats')">
                 <div class="nav-icon" style="display:flex;align-items:center;justify-content:center;margin-bottom:2px">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
                 </div>Chats
             </div>
             <div class="nav-item" id="navBtnTools" onclick="switchTab('tools')">
@@ -1230,9 +1266,8 @@
             </div>
         </div>
     </div>
-
+    
     <div class="chat-container" id="mainChatScreen" style="display:none">
-        
         <div class="bottom-sheet-overlay" id="personaSheetOverlay" onclick="closeSheet()">
             <div class="bottom-sheet" id="personaSheet" onclick="event.stopPropagation()">
                 <div class="sheet-header">
@@ -1634,7 +1669,6 @@
         }
 
         function resetAdButton() {
-            // Updated safely target exact IDs to prevent locking up
             let btn = document.getElementById('chatAdBtn');
             if (btn) {
                 btn.innerText = "🎬 Watch Ad Now";
@@ -1665,7 +1699,6 @@
         }
 
         function watchAd() {
-            // FIXED: Using strict ID to avoid clash with Welcome button
             let btn = document.getElementById('chatAdBtn');
             btn.innerText = "Loading Ad... ⏳";
             btn.disabled = true;
