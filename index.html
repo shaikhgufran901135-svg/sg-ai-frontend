@@ -840,7 +840,20 @@
             margin-bottom: 20px;
         }
         
-        .watch-ad-btn, .welcome-btn {
+        .welcome-btn {
+            background: var(--user-msg-bg);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+            transition: .3s;
+        }
+
+        .watch-ad-btn {
             background: var(--user-msg-bg);
             color: #fff;
             border: none;
@@ -1137,91 +1150,43 @@
         </div>
         <div class="roles-scroll" id="chatsView">
             <div class="role-card" onclick="openChatFromHome('general','chat')">
-                <div class="role-img-wrap">
-                    <div class="role-img" style="background:linear-gradient(135deg,#1e3c72,#2a5298)">🤖</div>
-                    <div class="role-tag free">FREE</div>
-                </div>
-                <div class="role-details">
-                    <h4>General Assistant</h4>
-                    <p>Your everyday helpful AI assistant for all queries.</p>
-                </div>
+                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#1e3c72,#2a5298)">🤖</div><div class="role-tag free">FREE</div></div>
+                <div class="role-details"><h4>General Assistant</h4><p>Your everyday helpful AI assistant for all queries.</p></div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
             <div class="role-card" onclick="openChatFromHome('friendly','chat')">
-                <div class="role-img-wrap">
-                    <div class="role-img" style="background:linear-gradient(135deg,#ff758c,#ff7eb3)">💖</div>
-                    <div class="role-tag pro">HOT</div>
-                </div>
-                <div class="role-details">
-                    <h4>AI Bestie <span class="free-status-badge"></span></h4>
-                    <p>Share every sweet moment and chat casually like friends.</p>
-                </div>
+                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#ff758c,#ff7eb3)">💖</div><div class="role-tag pro">HOT</div></div>
+                <div class="role-details"><h4>AI Bestie <span class="free-status-badge"></span></h4><p>Share every sweet moment and chat casually like friends.</p></div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
             <div class="role-card" onclick="openChatFromHome('professional','chat')">
-                <div class="role-img-wrap">
-                    <div class="role-img" style="background:linear-gradient(135deg,#2c3e50,#3498db)">💼</div>
-                    <div class="role-tag free">FREE</div>
-                </div>
-                <div class="role-details">
-                    <h4>Professional</h4>
-                    <p>Warm and professional, providing you with consultant support.</p>
-                </div>
+                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#2c3e50,#3498db)">💼</div><div class="role-tag free">FREE</div></div>
+                <div class="role-details"><h4>Professional</h4><p>Warm and professional, providing you with consultant support.</p></div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
             <div class="role-card" onclick="openChatFromHome('coder','chat')">
-                <div class="role-img-wrap">
-                    <div class="role-img" style="background:linear-gradient(135deg,#11998e,#38ef7d);font-family:monospace;font-weight:900">&lt;/&gt;</div>
-                    <div class="role-tag pro">PRO</div>
-                </div>
-                <div class="role-details">
-                    <h4>Code Helper <span class="free-status-badge"></span></h4>
-                    <p>Your expert programming assistant ready to debug.</p>
-                </div>
+                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#11998e,#38ef7d);font-family:monospace;font-weight:900">&lt;/&gt;</div><div class="role-tag pro">PRO</div></div>
+                <div class="role-details"><h4>Code Helper <span class="free-status-badge"></span></h4><p>Your expert programming assistant ready to debug.</p></div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
             <div class="role-card" onclick="openChatFromHome('teacher','chat')">
-                <div class="role-img-wrap">
-                    <div class="role-img" style="background:linear-gradient(135deg,#f12711,#f5af19)">🎓</div>
-                    <div class="role-tag pro">PRO</div>
-                </div>
-                <div class="role-details">
-                    <h4>Teacher Mode <span class="free-status-badge"></span></h4>
-                    <p>A patient and encouraging guide for learning anything.</p>
-                </div>
+                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#f12711,#f5af19)">🎓</div><div class="role-tag pro">PRO</div></div>
+                <div class="role-details"><h4>Teacher Mode <span class="free-status-badge"></span></h4><p>A patient and encouraging guide for learning anything.</p></div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
             <div class="role-card" onclick="openChatFromHome('funny','chat')">
-                <div class="role-img-wrap">
-                    <div class="role-img" style="background:linear-gradient(135deg,#8E2DE2,#4A00E0)">😂</div>
-                    <div class="role-tag pro">PRO</div>
-                </div>
-                <div class="role-details">
-                    <h4>Funny Bot <span class="free-status-badge"></span></h4>
-                    <p>Hilarious stand-up comedian ready to make you laugh.</p>
-                </div>
+                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#8E2DE2,#4A00E0)">😂</div><div class="role-tag pro">PRO</div></div>
+                <div class="role-details"><h4>Funny Bot <span class="free-status-badge"></span></h4><p>Hilarious stand-up comedian ready to make you laugh.</p></div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
             <div class="role-card" onclick="openChatFromHome('motivator','chat')">
-                <div class="role-img-wrap">
-                    <div class="role-img" style="background:linear-gradient(135deg,#fc4a1a,#f7b733)">🏆</div>
-                    <div class="role-tag pro">PRO</div>
-                </div>
-                <div class="role-details">
-                    <h4>Motivator <span class="free-status-badge"></span></h4>
-                    <p>Energetic motivational coach to keep your spirits high.</p>
-                </div>
+                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#fc4a1a,#f7b733)">🏆</div><div class="role-tag pro">PRO</div></div>
+                <div class="role-details"><h4>Motivator <span class="free-status-badge"></span></h4><p>Energetic motivational coach to keep your spirits high.</p></div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
             <div class="role-card" onclick="openChatFromHome('shayari','chat')">
-                <div class="role-img-wrap">
-                    <div class="role-img" style="background:linear-gradient(135deg,#b224ef,#7579ff)">🪶</div>
-                    <div class="role-tag pro">HOT</div>
-                </div>
-                <div class="role-details">
-                    <h4>Shayari Mode <span class="free-status-badge"></span></h4>
-                    <p>Poetic AI ready to write beautiful Shayari for you.</p>
-                </div>
+                <div class="role-img-wrap"><div class="role-img" style="background:linear-gradient(135deg,#b224ef,#7579ff)">🪶</div><div class="role-tag pro">HOT</div></div>
+                <div class="role-details"><h4>Shayari Mode <span class="free-status-badge"></span></h4><p>Poetic AI ready to write beautiful Shayari for you.</p></div>
                 <div class="role-action"><div class="role-arrow">➤</div></div>
             </div>
         </div>
@@ -1256,9 +1221,7 @@
         <div class="home-bottom-nav">
             <div class="nav-item active" id="navBtnChats" onclick="switchTab('chats')">
                 <div class="nav-icon" style="display:flex;align-items:center;justify-content:center;margin-bottom:2px">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                 </div>Chats
             </div>
             <div class="nav-item" id="navBtnTools" onclick="switchTab('tools')">
@@ -1268,6 +1231,7 @@
     </div>
     
     <div class="chat-container" id="mainChatScreen" style="display:none">
+        
         <div class="bottom-sheet-overlay" id="personaSheetOverlay" onclick="closeSheet()">
             <div class="bottom-sheet" id="personaSheet" onclick="event.stopPropagation()">
                 <div class="sheet-header">
@@ -1367,6 +1331,61 @@
     </div>
 
     <script>
+        // SMART ROUTER IMPLEMENTATION FOR NATIVE APP
+        // This solves the bug where Java directly calls either updateAdUI or adWatchedSuccessfully
+        
+        // Let's hook into these functions safely
+        window.originalUpdateAdUI = function(count) {
+            adsWatchedCount = count;
+            let progressText = document.getElementById('adProgressText');
+            if (progressText) {
+                progressText.innerText = `Ads Watched: ${count} / 3`;
+            }
+        };
+
+        // If Java calls updateAdUI directly
+        function updateAdUI(count) {
+            // Check if tool modal is active
+            if (document.getElementById('toolAdModalOverlay').style.display === 'flex') {
+                if (activeToolOffer === 1) {
+                    tool1AdCount = count;
+                    document.getElementById('toolProg1').innerText = `Ads Watched: ${count} / 2`;
+                } else if (activeToolOffer === 2) {
+                    tool2AdCount = count;
+                    document.getElementById('toolProg2').innerText = `Ads Watched: ${count} / 3`;
+                }
+            } else {
+                window.originalUpdateAdUI(count);
+            }
+        }
+        
+        // This is the router function that handles the Java callback
+        function adWatchedSuccessfully() {
+            if (document.getElementById('toolAdModalOverlay').style.display === 'flex') {
+                toolAdWatchedSuccessfully();
+            } else {
+                chatAdWatchedSuccessfully();
+            }
+        }
+        
+        // The original Chat logic is moved here
+        function chatAdWatchedSuccessfully() {
+            let btn = document.getElementById('chatAdBtn');
+            adsWatchedCount++;
+            document.getElementById('adProgressText').innerText = `Ads Watched: ${adsWatchedCount} / 3`;
+            btn.innerText = "🎬 Watch Ad Now";
+            btn.disabled = false;
+            
+            if (adsWatchedCount >= 3) {
+                alert("🎉 Reward Granted! You unlocked 5 free chats.");
+                document.getElementById('adModalOverlay').style.display = 'none';
+                freePremiumChatsLeft = 5;
+                localStorage.setItem('premiumChats', freePremiumChatsLeft);
+                updateMenuBadges();
+                switchMode(modeTryingToUnlock, modeTypeTryingToUnlock || 'chat');
+            }
+        }
+
         let freePremiumChatsLeft = parseInt(localStorage.getItem('premiumChats')) || 0;
         let sgToolTokens = parseInt(localStorage.getItem('sg_tool_tokens')) || 0;
         let chatHistory = [];
@@ -1549,7 +1568,7 @@
             if (typeof AndroidBridge !== "undefined") {
                 AndroidBridge.showAd();
             } else {
-                setTimeout(() => { toolAdWatchedSuccessfully(); }, 1500);
+                setTimeout(() => { adWatchedSuccessfully(); }, 1500);
             }
         }
 
@@ -1686,14 +1705,6 @@
             }
         }
 
-        function updateAdUI(count) {
-            adsWatchedCount = count;
-            let progressText = document.getElementById('adProgressText');
-            if (progressText) {
-                progressText.innerText = `Ads Watched: ${count} / 3`;
-            }
-        }
-
         function cancelAd() {
             document.getElementById('adModalOverlay').style.display = 'none';
         }
@@ -1706,22 +1717,6 @@
                 AndroidBridge.showAd();
             } else {
                 setTimeout(() => { adWatchedSuccessfully(); }, 1500);
-            }
-        }
-
-        function adWatchedSuccessfully() {
-            let btn = document.getElementById('chatAdBtn');
-            adsWatchedCount++;
-            document.getElementById('adProgressText').innerText = `Ads Watched: ${adsWatchedCount} / 3`;
-            btn.innerText = "🎬 Watch Ad Now";
-            btn.disabled = false;
-            if (adsWatchedCount >= 3) {
-                alert("🎉 Reward Granted! You unlocked 5 free chats.");
-                document.getElementById('adModalOverlay').style.display = 'none';
-                freePremiumChatsLeft = 5;
-                localStorage.setItem('premiumChats', freePremiumChatsLeft);
-                updateMenuBadges();
-                switchMode(modeTryingToUnlock, modeTypeTryingToUnlock || 'chat');
             }
         }
 
