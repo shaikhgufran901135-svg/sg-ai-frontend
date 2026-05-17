@@ -47,7 +47,9 @@
         .bento-icon { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .bento-tag { position: absolute; top: 10px; right: 10px; background: #2ecc71; color: #000; font-size: .6rem; font-weight: 800; padding: 2px 6px; border-radius: 6px; }
         .bento-tag.premium-tag { background: linear-gradient(135deg,#fbc02d,#f57f17); color: #fff; }
+        .bento-tag.locked-tag { background: #555; color: #fff; }
         .tool-token-badge { color: #2ecc71; font-size: .7rem; font-weight: 800; background: rgba(46,204,113,0.15); padding: 3px 8px; border-radius: 8px; display: inline-block; margin-top: 5px; }
+        .locked-badge { color: rgba(255,255,255,0.5) !important; background: rgba(255,255,255,0.1) !important; }
         
         .home-bottom-nav { position: absolute; bottom: 0; width: 100%; height: 75px; background: rgba(15,20,25,0.95); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-around; align-items: center; padding-bottom: env(safe-area-inset-bottom); z-index: 501; }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255,255,255,0.5); font-size: .75rem; font-weight: 600; cursor: pointer; width: 50%; padding: 10px 0; transition: .3s; }
@@ -155,6 +157,15 @@
             <button class="cancel-btn" onclick="cancelToolAd()">Close</button>
         </div>
     </div>
+
+    <div class="modal-overlay" id="premiumModalOverlay">
+        <div class="ad-modal" style="padding:25px; border: 1px solid #ff416c;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🚀</div>
+            <h2 style="font-size:1.4rem; color: #fff;">Premium Feature</h2>
+            <p style="font-size:.9rem;color:#a8b2d1;margin-bottom:20px" id="premiumModalText">This feature is coming soon in the next update!</p>
+            <button class="watch-ad-btn" onclick="closePremiumPopup()" style="background:linear-gradient(135deg,#ff416c,#ff4b2b);margin:0;width:100%; border-radius: 20px;">Got it!</button>
+        </div>
+    </div>
     
     <div class="home-screen" id="mainHomeScreen">
         <div class="home-header-top">
@@ -166,6 +177,7 @@
                 <h3 class="section-title" style="margin:0">Creative AI Tools</h3>
                 <div id="getTokensBanner" onclick="openToolRefillModal(null)" style="font-size:.75rem;padding:6px 12px;border-radius:12px;cursor:pointer;font-weight:800;display:none;box-shadow:0 2px 8px rgba(0,0,0,0.3);transition:.3s"></div>
             </div>
+            
             <div class="bento-grid">
                 <div class="bento-card large" onclick="openToolFromHome('image-gen')">
                     <div class="bento-icon" style="background:linear-gradient(135deg,#ff00cc,#333399)">🎨</div>
@@ -178,23 +190,40 @@
 
                 <div class="bento-card large" onclick="openToolFromHome('video-gen')">
                     <div class="bento-icon" style="background:linear-gradient(135deg,#ff416c,#ff4b2b)">🎥</div>
-                    <div class="bento-tag premium-tag">2 TOKENS</div>
+                    <div class="bento-tag premium-tag">PREMIUM</div>
                     <div>
                         <h4 style="color:#fff;margin:0 0 4px;font-size:1.1rem">AI Video Generator</h4>
-                        <span class="tool-token-badge">Loading...</span>
+                        <span class="tool-token-badge locked-badge">Premium 🔒</span>
                     </div>
                 </div>
 
                 <div class="bento-card" onclick="openToolFromHome('video-summary')">
                     <div class="bento-icon" style="background:linear-gradient(135deg,#11998e,#38ef7d)">📺</div>
+                    <div class="bento-tag premium-tag" style="background:#555;">PREMIUM</div>
                     <h4 style="color:#fff;margin:0;font-size:1rem">Video Summary</h4>
-                    <span class="tool-token-badge">Loading...</span>
+                    <span class="tool-token-badge locked-badge" style="margin-top:auto;">Premium 🔒</span>
                 </div>
+                
                 <div class="bento-card" onclick="openToolFromHome('audio-gen')">
                     <div class="bento-icon" style="background:linear-gradient(135deg,#f12711,#f5af19)">🎙️</div>
                     <h4 style="color:#fff;margin:0;font-size:1rem">Text to Voice</h4>
-                    <span class="tool-token-badge">Loading...</span>
+                    <span class="tool-token-badge" style="margin-top:auto;">Loading...</span>
                 </div>
+
+                <div class="bento-card" onclick="showPremiumPopup('🌐 AI Website Builder')">
+                    <div class="bento-icon" style="background:linear-gradient(135deg,#5c258d,#4389a2); filter: grayscale(0.8);">🌐</div>
+                    <div class="bento-tag locked-tag">SOON</div>
+                    <h4 style="color:rgba(255,255,255,0.6);margin:0;font-size:1rem">AI Website</h4>
+                    <span class="tool-token-badge locked-badge" style="margin-top:auto;">Locked 🔒</span>
+                </div>
+
+                <div class="bento-card" onclick="showPremiumPopup('📊 AI Presentation')">
+                    <div class="bento-icon" style="background:linear-gradient(135deg,#cb2d3e,#ef473a); filter: grayscale(0.8);">📊</div>
+                    <div class="bento-tag locked-tag">SOON</div>
+                    <h4 style="color:rgba(255,255,255,0.6);margin:0;font-size:1rem">Presentation</h4>
+                    <span class="tool-token-badge locked-badge" style="margin-top:auto;">Locked 🔒</span>
+                </div>
+                
             </div>
         </div>
         
@@ -346,7 +375,8 @@
         }
 
         function updateMenuBadges() {
-            document.querySelectorAll('.tool-token-badge').forEach(badge => {
+            // Update only badges that are not locked (Premium/Coming soon)
+            document.querySelectorAll('.tool-token-badge:not(.locked-badge)').forEach(badge => {
                 if (sgToolTokens > 0) {
                     badge.innerText = `${sgToolTokens} Tokens Left`;
                     badge.style.background = 'rgba(46, 204, 113, 0.15)';
@@ -396,6 +426,17 @@
             document.getElementById('toolAdModalOverlay').style.display = 'none';
         }
 
+        // 🔥 NAYA: Premium Popup Dikhane Aur Band Karne Ka Logic
+        function showPremiumPopup(featureName) {
+            let text = `<b>${featureName}</b> is a premium feature and will be available in the next update!`;
+            document.getElementById('premiumModalText').innerHTML = text;
+            document.getElementById('premiumModalOverlay').style.display = 'flex';
+        }
+
+        function closePremiumPopup() {
+            document.getElementById('premiumModalOverlay').style.display = 'none';
+        }
+
         function watchToolAd() {
             let btn = document.getElementById('btnToolAd');
             btn.innerText = "Loading Ad... ⏳";
@@ -429,7 +470,17 @@
         }
 
         function openToolFromHome(mode) {
-            let requiredTokens = (mode === 'video-gen') ? 2 : 1;
+            // 🔥 NAYA: Video Gen aur Video Summary ko yahan block karke popup dikhao
+            if (mode === 'video-gen') {
+                showPremiumPopup('🎥 AI Video Generator');
+                return;
+            }
+            if (mode === 'video-summary') {
+                showPremiumPopup('📺 Video Summary');
+                return;
+            }
+
+            let requiredTokens = 1;
             
             if (sgToolTokens < requiredTokens) {
                 openToolRefillModal(mode);
@@ -490,13 +541,11 @@
             msgs.forEach(m => m.remove());
             chatHistory = [];
             
-            let requiredTokens = (newMode === 'video-gen') ? 2 : 1;
+            let requiredTokens = 1;
             let toolMsg = `Tool Ready! ${requiredTokens} Token(s) per request.`;
             
             if (newMode === 'audio-gen') {
                 toolMsg += '<br><br><span style="font-size:0.85rem;color:#f5af19;">(Note: Please enter text in English only for the best audio conversion).</span>';
-            } else if (newMode === 'video-gen') {
-                toolMsg += '<br><br><span style="font-size:0.85rem;color:#ff416c;">(Note: Video generation is a heavy process and may take 30-60 seconds).</span>';
             }
             
             addMessage('SG AI', toolMsg, 'ai');
@@ -510,7 +559,7 @@
             const message = inputEl.value.trim();
             if (!message) return;
             
-            let requiredTokens = (currentPersona === 'video-gen') ? 2 : 1;
+            let requiredTokens = 1;
 
             if (sgToolTokens < requiredTokens) {
                 goBackToHome();
