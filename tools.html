@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <title>SG AI Tools - Premium Features</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" media="print" onload="this.media='all'">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --accent-1: #1e3c72;
+            --accent-2: #2a5298;
+            --chat-bg-pattern: none;
+        }
+        
+        [data-persona="image-gen"] {
+            --accent-1: #ff00cc;
+            --accent-2: #333399;
+            --chat-bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ctext x='20' y='50' font-size='30' opacity='0.08'%3E🎨%3C/text%3E%3C/svg%3E");
+        }
+        
+        [data-persona="audio-gen"] {
+            --accent-1: #f12711;
+            --accent-2: #f5af19;
+            --chat-bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ctext x='20' y='50' font-size='30' opacity='0.08'%3E🎙️%3C/text%3E%3C/svg%3E");
+        }
+        
+        [data-persona="video-summary"] {
+            --accent-1: #11998e;
+            --accent-2: #38ef7d;
+            --chat-bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ctext x='20' y='50' font-size='30' opacity='0.08'%3E📺%3C/text%3E%3C/svg%3E");
+        }
+        
+        :root, [data-theme="dark"] {
+            --bg-body: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            --bg-container: linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%), rgba(20,20,40,0.95);
+            --text-main: #e8eaf6;
+            --bg-messages: rgba(15,15,35,0.9);
+            --bg-ai-msg: rgba(255,255,255,0.05);
+            --text-ai-msg: #f0f4f8;
+            --bg-input: rgba(255,255,255,0.1);
+            --text-input: #e8eaf6;
+            --bg-selector: rgba(255,255,255,0.15);
+        }
+        
+        [data-theme="light"] {
+            --bg-body: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --bg-container: rgba(255,255,255,0.92);
+            --text-main: #2c3e50;
+            --bg-messages: rgba(248,249,250,0.95);
+            --bg-ai-msg: rgba(255,255,255,1);
+            --text-ai-msg: #2c3e50;
+            --bg-input: rgba(240,244,248,1);
+            --text-input: #2c3e50;
+            --bg-selector: rgba(255,255,255,0.8);
+        }
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            height: 100%;
+            overflow: hidden;
+            overscroll-behavior-y: none;
+        }
+        
+        body {
+            --bg-header: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+            --user-msg-bg: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+            --text-selector: var(--accent-1);
+            --border-input: 2px solid var(--accent-1);
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-main);
+            transition: all .5s ease;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .home-screen {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 500;
+            background: #0b0e14;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding-top: env(safe-area-inset-top);
+        }
+        
+        .home-header-top {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .home-header-top h2 {
+            margin: 0;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .home-header-top h2 span {
+            color: #2ecc71;
+            margin-left: 5px;
+        }
+        
+        .roles-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            padding-bottom: calc(90px + env(safe-area-inset-bottom));
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .roles-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .section-title {
+            color: rgba(255,255,255,0.8);
+            font-size: .85rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin: 0;
+        }
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .bento-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: .2s;
+            position: relative;
+        }
+        
+        .bento-card:active {
+            transform: scale(0.97);
+        }
+        
+        .bento-card.large {
+            grid-column: span 2;
+            flex-direction: row;
+            align-items: center;
+            background: linear-gradient(145deg, rgba(255,0,204,0.15), rgba(51,51,153,0.15));
+        }
+        
+        .bento-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        .bento-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #2ecc71;
+            color: #000;
+            font-size: .6rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+        
+        .tool-token-badge {
+            color: #2ecc71;
+            font-size: .7rem;
+            font-weight: 800;
+            background: rgba(46,204,113,0.15);
+            padding: 3px 8px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        
+        .home-bottom-nav {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 75px;
+            background: rgba(15,20,25,0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 501;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: rgba(255,255,255,0.5);
+            font-size: .75rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 50%;
+            padding: 10px 0;
+            transition: .3s;
+        }
+        
+        .nav-item.active {
+            color: #2ecc71;
+            background: rgba(46,204,113,0.05);
+            border-radius: 15px;
+        }
+        
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+        
+        .chat-container {
+            width: 92%;
+            max-width: 900px;
+            height: 92%;
+            background: var(--bg-container);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all .5s ease;
+            z-index: 1000;
+        }
+        
+        .chat-header {
+            background: var(--bg-header);
+            color: #fff;
+            padding: 20px 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background .5s ease;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 50;
+        }
+        
+        .title-and-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            z-index: 51;
+        }
+        
+        .back-btn {
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.8);
+            cursor: pointer;
+            margin-right: 5px;
+            padding: 5px;
+        }
+        
+        .profile-pic {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            border: 2px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            flex-shrink: 0;
+            transition: all 0.5s ease;
+        }
+        
+        .title-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .title-text h1 {
+            font-size: 1.4rem;
+            margin: 0;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -.5px;
+        }
+        
+        .title-text p {
+            font-size: .85rem;
+            margin: 0;
+            opacity: .9;
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            position: relative;
+            z-index: 51;
+        }
+        
+        .theme-btn {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 16px;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 1.2rem;
+            transition: .3s;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 55;
+        }
+        
+        .mode-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        
+        .mode-label {
+            font-size: .65rem;
+            color: rgba(255,255,255,0.85);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            margin-bottom: 4px;
+            margin-left: 6px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .custom-select-btn {
+            background: var(--bg-selector);
+            backdrop-filter: blur(15px);
+            padding: 12px 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.3);
+            font-weight: 600;
+            color: var(--text-selector);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all .5s ease;
+            white-space: nowrap;
+            position: relative;
+            z-index: 55;
+        }
+        
+        .custom-select-btn:active, .theme-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .messages {
+            flex: 1;
+            padding: 30px;
+            overflow-y: scroll;
+            background-color: var(--bg-messages);
+            background-image: var(--chat-bg-pattern);
+            background-repeat: repeat;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            transition: background-color .5s ease, background-image .5s ease;
+            position: relative;
+        }
+        
+        .messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .messages::-webkit-scrollbar-thumb {
+            background: var(--user-msg-bg);
+            border-radius: 10px;
+        }
+        
+        .message {
+            margin-bottom: 25px;
+            display: flex;
+            animation: slideInUp .4s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.user {
+            justify-content: flex-end;
+        }
+        
+        .message.ai {
+            justify-content: flex-start;
+            width: 100%;
+            gap: 15px;
+        }
+        
+        .ai-icon {
+            width: 28px;
+            height: 28px;
+            margin-top: 12px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .ai-icon svg {
+            width: 100%;
+            height: 100%;
+            animation: aiStarSpin 4s cubic-bezier(.4,0,.2,1) infinite;
+            filter: drop-shadow(0 0 8px var(--accent-1));
+            transition: all .5s ease;
+        }
+        
+        @keyframes aiStarSpin {
+            0% { transform: rotate(0deg) scale(0.9); }
+            50% { transform: rotate(180deg) scale(1.15); filter: drop-shadow(0 0 12px var(--accent-2)); }
+            100% { transform: rotate(360deg) scale(0.9); }
+        }
+        
+        .message-content {
+            max-width: 75%;
+            padding: 20px 25px;
+            border-radius: 24px;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+        
+        .user .message-content {
+            background: var(--user-msg-bg);
+            color: #fff;
+            border-bottom-right-radius: 8px;
+            transition: background .5s ease;
+        }
+        
+        .ai .message-content {
+            background: var(--bg-ai-msg);
+            color: var(--text-ai-msg);
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .message-content pre {
+            background: rgba(40,44,52,0.9);
+            border-radius: 16px;
+            padding: 25px;
+            padding-top: 50px;
+            margin: 15px 0;
+            overflow-x: auto;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .message-content pre code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: .9rem;
+            color: #abb2bf;
+        }
+        
+        .copy-code-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--user-msg-bg);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-size: .8rem;
+            cursor: pointer;
+            transition: background .5s ease;
+        }
+        
+        .typing-indicator {
+            display: none;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+            animation: slideInUp .3s ease-out;
+        }
+        
+        .typing-ai-icon svg {
+            animation: aiStarSpinPulse 1.5s cubic-bezier(.4,0,.2,1) infinite;
+        }
+        
+        @keyframes aiStarSpinPulse {
+            0%, 100% { transform: rotate(0deg) scale(0.8); filter: drop-shadow(0 0 5px var(--accent-1)); }
+            50% { transform: rotate(180deg) scale(1.3); filter: drop-shadow(0 0 20px var(--accent-2)); }
+        }
+        
+        .typing-content {
+            background: var(--bg-ai-msg);
+            color: var(--text-ai-msg);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            padding: 18px 25px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            font-style: italic;
+            opacity: .9;
+        }
+        
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            margin-left: 4px;
+            align-items: center;
+        }
+        
+        .typing-dots span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--accent-1);
+            animation: typingBounce 1.4s infinite ease-in-out both;
+        }
+        
+        .typing-dots span:nth-child(1) { animation-delay: -.32s; }
+        .typing-dots span:nth-child(2) { animation-delay: -.16s; }
+        
+        @keyframes typingBounce {
+            0%, 100%, 80% { transform: scale(0.8); opacity: .4; }
+            40% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 8px var(--accent-1); }
+        }
+        
+        .input-area {
+            padding: 30px;
+            background: var(--bg-input-area);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            align-items: center;
+        }
+        
+        #messageInput {
+            flex: 1;
+            padding: 20px 25px;
+            background: var(--bg-input);
+            color: var(--text-input);
+            border: var(--border-input);
+            border-radius: 28px;
+            outline: 0;
+            transition: all .3s ease;
+            font-size: 1rem;
+        }
+        
+        #messageInput:focus {
+            box-shadow: 0 0 15px var(--accent-1);
+        }
+        
+        #sendBtn {
+            padding: 20px 30px;
+            background: var(--user-msg-bg);
+            color: #fff;
+            border: none;
+            border-radius: 28px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background .5s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        .chat-counter {
+            font-size: .85rem;
+            color: #ff6b6b;
+            font-weight: 700;
+            text-align: right;
+            padding-right: 10px;
+            display: none;
+        }
+        
+        .modal-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
+        
+        .ad-modal {
+            background: var(--bg-container);
+            padding: 40px;
+            border-radius: 28px;
+            text-align: center;
+            max-width: 85%;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .ad-modal h2 {
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+        
+        .ad-modal p {
+            margin-bottom: 20px;
+            color: #a8b2d1;
+        }
+        
+        .ad-progress {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-1);
+            margin-bottom: 20px;
+        }
+
+        .watch-ad-btn {
+            background: var(--user-msg-bg);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+            transition: .3s;
+        }
+        
+        .watch-ad-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+        
+        .cancel-btn {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            margin-top: 15px;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 1rem;
+        }
+        
+        @media (max-width:768px) {
+            .chat-container {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                border-radius: 0;
+                border: none;
+                box-sizing: border-box;
+                box-shadow: none;
+            }
+            .chat-header {
+                padding: calc(15px + env(safe-area-inset-top)) 18px 15px;
+                z-index: 100;
+            }
+            .profile-pic {
+                width: 40px;
+                height: 40px;
+                font-size: 22px;
+            }
+            .title-text h1 {
+                font-size: 1.15rem;
+            }
+            .title-text p {
+                font-size: .8rem;
+            }
+            .header-controls {
+                gap: 8px;
+                z-index: 100;
+                align-items: center;
+            }
+            .mode-wrapper {
+                align-items: flex-start;
+            }
+            .mode-label {
+                font-size: .6rem;
+                margin-bottom: 2px;
+                margin-left: 4px;
+            }
+            .theme-btn {
+                width: 38px;
+                height: 38px;
+                font-size: 1rem;
+                border-radius: 12px;
+                z-index: 100;
+            }
+            .custom-select-btn {
+                padding: 8px 12px;
+                font-size: .85rem;
+                border-radius: 14px;
+                z-index: 100;
+            }
+            .messages {
+                padding: 20px 15px;
+            }
+            .message-content {
+                max-width: 90%;
+                padding: 12px 16px;
+                font-size: .95rem;
+                border-radius: 20px;
+            }
+            .input-area {
+                padding: 15px;
+                gap: 10px;
+                padding-bottom: calc(15px + env(safe-area-inset-bottom));
+            }
+            .input-row {
+                gap: 10px;
+            }
+            #messageInput, #sendBtn {
+                padding: 14px 20px;
+                font-size: .95rem;
+                border-radius: 24px;
+            }
+            .tool-token-badge {
+                font-size: .6rem;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark" data-persona="image-gen">
+
+    <svg width="0" height="0" style="position: absolute; width: 0; height: 0; overflow: hidden;">
+        <defs>
+            <linearGradient id="aiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="var(--accent-1)"/>
+                <stop offset="100%" stop-color="var(--accent-2)"/>
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <div class="modal-overlay" id="toolAdModalOverlay">
+        <div class="ad-modal" style="padding:20px">
+            <h2 style="font-size:1.4rem">Out of Tokens 🪙</h2>
+            <p style="font-size:.85rem;color:#a8b2d1;margin-bottom:15px">Watch 3 ads to get 4 Tool Tokens.</p>
+            <div style="background:rgba(255,255,255,0.05);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.1)">
+                <div class="ad-progress" id="toolProg" style="margin-bottom:8px">Ads Watched: 0 / 3</div>
+                <button class="watch-ad-btn" id="btnToolAd" onclick="watchToolAd()" style="background:linear-gradient(135deg,#fbc02d,#f57f17);margin:0;width:100%">🎬 Watch Ad Now</button>
+            </div>
+            <button class="cancel-btn" onclick="cancelToolAd()">Close</button>
+        </div>
+    </div>
+    
+    <div class="home-screen" id="mainHomeScreen">
+        <div class="home-header-top">
+            <h2>SG AI <span>Assistant</span></h2>
+        </div>
+        
+        <div class="roles-scroll" id="toolsView">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 5px 15px">
+                <h3 class="section-title" style="margin:0">Creative AI Tools</h3>
+                <div id="getTokensBanner" onclick="openToolRefillModal(null)" style="font-size:.75rem;padding:6px 12px;border-radius:12px;cursor:pointer;font-weight:800;display:none;box-shadow:0 2px 8px rgba(0,0,0,0.3);transition:.3s"></div>
+            </div>
+            <div class="bento-grid">
+                <div class="bento-card large" onclick="openToolFromHome('image-gen')">
+                    <div class="bento-icon" style="background:linear-gradient(135deg,#ff00cc,#333399)">🎨</div>
+                    <div class="bento-tag">NEW</div>
+                    <div>
+                        <h4 style="color:#fff;margin:0 0 4px;font-size:1.1rem">AI Image Generator</h4>
+                        <span class="tool-token-badge">Loading...</span>
+                    </div>
+                </div>
+                <div class="bento-card" onclick="openToolFromHome('video-summary')">
+                    <div class="bento-icon" style="background:linear-gradient(135deg,#11998e,#38ef7d)">📺</div>
+                    <h4 style="color:#fff;margin:0;font-size:1rem">Video Summary</h4>
+                    <span class="tool-token-badge">Loading...</span>
+                </div>
+                <div class="bento-card" onclick="openToolFromHome('audio-gen')">
+                    <div class="bento-icon" style="background:linear-gradient(135deg,#f12711,#f5af19)">🎙️</div>
+                    <h4 style="color:#fff;margin:0;font-size:1rem">Text to Voice</h4>
+                    <span class="tool-token-badge">Loading...</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="home-bottom-nav">
+            <div class="nav-item" onclick="window.location.href='index.html'">
+                <div class="nav-icon" style="display:flex;align-items:center;justify-content:center;margin-bottom:2px">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </div>Chats
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon" style="display:flex;align-items:center;justify-content:center;margin-bottom:2px">🛠️</div>Tools
+            </div>
+        </div>
+    </div>
+    
+    <div class="chat-container" id="mainChatScreen" style="display:none">
+        <div class="chat-header">
+            <div class="title-and-profile">
+                <div class="back-btn" onclick="goBackToHome()">❮</div>
+                <div class="profile-pic">🎨</div>
+                <div class="title-text">
+                    <h1 id="headerTitleText">AI Image Generator</h1>
+                    <p id="headerSubText">AI Power Tool</p>
+                </div>
+            </div>
+            <div class="header-controls">
+                <button id="themeToggle" class="theme-btn" onclick="toggleTheme()">☀️</button>
+                <div class="mode-wrapper">
+                    <span class="mode-label" id="modeLabelText">AI Tool</span>
+                    <div id="currentPersonaBtn" class="custom-select-btn" style="cursor:default">🎨 AI Image Generator</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="messages" id="messages">
+            <div class="message ai">
+                <div class="ai-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" fill="url(#aiGrad)"/>
+                    </svg>
+                </div>
+                <div class="message-content" id="welcomeToolMessage">Tool Ready! 1 Token per request.</div>
+            </div>
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="ai-icon typing-ai-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" fill="url(#aiGrad)"/>
+                    </svg>
+                </div>
+                <div class="typing-content">
+                    SG AI is thinking 
+                    <div class="typing-dots"><span></span><span></span><span></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="chat-counter" id="chatCounter" style="display:block">🛠️ Tool Tokens Left: 0</div>
+            <div class="input-row">
+                <input type="text" id="messageInput" placeholder="Describe your image..." autocomplete="off">
+                <button id="sendBtn" onclick="sendMessage()">Send 🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // SMART ROUTER IMPLEMENTATION FOR NATIVE APP
+        window.originalUpdateAdUI = function(count) {
+            // Unused here but kept to avoid native Android app crashing if it calls this
+        };
+
+        function updateAdUI(count) {
+            if (document.getElementById('toolAdModalOverlay').style.display === 'flex') {
+                toolAdCount = count;
+                document.getElementById('toolProg').innerText = `Ads Watched: ${count} / 3`;
+            }
+        }
+        
+        function adWatchedSuccessfully() {
+            if (document.getElementById('toolAdModalOverlay').style.display === 'flex') {
+                toolAdWatchedSuccessfully();
+            }
+        }
+
+        let sgToolTokens = parseInt(localStorage.getItem('sg_tool_tokens')) || 0;
+        let chatHistory = [];
+        let currentPersona = 'image-gen';
+        let modeTryingToUnlock = '';
+        let toolAdCount = 0; 
+        
+        const personaDisplayNames = {
+            'image-gen': '🎨 AI Image Generator',
+            'video-summary': '📺 Video Summary',
+            'audio-gen': '🎙️ Text to Voice'
+        };
+        
+        const messagesEl = document.getElementById('messages');
+        const inputEl = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingEl = document.getElementById('typingIndicator');
+        const chatCounter = document.getElementById('chatCounter');
+        
+        const AI_SVG_ICON = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" fill="url(#aiGrad)"/></svg>`;
+
+        window.onload = () => {
+            setTimeout(() => { if (inputEl) inputEl.focus(); }, 100);
+            updateMenuBadges();
+            history.replaceState({ page: 'home' }, "Tools Home", "");
+        };
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('themeToggle');
+            if (body.getAttribute('data-theme') === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                themeBtn.innerHTML = '☀️';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeBtn.innerHTML = '🌙';
+            }
+        }
+
+        function updateMenuBadges() {
+            document.querySelectorAll('.tool-token-badge').forEach(badge => {
+                if (sgToolTokens > 0) {
+                    badge.innerText = `${sgToolTokens} Tokens Left`;
+                    badge.style.background = 'rgba(46, 204, 113, 0.15)';
+                    badge.style.color = '#2ecc71';
+                } else {
+                    badge.innerText = '0 Tokens';
+                    badge.style.background = 'rgba(255, 107, 107, 0.2)';
+                    badge.style.color = '#ff6b6b';
+                }
+            });
+            
+            let banner = document.getElementById('getTokensBanner');
+            if (banner) {
+                if (sgToolTokens <= 0) {
+                    banner.style.display = 'inline-block';
+                    banner.style.background = 'linear-gradient(135deg,#ff6b6b,#c0392b)';
+                    banner.style.color = '#fff';
+                    banner.style.border = 'none';
+                    banner.innerHTML = '🪙 0 Tokens! Get Free';
+                } else {
+                    banner.style.display = 'inline-block';
+                    banner.style.background = 'rgba(46, 204, 113, 0.15)';
+                    banner.style.color = '#2ecc71';
+                    banner.style.border = '1px solid rgba(46, 204, 113, 0.3)';
+                    banner.innerHTML = `🪙 ${sgToolTokens} Tokens. Get More +`;
+                }
+            }
+
+            if(chatCounter) {
+                chatCounter.innerText = `🛠️ Tool Tokens Left: ${sgToolTokens}`;
+            }
+        }
+
+        function openToolRefillModal(mode = null) {
+            modeTryingToUnlock = mode;
+            toolAdCount = 0; 
+            
+            document.getElementById('toolProg').innerText = `Ads Watched: 0 / 3`;
+            let btn = document.getElementById('btnToolAd');
+            btn.innerText = "🎬 Watch Ad Now";
+            btn.disabled = false;
+            
+            document.getElementById('toolAdModalOverlay').style.display = 'flex';
+        }
+
+        function cancelToolAd() {
+            document.getElementById('toolAdModalOverlay').style.display = 'none';
+        }
+
+        function watchToolAd() {
+            let btn = document.getElementById('btnToolAd');
+            btn.innerText = "Loading Ad... ⏳";
+            btn.disabled = true;
+            
+            if (typeof AndroidBridge !== "undefined") {
+                AndroidBridge.showAd();
+            } else {
+                setTimeout(() => { toolAdWatchedSuccessfully(); }, 1500);
+            }
+        }
+
+        function toolAdWatchedSuccessfully() {
+            let btn = document.getElementById('btnToolAd');
+            
+            toolAdCount++;
+            document.getElementById('toolProg').innerText = `Ads Watched: ${toolAdCount} / 3`;
+            btn.innerText = "🎬 Watch Ad Now";
+            btn.disabled = false;
+            
+            if (toolAdCount >= 3) {
+                alert("🎉 Reward Granted! You got 4 Tool Tokens.");
+                document.getElementById('toolAdModalOverlay').style.display = 'none';
+                sgToolTokens += 4;
+                localStorage.setItem('sg_tool_tokens', sgToolTokens);
+                updateMenuBadges();
+                if (modeTryingToUnlock) {
+                    switchMode(modeTryingToUnlock);
+                }
+            }
+        }
+
+        function openToolFromHome(mode) {
+            if (sgToolTokens <= 0) {
+                openToolRefillModal(mode);
+                return;
+            }
+            document.getElementById('mainHomeScreen').style.display = 'none';
+            document.getElementById('mainChatScreen').style.display = 'flex';
+            history.pushState({ page: 'tool' }, "Tool Chat", "#tool");
+            switchMode(mode);
+        }
+
+        function goBackToHome() {
+            history.back();
+        }
+
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.page === 'tool') {
+                document.getElementById('mainHomeScreen').style.display = 'none';
+                document.getElementById('mainChatScreen').style.display = 'flex';
+            } else {
+                document.getElementById('mainChatScreen').style.display = 'none';
+                document.getElementById('mainHomeScreen').style.display = 'flex';
+                updateMenuBadges();
+            }
+        });
+
+        function switchMode(newMode) {
+            currentPersona = newMode;
+            document.body.setAttribute('data-persona', newMode);
+            
+            const logoMap = {
+                'image-gen': '🎨', 
+                'video-summary': '📺', 
+                'audio-gen': '🎙️'
+            };
+            
+            let profilePic = document.querySelector('.profile-pic');
+            if (profilePic) {
+                profilePic.innerHTML = logoMap[newMode] || '🎨';
+            }
+
+            let displayFull = personaDisplayNames[newMode];
+            document.getElementById('currentPersonaBtn').innerHTML = displayFull;
+            document.getElementById('headerTitleText').innerText = displayFull.replace(/[^a-zA-Z ]/g, "").trim();
+            
+            if (newMode === 'image-gen') {
+                inputEl.placeholder = "Describe your image...";
+            } else if (newMode === 'video-summary') {
+                inputEl.placeholder = "Paste video link here...";
+            } else if (newMode === 'audio-gen') {
+                inputEl.placeholder = "Type text to convert...";
+            }
+            
+            // Cleanup existing messages except typing indicator
+            const msgs = messagesEl.querySelectorAll('.message');
+            msgs.forEach(m => m.remove());
+            chatHistory = [];
+            
+            let toolMsg = 'Tool Ready! 1 Token per request.';
+            if (newMode === 'audio-gen') {
+                toolMsg += '<br><br><span style="font-size:0.85rem;color:#f5af19;">(Note: Please enter text in English only for the best audio conversion).</span>';
+            }
+            
+            addMessage('SG AI', toolMsg, 'ai');
+            
+            if (typeof AndroidBridge !== "undefined" && typeof AndroidBridge.showInterstitial === "function") {
+                AndroidBridge.showInterstitial();
+            }
+        }
+
+        async function sendMessage() {
+            const message = inputEl.value.trim();
+            if (!message) return;
+            
+            if (sgToolTokens <= 0) {
+                goBackToHome();
+                openToolFromHome(currentPersona);
+                return;
+            }
+            
+            addMessage('You', message, 'user');
+            inputEl.value = '';
+            sendBtn.disabled = true;
+            typingEl.style.display = 'flex';
+            scrollToBottom();
+            
+            chatHistory.push({
+                role: "user",
+                parts: [{ text: message }]
+            });
+
+            try {
+                let aiReply = "";
+                
+                if (currentPersona === 'audio-gen') {
+                    document.querySelector('.typing-content').innerHTML = `SG AI is converting voice <div class="typing-dots"><span></span><span></span><span></span></div>`;
+                    const BACKEND_URL = `https://sg-ai-backend.onrender.com/api/chat`;
+                    const personaInstruction = "Text to Voice";
+                    
+                    const response = await fetch(BACKEND_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: message, persona: personaInstruction, history: chatHistory })
+                    });
+                    
+                    const data = await response.json();
+                    if (data.candidates && data.candidates.length > 0) {
+                        aiReply = data.candidates[0].content.parts[0].text;
+                    } else {
+                        throw new Error();
+                    }
+                } else {
+                    await new Promise(r => setTimeout(r, 1500)); // Simulated delay for tools without backend setup yet
+                    if (currentPersona === 'image-gen') aiReply = `🎨 Generating Image: ${message}`;
+                    else if (currentPersona === 'video-summary') aiReply = `📺 Summarizing video...`;
+                }
+                
+                addMessage('SG AI', aiReply, 'ai');
+                
+                let historyReplyToSave = aiReply;
+                if (currentPersona === 'audio-gen') {
+                    historyReplyToSave = "🎵 Audio Generated Successfully.";
+                }
+                
+                chatHistory.push({
+                    role: "model",
+                    parts: [{ text: historyReplyToSave }]
+                });
+                
+                sgToolTokens--;
+                localStorage.setItem('sg_tool_tokens', sgToolTokens);
+                updateMenuBadges();
+                
+            } catch (error) {
+                addMessage('SG AI', "Sorry, error aa gaya.", 'ai');
+            } finally {
+                document.querySelector('.typing-content').innerHTML = `SG AI is processing <div class="typing-dots"><span></span><span></span><span></span></div>`;
+                typingEl.style.display = 'none';
+                sendBtn.disabled = false;
+                if (inputEl) inputEl.focus();
+            }
+        }
+
+        function addMessage(sender, text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            if (type === 'ai') {
+                const iconDiv = document.createElement('div');
+                iconDiv.className = 'ai-icon';
+                iconDiv.innerHTML = AI_SVG_ICON;
+                messageDiv.appendChild(iconDiv);
+            }
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            if (type === 'ai') {
+                if (typeof marked !== 'undefined') {
+                    contentDiv.innerHTML = marked.parse(text);
+                } else {
+                    contentDiv.innerHTML = text;
+                }
+            } else {
+                contentDiv.innerText = text;
+            }
+            messageDiv.appendChild(contentDiv);
+            messagesEl.appendChild(messageDiv);
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                messagesEl.appendChild(typingIndicator);
+            }
+            scrollToBottom();
+        }
+
+        function handleGlobalAdSuccess() {
+            if (document.getElementById('toolAdModalOverlay').style.display === 'flex') {
+                toolAdWatchedSuccessfully();
+            }
+        }
+
+        function scrollToBottom() {
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+
+        if (inputEl) {
+            inputEl.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+        }
+    </script>
+</body>
+</html>
