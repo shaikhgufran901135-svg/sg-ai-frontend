@@ -928,12 +928,19 @@
             // Unused here but kept to avoid native Android app crashing if it calls this
         };
 
-        function updateAdUI(count) {
-            if (document.getElementById('toolAdModalOverlay').style.display === 'flex') {
-                toolAdCount = count;
-                document.getElementById('toolProg').innerText = `Ads Watched: ${count} / 3`;
-            }
+function updateAdUI(count) {
+    if (document.getElementById('toolAdModalOverlay').style.display === 'flex') {
+        toolAdCount = count;
+        document.getElementById('toolProg').innerText = `Ads Watched: ${count} / 3`;
+        
+        // 🔥 FIX YAHAN HAI: Ad dekhne ke baad button ko turant normal karo
+        let btn = document.getElementById('btnToolAd');
+        if (btn) {
+            btn.innerText = "🎬 Watch Ad Now";
+            btn.disabled = false;
         }
+    }
+}
         
         function adWatchedSuccessfully() {
             if (document.getElementById('toolAdModalOverlay').style.display === 'flex') {
