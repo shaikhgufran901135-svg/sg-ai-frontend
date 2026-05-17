@@ -148,11 +148,11 @@
             position: absolute; bottom: 0; width: 100%; height: 75px;
             background: rgba(15, 20, 25, 0.95); backdrop-filter: blur(10px);
             border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex; justify-content: center; align-items: center;
+            display: flex; justify-content: space-around; align-items: center;
             padding-bottom: env(safe-area-inset-bottom); z-index: 501;
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255,255,255,0.5); font-size: 0.75rem; font-weight: 600; cursor: pointer; }
-        .nav-item.active { color: #2ecc71; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255,255,255,0.5); font-size: 0.75rem; font-weight: 600; cursor: pointer; width: 50%; padding: 10px 0; transition: .3s;}
+        .nav-item.active { color: #2ecc71; background: rgba(46,204,113,0.05); border-radius: 15px;}
         .nav-icon { font-size: 1.4rem; }
 
         /* CHAT CONTAINER */
@@ -385,12 +385,12 @@
         
         <div class="home-bottom-nav">
             <div class="nav-item active">
-                <div class="nav-icon" style="display: flex; align-items: center; justify-content: center; margin-bottom: 2px;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                </div>
-                Chats
+                <div class="nav-icon" style="display:flex;align-items:center;justify-content:center;margin-bottom:2px">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </div>Chats
+            </div>
+            <div class="nav-item" onclick="window.location.href='tools.html'">
+                <div class="nav-icon" style="display:flex;align-items:center;justify-content:center;margin-bottom:2px">🛠️</div>Tools
             </div>
         </div>
     </div>
@@ -577,7 +577,7 @@
         const typingEl = document.getElementById('typingIndicator');
         const chatCounter = document.getElementById('chatCounter');
 
-        const AI_SVG_ICON = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" fill="url(#aiGrad)"/></svg>`;
+        const AI_SVG_ICON = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" fill="url(#aiGrad)"/></svg>`;
 
         function toggleTheme() {
             const body = document.body;
