@@ -166,6 +166,13 @@
             <button class="watch-ad-btn" onclick="closePremiumPopup()" style="background:linear-gradient(135deg,#ff416c,#ff4b2b);margin:0;width:100%; border-radius: 20px;">Got it!</button>
         </div>
     </div>
+
+    <div class="modal-overlay" id="imageViewerOverlay" onclick="this.style.display='none'">
+        <div style="width: 90%; max-height: 90%; display: flex; justify-content: center; align-items: center; position: relative;">
+            <span style="position: absolute; top: -30px; right: 0; color: #fff; font-size: 1.5rem; font-weight: bold; cursor: pointer;">✕</span>
+            <img id="fullScreenImage" src="" style="max-width: 100%; max-height: 100vh; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);">
+        </div>
+    </div>
     
     <div class="home-screen" id="mainHomeScreen">
         <div class="home-header-top">
@@ -340,27 +347,26 @@
             history.replaceState({ page: 'home' }, "Tools Home", "");
         };
 
+        // 🔥 NAYA: WebView Friendly Download Code 🔥
         window.downloadFile = function(url, fileName) {
-            fetch(url)
-                .then(response => response.blob())
-                .then(blob => {
-                    const blobUrl = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = blobUrl;
-                    a.download = fileName;
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(blobUrl);
-                })
-                .catch(() => {
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = fileName;
-                    a.target = '_blank';
-                    a.click();
-                });
+            try {
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } catch (e) {
+                console.error("Download Error: ", e);
+            }
         };
+
+        // 🔥 NAYA: Image ko full screen kholne ka logic
+        window.viewImageFull = function(src) {
+            document.getElementById('fullScreenImage').src = src;
+            document.getElementById('imageViewerOverlay').style.display = 'flex';
+        }
 
         function toggleTheme() {
             const body = document.body;
@@ -435,7 +441,6 @@
             document.getElementById('premiumModalOverlay').style.display = 'none';
         }
 
-        // 🔥 NAYA: watchToolAd me 4 Second ka Timer (Fallback Logic)
         function watchToolAd() {
             let btn = document.getElementById('btnToolAd');
             btn.innerText = "Loading Ad... ⏳";
@@ -444,7 +449,7 @@
             if (typeof AndroidBridge !== "undefined") {
                 AndroidBridge.showAd();
                 
-                // Agar ad backend se fail ho jata hai ya load nahi hota, toh 4 second baad button wapas theek ho jayega
+                // 4 sec fallback timer
                 setTimeout(() => {
                     if (btn.innerText.includes("Loading")) {
                         btn.innerText = "🎬 Watch Ad Now";
@@ -611,7 +616,7 @@
                         aiReply = `
                             🎵 Audio Generated Successfully.<br><br>
                             <audio controls src="${data.mediaUrl}" style="width:100%; border-radius:12px;"></audio><br>
-                            <button class="media-download-btn" onclick="downloadFile('${data.mediaUrl}', 'sg_ai_audio.mp3')">⬇️ Download Audio</button>
+                            <button class="media-download-btn" onclick="downloadFile('${data.mediaUrl}', 'sg_ai_audio.wav')">⬇️ Download Audio</button>
                         `;
                     } else if (currentPersona === 'video-gen') {
                         aiReply = `
@@ -620,10 +625,11 @@
                             <button class="media-download-btn" onclick="downloadFile('${data.mediaUrl}', 'sg_ai_video.mp4')">⬇️ Download Video</button>
                         `;
                     } else if (currentPersona === 'image-gen') {
+                        // 🔥 NAYA: Image par click karte hi full screen modal khulega 🔥
                         aiReply = `
                             🎨 Image Generated Successfully.<br><br>
-                            <img src="${data.mediaUrl}" style="width:100%; border-radius:12px;"><br>
-                            <button class="media-download-btn" onclick="downloadFile('${data.mediaUrl}', 'sg_ai_image.png')">⬇️ Download Image</button>
+                            <img src="${data.mediaUrl}" onclick="viewImageFull(this.src)" style="width:100%; border-radius:12px; cursor:zoom-in;"><br>
+                            <button class="media-download-btn" onclick="downloadFile('${data.mediaUrl}', 'sg_ai_image.jpeg')">⬇️ Download Image</button>
                         `;
                     } else {
                         aiReply = data.reply; 
