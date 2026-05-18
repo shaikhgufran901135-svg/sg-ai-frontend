@@ -151,7 +151,7 @@
             <h2 style="font-size:1.4rem">Out of Tokens 🪙</h2>
             <p style="font-size:.85rem;color:#a8b2d1;margin-bottom:15px">Watch 3 ads to get 4 Tool Tokens.</p>
             <div style="background:rgba(255,255,255,0.05);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.1)">
-                <div class="ad-progress" id="toolProg" style="margin-bottom:8px">Ads Watched: 0 / 3</div>
+                <div class="ad-progress" id="toolProg" style="margin-bottom:8px">Ads Watched: <span id="toolProgCounter">0</span> / 3</div>
                 <button class="watch-ad-btn" id="btnToolAd" onclick="watchToolAd()" style="background:linear-gradient(135deg,#fbc02d,#f57f17);margin:0;width:100%">🎬 Watch Ad Now</button>
             </div>
             <button class="cancel-btn" onclick="cancelToolAd()">Close</button>
@@ -297,7 +297,7 @@
         function updateAdUI(count) {
             if (document.getElementById('toolAdModalOverlay').style.display === 'flex') {
                 toolAdCount = count;
-                document.getElementById('toolProg').innerText = `Ads Watched: ${count} / 3`;
+                document.getElementById('toolProgCounter').innerText = count;
                 
                 let btn = document.getElementById('btnToolAd');
                 if (btn) {
@@ -375,7 +375,6 @@
         }
 
         function updateMenuBadges() {
-            // Update only badges that are not locked (Premium/Coming soon)
             document.querySelectorAll('.tool-token-badge:not(.locked-badge)').forEach(badge => {
                 if (sgToolTokens > 0) {
                     badge.innerText = `${sgToolTokens} Tokens Left`;
@@ -414,7 +413,7 @@
             modeTryingToUnlock = mode;
             toolAdCount = 0; 
             
-            document.getElementById('toolProg').innerText = `Ads Watched: 0 / 3`;
+            document.getElementById('toolProgCounter').innerText = '0';
             let btn = document.getElementById('btnToolAd');
             btn.innerText = "🎬 Watch Ad Now";
             btn.disabled = false;
@@ -426,7 +425,6 @@
             document.getElementById('toolAdModalOverlay').style.display = 'none';
         }
 
-        // 🔥 NAYA: Premium Popup Dikhane Aur Band Karne Ka Logic
         function showPremiumPopup(featureName) {
             let text = `<b>${featureName}</b> is a premium feature and will be available in the next update!`;
             document.getElementById('premiumModalText').innerHTML = text;
@@ -437,6 +435,7 @@
             document.getElementById('premiumModalOverlay').style.display = 'none';
         }
 
+        // 🔥 NAYA: watchToolAd me 4 Second ka Timer (Fallback Logic)
         function watchToolAd() {
             let btn = document.getElementById('btnToolAd');
             btn.innerText = "Loading Ad... ⏳";
@@ -444,6 +443,15 @@
             
             if (typeof AndroidBridge !== "undefined") {
                 AndroidBridge.showAd();
+                
+                // Agar ad backend se fail ho jata hai ya load nahi hota, toh 4 second baad button wapas theek ho jayega
+                setTimeout(() => {
+                    if (btn.innerText.includes("Loading")) {
+                        btn.innerText = "🎬 Watch Ad Now";
+                        btn.disabled = false;
+                    }
+                }, 4000); 
+
             } else {
                 setTimeout(() => { toolAdWatchedSuccessfully(); }, 1500);
             }
@@ -453,7 +461,7 @@
             let btn = document.getElementById('btnToolAd');
             
             toolAdCount++;
-            document.getElementById('toolProg').innerText = `Ads Watched: ${toolAdCount} / 3`;
+            document.getElementById('toolProgCounter').innerText = toolAdCount;
             btn.innerText = "🎬 Watch Ad Now";
             btn.disabled = false;
             
@@ -470,7 +478,6 @@
         }
 
         function openToolFromHome(mode) {
-            // 🔥 NAYA: Video Gen aur Video Summary ko yahan block karke popup dikhao
             if (mode === 'video-gen') {
                 showPremiumPopup('🎥 AI Video Generator');
                 return;
@@ -578,12 +585,10 @@
                 parts: [{ text: message }]
             });
 
-            // 🚀🔥 REAL BACKEND CONNECTION LOGIC 🔥🚀
             try {
                 let aiReply = "";
                 let backendPath = "chat";
 
-                // Routing to correct backend API
                 if (currentPersona === 'image-gen') backendPath = "generate-image";
                 else if (currentPersona === 'video-gen') backendPath = "generate-video";
                 else if (currentPersona === 'audio-gen') backendPath = "generate-audio";
@@ -596,13 +601,12 @@
                 const response = await fetch(BACKEND_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message }) // Sirf user ka text bhejenge
+                    body: JSON.stringify({ message: message }) 
                 });
                 
                 const data = await response.json();
                 
                 if (data.success) {
-                    // Agar backend se reply successfully aata hai
                     if (currentPersona === 'audio-gen') {
                         aiReply = `
                             🎵 Audio Generated Successfully.<br><br>
@@ -622,7 +626,7 @@
                             <button class="media-download-btn" onclick="downloadFile('${data.mediaUrl}', 'sg_ai_image.png')">⬇️ Download Image</button>
                         `;
                     } else {
-                        aiReply = data.reply; // Ye baaki (video-summary wagaira) ke liye
+                        aiReply = data.reply; 
                     }
                 } else {
                     throw new Error(data.error || "Generation Failed");
@@ -630,7 +634,6 @@
                 
                 addMessage('SG AI', aiReply, 'ai');
                 
-                // History ke liye simple text save karna (HTML tags nahi)
                 let historyReplyToSave = "Media Generated Successfully.";
                 if(currentPersona === 'video-summary') historyReplyToSave = aiReply;
                 
@@ -639,7 +642,6 @@
                     parts: [{ text: historyReplyToSave }]
                 });
                 
-                // Tokens katenge bas generation pass hone par
                 sgToolTokens -= requiredTokens;
                 localStorage.setItem('sg_tool_tokens', sgToolTokens);
                 updateMenuBadges();
@@ -667,7 +669,6 @@
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
             if (type === 'ai') {
-                // Allows HTML like <img> and <audio> tags sent from backend to render correctly
                 contentDiv.innerHTML = text;
             } else {
                 contentDiv.innerText = text;
