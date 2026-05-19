@@ -320,7 +320,19 @@
             }
         }
 
-        let sgToolTokens = parseInt(localStorage.getItem('sg_tool_tokens')) || 0;
+        // 🔥 NAYA: Welcome Bonus (First Time User ko 2 Tokens Free) 🔥
+        let storedTokens = localStorage.getItem('sg_tool_tokens');
+        let sgToolTokens;
+        
+        if (storedTokens === null) {
+            // Naya User! Free 2 tokens de do
+            sgToolTokens = 2;
+            localStorage.setItem('sg_tool_tokens', sgToolTokens);
+        } else {
+            // Purana User, iske purane tokens nikal lo
+            sgToolTokens = parseInt(storedTokens) || 0;
+        }
+
         let chatHistory = [];
         let currentPersona = 'image-gen';
         let modeTryingToUnlock = '';
@@ -347,7 +359,6 @@
             history.replaceState({ page: 'home' }, "Tools Home", "");
         };
 
-        // 🔥 NAYA: WebView Friendly Download Code 🔥
         window.downloadFile = function(url, fileName) {
             try {
                 const a = document.createElement('a');
@@ -362,7 +373,6 @@
             }
         };
 
-        // 🔥 NAYA: Image ko full screen kholne ka logic
         window.viewImageFull = function(src) {
             document.getElementById('fullScreenImage').src = src;
             document.getElementById('imageViewerOverlay').style.display = 'flex';
@@ -449,7 +459,6 @@
             if (typeof AndroidBridge !== "undefined") {
                 AndroidBridge.showAd();
                 
-                // 4 sec fallback timer
                 setTimeout(() => {
                     if (btn.innerText.includes("Loading")) {
                         btn.innerText = "🎬 Watch Ad Now";
@@ -625,7 +634,6 @@
                             <button class="media-download-btn" onclick="downloadFile('${data.mediaUrl}', 'sg_ai_video.mp4')">⬇️ Download Video</button>
                         `;
                     } else if (currentPersona === 'image-gen') {
-                        // 🔥 NAYA: Image par click karte hi full screen modal khulega 🔥
                         aiReply = `
                             🎨 Image Generated Successfully.<br><br>
                             <img src="${data.mediaUrl}" onclick="viewImageFull(this.src)" style="width:100%; border-radius:12px; cursor:zoom-in;"><br>
