@@ -289,28 +289,6 @@
 
         <div class="input-area">
             <div class="chat-counter" id="chatCounter" style="display:block">🛠️ Tool Tokens Left: 0</div>
-            
-            <div id="audioOptions" style="display:none; flex-direction:column; gap:10px; margin-bottom: 12px;">
-                <div style="display:flex; gap:15px; align-items: center;">
-                    <span style="color:#a8b2d1; font-size:0.85rem; font-weight:600; min-width: 70px;">Voice:</span>
-                    <label style="color:#fff; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; gap:5px;">
-                        <input type="radio" name="voiceGender" value="female" checked> 👧 Female
-                    </label>
-                    <label style="color:#fff; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; gap:5px;">
-                        <input type="radio" name="voiceGender" value="male"> 👦 Male
-                    </label>
-                </div>
-                <div style="display:flex; gap:15px; align-items: center;">
-                    <span style="color:#a8b2d1; font-size:0.85rem; font-weight:600; min-width: 70px;">Language:</span>
-                    <label style="color:#fff; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; gap:5px;">
-                        <input type="radio" name="voiceLang" value="english" checked> 🇺🇸 English
-                    </label>
-                    <label style="color:#fff; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; gap:5px;">
-                        <input type="radio" name="voiceLang" value="hindi"> 🇮🇳 Hindi
-                    </label>
-                </div>
-            </div>
-
             <div class="input-row">
                 <input type="text" id="messageInput" placeholder="Describe your image..." autocomplete="off">
                 <button id="sendBtn" onclick="sendMessage()">Send 🚀</button>
@@ -342,13 +320,16 @@
             }
         }
 
+        // 🔥 NAYA: Welcome Bonus (First Time User ko 2 Tokens Free) 🔥
         let storedTokens = localStorage.getItem('sg_tool_tokens');
         let sgToolTokens;
         
         if (storedTokens === null) {
+            // Naya User! Free 2 tokens de do
             sgToolTokens = 2;
             localStorage.setItem('sg_tool_tokens', sgToolTokens);
         } else {
+            // Purana User, iske purane tokens nikal lo
             sgToolTokens = parseInt(storedTokens) || 0;
         }
 
@@ -551,12 +532,6 @@
             currentPersona = newMode;
             document.body.setAttribute('data-persona', newMode);
             
-            if (newMode === 'audio-gen') {
-                document.getElementById('audioOptions').style.display = 'flex';
-            } else {
-                document.getElementById('audioOptions').style.display = 'none';
-            }
-
             const logoMap = {
                 'image-gen': '🎨', 
                 'video-gen': '🎥',
@@ -591,7 +566,7 @@
             let toolMsg = `Tool Ready! ${requiredTokens} Token(s) per request.`;
             
             if (newMode === 'audio-gen') {
-                toolMsg += '<br><br><span style="font-size:0.85rem;color:#f5af19;">(Note: Hindi voice naturally defaults to female across most devices).</span>';
+                toolMsg += '<br><br><span style="font-size:0.85rem;color:#f5af19;">(Note: Please enter text in English only for the best audio conversion).</span>';
             }
             
             addMessage('SG AI', toolMsg, 'ai');
@@ -624,21 +599,6 @@
                 parts: [{ text: message }]
             });
 
-            // Get selected voice and language
-            let selectedVoiceType = 'female';
-            let selectedLang = 'english';
-            
-            if (currentPersona === 'audio-gen') {
-                const voiceRadios = document.getElementsByName('voiceGender');
-                for (let r of voiceRadios) {
-                    if (r.checked) { selectedVoiceType = r.value; break; }
-                }
-                const langRadios = document.getElementsByName('voiceLang');
-                for (let r of langRadios) {
-                    if (r.checked) { selectedLang = r.value; break; }
-                }
-            }
-
             try {
                 let aiReply = "";
                 let backendPath = "chat";
@@ -649,40 +609,6 @@
                 else if (currentPersona === 'video-summary') backendPath = "video-summary";
                 
                 document.querySelector('.typing-content').innerHTML = `SG AI is generating <div class="typing-dots"><span></span><span></span><span></span></div>`;
-                
-                if (currentPersona === 'audio-gen') {
-                    const textToSpeak = encodeURIComponent(message);
-                    let audioApiUrl;
-                    
-                    if (selectedLang === 'hindi') {
-                        audioApiUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${textToSpeak}&tl=hi-IN&client=tw-ob`;
-                    } else {
-                        if (selectedVoiceType === 'male') {
-                             audioApiUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${textToSpeak}&tl=en-GB&client=tw-ob`;
-                        } else {
-                             audioApiUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${textToSpeak}&tl=en-US&client=tw-ob`;
-                        }
-                    }
-
-                    aiReply = `
-                        🎵 Audio Generated Successfully.<br><br>
-                        <audio controls src="${audioApiUrl}" style="width:100%; border-radius:12px;"></audio><br>
-                        <button class="media-download-btn" onclick="downloadFile('${audioApiUrl}', 'sg_ai_audio.mp3')">⬇️ Download Audio</button>
-                    `;
-                    
-                    addMessage('SG AI', aiReply, 'ai');
-                    chatHistory.push({ role: "model", parts: [{ text: "Audio Generated Successfully." }] });
-                    
-                    sgToolTokens -= requiredTokens;
-                    localStorage.setItem('sg_tool_tokens', sgToolTokens);
-                    updateMenuBadges();
-                    
-                    document.querySelector('.typing-content').innerHTML = `SG AI is processing <div class="typing-dots"><span></span><span></span><span></span></div>`;
-                    typingEl.style.display = 'none';
-                    sendBtn.disabled = false;
-                    if (inputEl) inputEl.focus();
-                    return; 
-                }
                 
                 const BACKEND_URL = `https://sg-ai-backend.onrender.com/api/${backendPath}`;
                 
@@ -695,7 +621,13 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    if (currentPersona === 'video-gen') {
+                    if (currentPersona === 'audio-gen') {
+                        aiReply = `
+                            🎵 Audio Generated Successfully.<br><br>
+                            <audio controls src="${data.mediaUrl}" style="width:100%; border-radius:12px;"></audio><br>
+                            <button class="media-download-btn" onclick="downloadFile('${data.mediaUrl}', 'sg_ai_audio.wav')">⬇️ Download Audio</button>
+                        `;
+                    } else if (currentPersona === 'video-gen') {
                         aiReply = `
                             🎥 Video Generated Successfully.<br><br>
                             <video controls src="${data.mediaUrl}" style="width:100%; border-radius:12px; background:#000;"></video><br>
@@ -759,7 +691,6 @@
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
             if (type === 'ai') {
-                // 🔥 NAYA: AI ke message mein Report button add kiya
                 contentDiv.innerHTML = text + `
                     <div style="text-align: right; margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
                         <button onclick="reportContent(this)" style="background:none; border:none; color:#ff6b6b; font-size:0.75rem; cursor:pointer; font-weight:600; letter-spacing:0.3px;">🚩 Report Content</button>
