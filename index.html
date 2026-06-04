@@ -144,6 +144,7 @@
         
         .role-arrow { width: 35px; height: 35px; border-radius: 50%; background: rgba(46, 204, 113, 0.15); color: #2ecc71; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 1.2rem; flex-shrink: 0; }
         
+        /* --- UPDATED BOTTOM NAV (Premium Click Effect) --- */
         .home-bottom-nav {
             position: absolute; bottom: 0; width: 100%; height: 75px;
             background: rgba(15, 20, 25, 0.95); backdrop-filter: blur(10px);
@@ -151,9 +152,43 @@
             display: flex; justify-content: space-around; align-items: center;
             padding-bottom: env(safe-area-inset-bottom); z-index: 501;
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255,255,255,0.5); font-size: 0.75rem; font-weight: 600; cursor: pointer; width: 50%; padding: 10px 0; transition: .3s;}
-        .nav-item.active { color: #2ecc71; background: rgba(46,204,113,0.05); border-radius: 15px;}
-        .nav-icon { font-size: 1.4rem; }
+
+        .nav-item { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; 
+            color: rgba(255,255,255,0.5); font-size: 0.75rem; font-weight: 600; cursor: pointer; 
+            width: 50%; height: 100%; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Ganda blue tap box hatane ke liye: */
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        /* Jab tab dabaenge toh halka sa dabega (shrink) */
+        .nav-item:active {
+            transform: scale(0.92);
+            opacity: 0.7;
+        }
+
+        .nav-item.active { 
+            color: #2ecc71; 
+            position: relative;
+        }
+
+        /* Active tab ke peeche smooth glow indicator */
+        .nav-item.active::before {
+            content: ''; position: absolute; width: 40px; height: 40px;
+            background: rgba(46,204,113,0.15); border-radius: 50%;
+            z-index: -1; top: 12px;
+        }
+
+        .nav-icon { font-size: 1.4rem; transition: transform 0.3s; }
+        .nav-item.active .nav-icon { transform: translateY(-2px); }
+
+        /* --- PAGE TRANSITION EFFECT --- */
+        body.page-transitioning {
+            opacity: 0;
+            transform: scale(0.98);
+            transition: all 0.3s ease-out;
+        }
 
         /* CHAT CONTAINER */
         .chat-container { width: 92%; max-width: 900px; height: 92%; background: var(--bg-container); backdrop-filter: blur(20px); border-radius: 32px; box-shadow: 0 25px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1); display: flex; flex-direction: column; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); transition: all 0.5s ease; z-index: 1000; }
@@ -383,13 +418,15 @@
 
         </div>
         
+        <!-- Naya Smooth Bottom Navigation Bar -->
         <div class="home-bottom-nav">
             <div class="nav-item active">
                 <div class="nav-icon" style="display:flex;align-items:center;justify-content:center;margin-bottom:2px">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                 </div>Chats
             </div>
-            <div class="nav-item" onclick="window.location.href='tools.html'">
+            <!-- Yahan onclick animation logic add ki hai -->
+            <div class="nav-item" onclick="navigateTo('tools.html')">
                 <div class="nav-icon" style="display:flex;align-items:center;justify-content:center;margin-bottom:2px">🛠️</div>Tools
             </div>
         </div>
@@ -500,7 +537,19 @@
     </div>
 
     <script>
-        // 🚀 NEW: Check and Show Welcome Bonus Logic
+        // 🚀 NEW: Smooth Page Transition Logic for Tabs
+        function navigateTo(url) {
+            document.body.classList.add('page-transitioning');
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+
+        window.addEventListener('pageshow', () => {
+            document.body.classList.remove('page-transitioning');
+        });
+
+        // Check and Show Welcome Bonus Logic
         function checkWelcomeBonus() {
             const isClaimed = localStorage.getItem('welcomeBonusClaimed');
             if (!isClaimed) {
@@ -508,23 +557,17 @@
             }
         }
 
-        // 🚀 NEW: Claim Button Logic
+        // Claim Button Logic
         function claimWelcomeBonus() {
-            // Unko 5 free chats dedo
             freePremiumChatsLeft = 5;
             localStorage.setItem('premiumChats', freePremiumChatsLeft);
-            // System ko bata do ki bonus claim ho chuka hai (taaki dobara na aaye)
             localStorage.setItem('welcomeBonusClaimed', 'true');
-            // UI aur badges update karo
             updateMenuBadges();
-            // Modal ko band kar do
             document.getElementById('welcomeModalOverlay').style.display = 'none';
-            // User ko mast notification dikhao
             alert("🎉 Awesome! 5 Free Premium Chats have been added to your account. Enjoy!");
         }
 
         window.onload = () => { 
-            // 🚀 NEW: App khulte hi check hoga ki bonus dena hai ya nahi
             checkWelcomeBonus();
 
             setTimeout(() => { if(inputEl) inputEl.focus(); }, 100);
