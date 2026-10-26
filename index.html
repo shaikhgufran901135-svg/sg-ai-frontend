@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#07090e">
-    <title>SG AI Chat - Premium OS Edition</title>
+    <title>SG AI Assistant - Premium Features</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,7 +66,7 @@
         /* 🌓 OS DARK & LIGHT THEME TOKENS */
         :root, [data-theme="dark"] {
             --bg-app: #07090e;
-            --bg-surface: rgba(17, 21, 32, 0.78);
+            --bg-surface: rgba(17, 21, 32, 0.82);
             --bg-card: rgba(255, 255, 255, 0.045);
             --bg-card-hover: rgba(255, 255, 255, 0.08);
             --border-glass: rgba(255, 255, 255, 0.08);
@@ -74,31 +74,31 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --bg-messages: #090c14;
-            --bg-ai-msg: rgba(30, 36, 52, 0.75);
+            --bg-ai-msg: rgba(30, 36, 52, 0.78);
             --text-ai-msg: #f1f5f9;
-            --bg-input-bar: rgba(19, 24, 36, 0.85);
+            --bg-input-bar: rgba(19, 24, 36, 0.9);
             --bg-input: rgba(255, 255, 255, 0.06);
             --text-input: #f8fafc;
-            --bg-sheet: rgba(16, 20, 30, 0.94);
+            --bg-sheet: rgba(16, 20, 30, 0.96);
             --shadow-soft: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
 
         [data-theme="light"] {
             --bg-app: #f1f5f9;
-            --bg-surface: rgba(255, 255, 255, 0.85);
-            --bg-card: rgba(255, 255, 255, 0.85);
-            --bg-card-hover: rgba(255, 255, 255, 1);
+            --bg-surface: rgba(255, 255, 255, 0.88);
+            --bg-card: rgba(255, 255, 255, 0.9);
+            --bg-card-hover: #ffffff;
             --border-glass: rgba(15, 23, 42, 0.08);
-            --border-highlight: rgba(15, 23, 42, 0.12);
+            --border-highlight: rgba(15, 23, 42, 0.14);
             --text-main: #0f172a;
             --text-muted: #64748b;
             --bg-messages: #f8fafc;
             --bg-ai-msg: #ffffff;
             --text-ai-msg: #1e293b;
-            --bg-input-bar: rgba(255, 255, 255, 0.88);
+            --bg-input-bar: rgba(255, 255, 255, 0.92);
             --bg-input: rgba(15, 23, 42, 0.05);
             --text-input: #0f172a;
-            --bg-sheet: rgba(255, 255, 255, 0.96);
+            --bg-sheet: rgba(255, 255, 255, 0.98);
             --shadow-soft: 0 15px 35px rgba(15, 23, 42, 0.08);
         }
 
@@ -109,9 +109,10 @@
         }
 
         html, body {
-            height: 100%; width: 100%;
-            overflow: hidden;
-            overscroll-behavior-y: none;
+            width: 100%; max-width: 100vw;
+            height: 100%; height: 100dvh;
+            overflow: hidden !important;
+            overscroll-behavior: none;
             font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-app);
             color: var(--text-main);
@@ -132,7 +133,7 @@
             top: calc(16px + env(safe-area-inset-top));
             left: 50%;
             transform: translateX(-50%) translateY(-120px) scale(0.9);
-            background: rgba(15, 20, 30, 0.92);
+            background: rgba(15, 20, 30, 0.94);
             color: #fff;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -140,7 +141,7 @@
             border-radius: 999px;
             border: 1px solid rgba(255,255,255,0.15);
             box-shadow: 0 15px 35px rgba(0,0,0,0.45);
-            font-size: 0.88rem;
+            font-size: 0.86rem;
             font-weight: 600;
             display: flex;
             align-items: center;
@@ -149,7 +150,7 @@
             opacity: 0;
             transition: all 0.45s var(--spring);
             pointer-events: none;
-            max-width: 90%;
+            max-width: 90vw;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -161,13 +162,12 @@
 
         /* 🚀 HOME SCREEN (OS LAUNCHER STYLE) */
         .home-screen {
-            width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 500;
+            width: 100%; max-width: 100vw; height: 100%; position: absolute; top: 0; left: 0; z-index: 500;
             background: var(--bg-app);
-            display: flex; flex-direction: column; overflow: hidden;
+            display: flex; flex-direction: column; overflow: hidden !important;
             padding-top: env(safe-area-inset-top);
             animation: fadeInScreen 0.35s var(--spring);
         }
-        /* Ambient Background Orbs */
         .home-screen::before {
             content: ''; position: absolute; top: -120px; right: -80px;
             width: 280px; height: 280px; border-radius: 50%;
@@ -187,38 +187,40 @@
         }
 
         .home-header-top {
-            padding: 18px 22px 14px 22px;
-            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 20px 14px 20px;
+            display: flex; justify-content: space-between; align-items: center; gap: 10px;
             border-bottom: 1px solid var(--border-glass);
             background: var(--bg-surface);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             position: relative; z-index: 2;
         }
-        .brand-wrap { display: flex; flex-direction: column; }
+        .brand-wrap { display: flex; flex-direction: column; min-width: 0; }
         .home-header-top h2 { 
-            margin: 0; font-size: 1.45rem; font-weight: 800; color: var(--text-main); 
+            margin: 0; font-size: 1.4rem; font-weight: 800; color: var(--text-main); 
             letter-spacing: -0.5px; display: flex; align-items: center; gap: 6px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .home-header-top h2 span { 
             background: linear-gradient(135deg, #10b981, #34d399);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .brand-sub { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+        .brand-sub { font-size: 0.74rem; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
 
         .home-credits-pill {
             background: rgba(16, 185, 129, 0.12);
             border: 1px solid rgba(16, 185, 129, 0.3);
             color: #10b981;
-            padding: 7px 13px;
+            padding: 7px 12px;
             border-radius: 999px;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 700;
             display: flex; align-items: center; gap: 5px;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);
+            white-space: nowrap; flex-shrink: 0;
         }
 
         .roles-scroll {
-            flex: 1; overflow-y: auto; padding: 18px 16px; 
+            flex: 1; overflow-y: auto; overflow-x: hidden !important; padding: 18px 16px; 
             padding-bottom: calc(105px + env(safe-area-inset-bottom));
             display: flex; flex-direction: column; gap: 12px;
             position: relative; z-index: 1;
@@ -318,7 +320,7 @@
             background: var(--bg-messages); 
             border-radius: 32px; 
             box-shadow: var(--shadow-soft), inset 0 1px 0 var(--border-highlight); 
-            display: flex; flex-direction: column; overflow: hidden; 
+            display: flex; flex-direction: column; overflow: hidden !important; 
             position: relative; border: 1px solid var(--border-glass); 
             z-index: 1000;
             animation: slideInChat 0.35s var(--spring);
@@ -327,7 +329,6 @@
             from { opacity: 0; transform: translateX(30px) scale(0.98); }
             to { opacity: 1; transform: translateX(0) scale(1); }
         }
-        /* Dynamic Persona Ambient Top Glow */
         .chat-container::before {
             content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
             width: 80%; height: 220px; border-radius: 50%;
@@ -339,13 +340,14 @@
         /* OS FROSTED GLASS HEADER */
         .chat-header { 
             background: var(--bg-header); 
-            color: #fff; padding: 16px 22px; 
+            color: #fff; padding: 16px 20px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.22); 
-            display: flex; justify-content: space-between; align-items: center; 
+            display: flex; justify-content: space-between; align-items: center; gap: 8px;
             transition: background 0.5s ease; flex-shrink: 0; position: relative; z-index: 50; 
             border-bottom: 1px solid rgba(255,255,255,0.12);
+            overflow: hidden;
         }
-        .title-and-profile { display: flex; align-items: center; gap: 10px; position: relative; z-index: 51; min-width: 0; }
+        .title-and-profile { display: flex; align-items: center; gap: 10px; position: relative; z-index: 51; min-width: 0; flex: 1; }
         
         .back-btn { 
             width: 36px; height: 36px; border-radius: 12px;
@@ -357,51 +359,56 @@
         .back-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.28); }
         
         .profile-pic { 
-            width: 44px; height: 44px; border-radius: 15px; 
+            width: 42px; height: 42px; border-radius: 14px; 
             background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); 
             display: flex; justify-content: center; align-items: center; 
-            font-size: 22px; border: 1.5px solid rgba(255,255,255,0.35); flex-shrink: 0;
+            font-size: 21px; border: 1.5px solid rgba(255,255,255,0.35); flex-shrink: 0;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
         .title-text { display: flex; flex-direction: column; min-width: 0; }
-        .title-text h1 { font-size: 1.15rem; margin: 0; font-weight: 800; color: #fff; letter-spacing: -0.3px; }
+        .title-text h1 { 
+            font-size: 1.08rem; margin: 0; font-weight: 800; color: #fff; letter-spacing: -0.3px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
         .title-text p { 
-            font-size: 0.74rem; margin: 0; opacity: 0.9; font-weight: 500;
+            font-size: 0.72rem; margin: 0; opacity: 0.9; font-weight: 500;
             display: flex; align-items: center; gap: 5px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .title-text p::before {
             content: ''; width: 6px; height: 6px; border-radius: 50%;
-            background: #4ade80; box-shadow: 0 0 8px #4ade80; display: inline-block;
+            background: #4ade80; box-shadow: 0 0 8px #4ade80; display: inline-block; flex-shrink: 0;
         }
         
-        .header-controls { display: flex; gap: 8px; align-items: center; position: relative; z-index: 51; }
+        .header-controls { display: flex; gap: 8px; align-items: center; position: relative; z-index: 51; flex-shrink: 0; }
         .theme-btn { 
             background: rgba(255,255,255,0.18); backdrop-filter: blur(10px); 
             border: 1px solid rgba(255,255,255,0.28); border-radius: 14px; 
-            width: 40px; height: 40px; cursor: pointer; 
+            width: 38px; height: 38px; cursor: pointer; 
             display: flex; justify-content: center; align-items: center; 
-            color: white; font-size: 1.05rem; transition: 0.25s var(--spring); flex-shrink: 0; 
+            color: white; font-size: 1rem; transition: 0.25s var(--spring); flex-shrink: 0; 
         }
         
         .mode-wrapper { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; }
         .mode-label { 
-            font-size: 0.58rem; color: rgba(255,255,255,0.85); font-weight: 700; 
+            font-size: 0.56rem; color: rgba(255,255,255,0.85); font-weight: 700; 
             text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 2px; margin-right: 4px; 
         }
         
         .custom-select-btn { 
             background: rgba(0, 0, 0, 0.22); backdrop-filter: blur(15px); 
-            padding: 8px 13px; border-radius: 14px; 
+            padding: 8px 12px; border-radius: 14px; 
             border: 1px solid rgba(255,255,255,0.28); 
-            font-weight: 700; font-size: 0.82rem; color: #ffffff; 
-            cursor: pointer; display: flex; align-items: center; gap: 6px; 
-            transition: all 0.25s var(--spring); white-space: nowrap; 
+            font-weight: 700; font-size: 0.8rem; color: #ffffff; 
+            cursor: pointer; display: flex; align-items: center; gap: 5px; 
+            transition: all 0.25s var(--spring); white-space: nowrap;
+            max-width: 160px; overflow: hidden; text-overflow: ellipsis;
         }
         .custom-select-btn:active, .theme-btn:active { transform: scale(0.92); }
         
-        /* MESSAGES STREAM */
+        /* MESSAGES STREAM (ZERO OVERFLOW) */
         .messages { 
-            flex: 1; padding: 24px 20px; overflow-y: auto; 
+            flex: 1; padding: 22px 18px; overflow-y: auto; overflow-x: hidden !important;
             background-color: transparent; 
             background-image: var(--chat-bg-pattern); 
             background-size: var(--pattern-size);
@@ -411,7 +418,7 @@
         .messages::-webkit-scrollbar { width: 5px; } 
         .messages::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); border-radius: 10px; }
         
-        .message { margin-bottom: 18px; display: flex; animation: messagePop 0.35s var(--spring); position: relative; z-index: 1; }
+        .message { margin-bottom: 18px; display: flex; max-width: 100%; animation: messagePop 0.35s var(--spring); position: relative; z-index: 1; }
         @keyframes messagePop { 
             from { opacity: 0; transform: translateY(14px) scale(0.96); } 
             to { opacity: 1; transform: translateY(0) scale(1); } 
@@ -430,8 +437,9 @@
         @keyframes aiStarSpin { 0% { transform: rotate(0deg) scale(0.9); } 50% { transform: rotate(180deg) scale(1.12); } 100% { transform: rotate(360deg) scale(0.9); } }
 
         .message-content { 
-            max-width: 78%; padding: 14px 18px; border-radius: 22px; 
-            line-height: 1.55; word-wrap: break-word; font-size: 0.95rem;
+            max-width: 80%; min-width: 0; padding: 14px 18px; border-radius: 22px; 
+            line-height: 1.55; word-wrap: break-word; overflow-wrap: anywhere; word-break: break-word;
+            font-size: 0.95rem;
             -webkit-user-select: text; user-select: text;
         }
         .user .message-content { 
@@ -451,7 +459,7 @@
         .message-content p:last-child { margin-bottom: 0; }
         .message-content pre { 
             background: #0d1117; border-radius: 14px; padding: 18px; padding-top: 44px; 
-            margin: 12px 0; overflow-x: auto; position: relative; 
+            margin: 12px 0; max-width: 100%; overflow-x: auto; position: relative; 
             border: 1px solid rgba(255,255,255,0.1); 
         }
         .message-content pre code { font-family: 'Fira Code', 'Consolas', monospace; font-size: 0.85rem; color: #e6edf3; }
@@ -480,7 +488,7 @@
         
         /* FLOATING OS INPUT DOCK */
         .input-area { 
-            padding: 12px 18px calc(14px + env(safe-area-inset-bottom)) 18px; 
+            padding: 12px 16px calc(14px + env(safe-area-inset-bottom)) 16px; 
             background: var(--bg-input-bar); 
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-top: 1px solid var(--border-glass); 
@@ -497,7 +505,7 @@
         }
         .input-row { display: flex; gap: 10px; width: 100%; align-items: center; }
         #messageInput { 
-            flex: 1; padding: 14px 20px; 
+            flex: 1; min-width: 0; padding: 14px 18px; 
             background: var(--bg-input); color: var(--text-input); 
             border: 1.5px solid var(--border-highlight); 
             border-radius: 999px; outline: none; 
@@ -510,7 +518,7 @@
             box-shadow: 0 0 0 3px var(--accent-glow); 
         }
         #sendBtn { 
-            padding: 14px 22px; background: var(--user-msg-bg); color: white; 
+            padding: 14px 20px; background: var(--user-msg-bg); color: white; 
             border: none; border-radius: 999px; cursor: pointer; 
             font-weight: 700; font-size: 0.92rem; font-family: inherit;
             box-shadow: 0 6px 20px var(--accent-glow);
@@ -639,12 +647,12 @@
         
         @media (max-width: 768px) { 
             .chat-container { width: 100%; height: 100%; position: absolute; top: 0; bottom: 0; left: 0; right: 0; border-radius: 0; border: none; box-shadow: none; } 
-            .chat-header { padding: calc(12px + env(safe-area-inset-top)) 14px 12px 14px; }
-            .profile-pic { width: 38px; height: 38px; font-size: 19px; border-radius: 12px; }
-            .title-text h1 { font-size: 1.05rem; }
-            .title-text p { font-size: 0.7rem; }
-            .theme-btn { width: 36px; height: 36px; font-size: 0.95rem; border-radius: 11px; }
-            .custom-select-btn { padding: 7px 11px; font-size: 0.78rem; border-radius: 12px; }
+            .chat-header { padding: calc(12px + env(safe-area-inset-top)) 12px 12px 12px; }
+            .profile-pic { width: 36px; height: 36px; font-size: 18px; border-radius: 11px; }
+            .title-text h1 { font-size: 0.98rem; }
+            .title-text p { font-size: 0.68rem; }
+            .theme-btn { width: 34px; height: 34px; font-size: 0.9rem; border-radius: 10px; }
+            .custom-select-btn { padding: 7px 10px; font-size: 0.74rem; border-radius: 11px; max-width: 140px; }
             .messages { padding: 16px 12px; }
             .message-content { max-width: 85%; padding: 12px 15px; font-size: 0.92rem; }
         }
@@ -653,7 +661,7 @@
 <body data-theme="dark" data-persona="general">
 
     <!-- 🔔 NATIVE OS TOAST NOTIFICATION -->
-    <div class="os-toast" id="osToast">✨ Welcome to SG AI</div>
+    <div class="os-toast" id="osToast">✨ Welcome to SG AI Assistant</div>
 
     <!-- 🎁 WELCOME BONUS MODAL -->
     <div class="modal-overlay" id="welcomeModalOverlay">
@@ -661,7 +669,7 @@
             <div class="modal-icon-badge">🎁</div>
             <h2>Welcome Gift!</h2>
             <p>Thank you for trying SG AI. Claim your <strong>5 FREE Premium Chats</strong> to explore all our PRO AI Personas right now!</p>
-            <button class="claim-bonus-btn" onclick="claimWelcomeBonus()" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.35);">Claim 5 Free Chats 🎉</button>
+            <button class="claim-bonus-btn" onclick="claimWelcomeBonus()" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.35);">Claim Now 🎁</button>
         </div>
     </div>
 
@@ -669,7 +677,7 @@
     <div class="home-screen" id="mainHomeScreen">
         <div class="home-header-top">
             <div class="brand-wrap">
-                <h2>SG AI <span>OS</span></h2>
+                <h2>SG AI <span>Assistant</span></h2>
                 <div class="brand-sub">Select an AI Persona to start</div>
             </div>
             <div class="home-credits-pill" id="homeCreditsPill">🔥 0 Pro Chats</div>
@@ -816,7 +824,7 @@
             <div class="bottom-sheet" id="personaSheet" onclick="event.stopPropagation()">
                 <div class="sheet-pill-handle"></div>
                 <div class="sheet-header">
-                    <h3>Switch AI Persona</h3>
+                    <h3>Select AI Persona</h3>
                     <button class="close-sheet" onclick="closeSheet()">×</button>
                 </div>
                 <div class="persona-list">
@@ -854,8 +862,8 @@
                 <div class="back-btn" onclick="goBackToHome()">❮</div>
                 <div class="profile-pic" id="headerAvatar">🤖</div>
                 <div class="title-text">
-                    <h1>SG AI</h1>
-                    <p>Online • Ready to help</p>
+                    <h1>SG AI Assistant</h1>
+                    <p>Talk about anything!</p>
                 </div>
             </div>
             
@@ -904,14 +912,14 @@
         <div class="input-area">
             <div class="chat-counter" id="chatCounter">🔥 Premium Chats Left: 5</div>
             <div class="input-row">
-                <input type="text" id="messageInput" placeholder="Ask anything..." autocomplete="off">
+                <input type="text" id="messageInput" placeholder="Type your message here..." autocomplete="off">
                 <button id="sendBtn" onclick="sendMessage()">Send 🚀</button>
             </div>
         </div>
     </div>
 
     <script>
-        // 🔔 OS Toast Helper (Non-blocking native-like notification)
+        // 🔔 OS Toast Helper
         let toastTimeout;
         function showOSToast(msg) {
             const toast = document.getElementById('osToast');
@@ -939,7 +947,7 @@
             localStorage.setItem('welcomeBonusClaimed', 'true');
             updateMenuBadges();
             document.getElementById('welcomeModalOverlay').style.display = 'none';
-            showOSToast("🎉 5 Free Premium Chats added!");
+            showOSToast("🎉 Awesome! 5 Free Premium Chats added!");
         }
 
         window.onload = () => { 
@@ -1044,10 +1052,10 @@
             const freeStatusTexts = document.querySelectorAll('.free-status-badge');
             freeStatusTexts.forEach(span => {
                 if (freePremiumChatsLeft > 0) {
-                    span.innerText = `${freePremiumChatsLeft} Free Left`;
+                    span.innerText = `(free - ${freePremiumChatsLeft} left)`;
                     span.style.display = 'inline-block';
                 } else {
-                    span.innerText = `Watch Ad`;
+                    span.innerText = `(free)`;
                     span.style.display = 'inline-block';
                 }
             });
@@ -1086,7 +1094,7 @@
                 closeSheet(); modeTryingToUnlock = selectedMode; adsWatchedCount = 0;
                 document.getElementById('adProgressText').innerText = `Ads Watched: 0 / 3`;
                 syncAdProgressBar(0);
-                let rawTitle = personaDisplayNames[selectedMode].replace(/&lt;\/&gt;/g, '</>').replace(/[^a-zA-Z \u00a9-\u02ff\u1d00-\u1d7f\u2100-\u214f\u2600-\u26ff\u2700-\u27bf\u2800-\u28ff\u2b00-\u2bff\u2c00-\u2cff\u2d00-\u2dff\u2e00-\u2eff\u3000-\u303f\u31c0-\u31ef\u3200-\u32ff\u3300-\u33ff\u3400-\u4dbf\u4dc0-\u4dff\u4e00-\u9fff\ua000-\ua48f\ua490-\ua4cf\uf900-\ufaff\ufe30-\ufe4f\ufe50-\ufe6f\ufe70-\ufeff\uff00-\uffef\U0001f000-\U0001f02f\U0001f030-\U0001f09f\U0001f0a0-\U0001f0ff\U0001f100-\U0001f1ff\U0001f200-\U0001f2ff\U0001f300-\U0001f5ff\U0001f600-\U0001f64f\U0001f650-\U0001f67f\U0001f680-\U0001f6ff\U0001f700-\U0001f77f\U0001f780-\U0001f7ff\U0001f800-\U0001f8ff\U0001f900-\U0001f9ff\U0001fa00-\U0001fa6f\U0001fa70-\U0001faff\U0001fb00-\U0001fbff]/g, "").trim();
+                let rawTitle = (personaDisplayNames[selectedMode] || 'Premium Mode').replace(/&lt;\/&gt;/g, '</>').trim();
                 document.getElementById('modalTitle').innerText = `Unlock ${rawTitle} 🔒`;
                 document.getElementById('adModalOverlay').style.display = 'flex'; return;
             }
@@ -1123,7 +1131,7 @@
             syncAdProgressBar(adsWatchedCount);
             btn.innerText = "🎬 Watch Ad Now"; btn.disabled = false;
             if (adsWatchedCount >= 3) {
-                showOSToast("🎉 Unlocked! 5 Free Pro Chats added.");
+                showOSToast("🎉 Reward Granted! You unlocked 5 free chats.");
                 document.getElementById('adModalOverlay').style.display = 'none';
                 freePremiumChatsLeft = 5; localStorage.setItem('premiumChats', freePremiumChatsLeft);
                 updateMenuBadges(); switchMode(modeTryingToUnlock); 
@@ -1196,7 +1204,7 @@
                         chatCounter.innerText = `🔥 Premium Chats Left: ${freePremiumChatsLeft}`; updateMenuBadges(); 
                         if (freePremiumChatsLeft <= 0) {
                             setTimeout(() => { 
-                                showOSToast("⚠️ Free premium chats over! Switched to General."); 
+                                showOSToast("⚠️ Free premium chats over! Locking mode back."); 
                                 chatCounter.style.display = 'none'; 
                                 switchMode('general'); 
                             }, 1000);
